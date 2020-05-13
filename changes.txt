@@ -1,5 +1,15 @@
 
+1.1.0:
+- Added animated tiles (grass + waterfall)
+- added "up" and "space" keys for jumping
+- small tweaks and fixes
+
+1.0.0:
+- First release
+
+
 
 ToDo:
+- add missing level (new level 8)
 - Bomb cooking
 - level editor
