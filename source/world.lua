@@ -30,6 +30,7 @@ function World:init(lvl)
   self.players  = Conta()
   self.objects  = Conta()
   self.tiles    = Conta()
+  self.animatedTiles = Conta()
 
   -- Generate world
   local tw = Assets.getTilesize()
@@ -39,22 +40,24 @@ function World:init(lvl)
       local pixelColor = {self.tileImage:getPixel(x-1, y-1)}
       for k,v in pairs(Assets.tileset.tiles) do
         if compare(pixelColor, v.pixelColor) then
+          local x = x*tw-tw
+          local y = y*tw-tw
           v.type = k
-          tile = Tile(self, x*tw-tw, y*tw-tw, tw, v)
+          if v.quad then self.tiles:add(Tile(self, x, y, tw, v))
+          elseif v.anim then self.animatedTiles:add(Tile(self, x, y, tw, v)) end
           if k == "player" then
-            local player = Player(self, tile.pos.x, tile.pos.y)
-            self.player = self.players:add(player)
-          elseif k == "bug" then self.objects:add(Bug(self, tile.pos.x, tile.pos.y))
-          elseif k == "exit" then self.objects:add(Exit(self, tile.pos.x, tile.pos.y)) end
+            self.player = self.players:add(Player(self, x, y))
+          elseif k == "bug" then self.objects:add(Bug(self, x, y))
+          elseif k == "exit" then self.objects:add(Exit(self, x, y)) end
         end
       end
-      self.tiles:add(tile)
     end
   end
   -- Render level to canvas
-  -- lg.setCanvas(self.canvas)
-  -- self.tiles:draw()
-  -- lg.setCanvas()
+  lg.setCanvas(self.canvas)
+  self.tiles:draw()
+  if self.overlayImage then lg.draw(self.overlayImage) end
+  lg.setCanvas()
 end
 
 
@@ -65,14 +68,14 @@ end
 
 function World:update(dt)
   self.objects:update(dt)
-  self.tiles:update(dt)
+  self.animatedTiles:update(dt)
   self.players:update(dt)
 end
 
 
 function World:draw()
-  --lg.draw(self.canvas)
-  self.tiles:draw()
+  lg.draw(self.canvas)
+  self.animatedTiles:draw()
   if self.overlayImage then lg.draw(self.overlayImage) end
   self.objects:draw()
   self.players:draw()

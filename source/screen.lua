@@ -16,7 +16,7 @@ end
 
 
 function Screen:shake(time)
-  shakeTime = time or .5
+  shakeTime = time or .35
 end
 
 
@@ -50,7 +50,7 @@ function Screen:set()
   love.graphics.push()
   local shakeX = math.floor(math.random(-shakeTime, shakeTime))
   local shakeY = math.floor(math.random(-shakeTime, shakeTime))
-  love.graphics.translate(shakeX*3, shakeY*3)
+  love.graphics.translate(shakeX*2, shakeY*2)
   love.graphics.scale(self.scale, self.scale)
 end
 
