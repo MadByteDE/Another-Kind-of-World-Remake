@@ -52,11 +52,9 @@ function World:init(lvl)
     end
   end
   -- Render level to canvas
-  lg.setCanvas(self.canvas)
-  self.tiles:draw()
-  -- Draw overlay image
-  if self.overlayImage then lg.draw(self.overlayImage) end
-  lg.setCanvas()
+  -- lg.setCanvas(self.canvas)
+  -- self.tiles:draw()
+  -- lg.setCanvas()
 end
 
 
@@ -73,8 +71,9 @@ end
 
 
 function World:draw()
-  lg.draw(self.canvas)
-  --self.tiles:draw() -- used later when animated tiles exist
+  --lg.draw(self.canvas)
+  self.tiles:draw()
+  if self.overlayImage then lg.draw(self.overlayImage) end
   self.objects:draw()
   self.players:draw()
 end

@@ -48,8 +48,8 @@ end
 
 function Screen:set()
   love.graphics.push()
-  local shakeX = math.random(-shakeTime, shakeTime)
-  local shakeY = math.random(-shakeTime, shakeTime)
+  local shakeX = math.floor(math.random(-shakeTime, shakeTime))
+  local shakeY = math.floor(math.random(-shakeTime, shakeTime))
   love.graphics.translate(shakeX*3, shakeY*3)
   love.graphics.scale(self.scale, self.scale)
 end

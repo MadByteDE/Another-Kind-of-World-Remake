@@ -10,16 +10,16 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 love.mouse.setVisible(false)
 love.mouse.setGrabbed(true)
 
--- Locals
-local callbacks = {"init", "update", "draw", "keypressed", "mousereleased"}
-local Scene = {}
-for i=1, #callbacks do Scene[callbacks[i]] = function()end end
-local cursor
-
 -- Dependencies
 local Assets  = require("source.assets")
 local Screen  = require("source.screen")
 local Game    = require("source.game")
+
+-- Locals
+local callbacks = {"init", "update", "draw", "keypressed", "mousereleased"}
+local Scene = {}
+for i=1, #callbacks do Scene[callbacks[i]] = function()end end
+local cursor = Assets.newQuad(7, 2)
 
 -- Local functions
 local function drawCursor()
@@ -37,7 +37,6 @@ end
 
 -- Main callbacks
 function love.load()
-  cursor = Assets.newQuad(7, 2)
   Screen:init(256, 160, 3)
   Screen:transition(function() Scene = Game; Scene:init() end, 2)
 end

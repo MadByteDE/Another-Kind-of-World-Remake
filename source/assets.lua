@@ -53,7 +53,12 @@ end
 -- Tileset
 local tileset = {image = lg.newImage("assets/tileset.png")}
 local iw, ih  = tileset.image:getDimensions()
-
+tileset.grid  = Anim8.newGrid(tw, tw, iw, ih)
+tileset.newAnimation = function(frames, row, durations, onLoop)
+  local anim = Anim8.newAnimation(tileset.grid(frames, row), durations, onLoop):clone()
+  return anim
+end
+local f = function(anim) anim.position = love.math.random(1, #anim.frames) end
 tileset.tiles   = {
   ["wall"] = {
     pixelColor = {1, 0, 0},
@@ -67,10 +72,11 @@ tileset.tiles   = {
     isSolid = true},
   ["back"] = {
     pixelColor = {0, 0, 0},
-    quad = lg.newQuad(tw*6, 0, tw, tw, iw, ih)},
+    quad = lg.newQuad(tw*5, 0, tw, tw, iw, ih)},
   ["grass"] = {
     pixelColor = {0, 1, 1},
-    quad = lg.newQuad(tw*5, 0, tw, tw, iw, ih)},
+    anim = tileset.newAnimation('1-4', 4, .2),
+    randomFrame = true},
   ["under"] = {
     pixelColor = {1, 1, 0},
     quad = lg.newQuad(tw*2, 0, tw, tw, iw, ih),
@@ -79,15 +85,21 @@ tileset.tiles   = {
   ["pillar"] = {
     pixelColor = {128/255, 0, 128/255},
     quad = lg.newQuad(tw*1, 0, tw, tw, iw, ih)},
+  ["drain"] = {
+    pixelColor = {128/255, 0, 0},
+    anim = tileset.newAnimation('1-8', 2, .05)},
+  ["water"] = {
+    pixelColor = {0, 0, 128/255},
+    anim = tileset.newAnimation('1-8', 3, .05)},
   ["exit"] = {
     pixelColor = {1, 1, 1},
-    quad = lg.newQuad(tw*6, 0, tw, tw, iw, ih)},
+    quad = lg.newQuad(tw*5, 0, tw, tw, iw, ih)},
   ["player"] = {
     pixelColor = {1, 0, 1},
-    quad = lg.newQuad(tw*6, 0, tw, tw, iw, ih)},
+    quad = lg.newQuad(tw*5, 0, tw, tw, iw, ih)},
   ["bug"] = {
     pixelColor = {0, 0, 1},
-    quad = lg.newQuad(tw*6, 0, tw, tw, iw, ih)},
+    quad = lg.newQuad(tw*5, 0, tw, tw, iw, ih)},
 }
 
 

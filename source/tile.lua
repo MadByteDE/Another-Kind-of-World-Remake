@@ -10,8 +10,12 @@ Tile:include(Actor)
 
 function Tile:init(world, x, y, w, t)
   Actor.init(self, world, x, y, t)
-  self.anim = t.anim
-  self.quad = t.quad
+  if self.anim then
+    self.anim = self.anim:clone()
+    if t.randomFrame then
+      self.anim:gotoFrame(love.math.random(1, #self.anim.frames))
+    end
+  end
 end
 
 
@@ -23,7 +27,7 @@ end
 function Tile:draw()
   if not self.visible then return end
   if self.quad then lg.draw(Assets.tileset.image, self.quad, self.pos.x, self.pos.y)
-  elseif self.anim then self.anim:draw(Assets.sprite.image, self.pos.x, self.pos.y) end
+  elseif self.anim then self.anim:draw(Assets.tileset.image, self.pos.x, self.pos.y) end
   --self:drawRectangle("line")
 end
 
