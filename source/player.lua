@@ -65,7 +65,7 @@ end
 
 
 function Player:keypressed(key)
-  if key == "w" or key == "rctrl" then
+  if key == "w" or key == "up" or key == "space" then
     if not self.inAir then Assets.audio.play("jump") end
     self:jump()
   end

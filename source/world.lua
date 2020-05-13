@@ -76,7 +76,6 @@ end
 function World:draw()
   lg.draw(self.canvas)
   self.animatedTiles:draw()
-  if self.overlayImage then lg.draw(self.overlayImage) end
   self.objects:draw()
   self.players:draw()
 end
