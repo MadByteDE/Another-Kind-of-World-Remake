@@ -1,6 +1,6 @@
 
 local _Another_Kind_of_World = {
-  _VERSION          = '1.0.0',
+  _VERSION          = '1.3.0',
   _ORIGINAL_AUTHOR  = 'Markus Kothe (Daandruff)',
   _REMADE_BY        = 'Lars Lönneker (MadByte)',
 }
@@ -25,11 +25,11 @@ local cursor = Assets.newQuad(7, 2)
 local function drawCursor()
   local mx, my  = love.mouse.getPosition()
   local scale   = Screen.scale
-  love.graphics.draw(Assets.sprite.image, cursor, mx, my, 0, scale, scale)
+  love.graphics.draw(Assets.sprite.image, cursor, mx-4, my-4, 0, scale, scale)
 end
 
 local function drawDirtCover()
-  love.graphics.setColor(1, 1, 1, .35)
+  love.graphics.setColor(1, 1, 1, .5)
   love.graphics.draw(Assets.image["dirtcover"])
   love.graphics.setColor(1, 1, 1, 1)
 end
