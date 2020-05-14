@@ -21,7 +21,7 @@ function Bomb:init(world, parent, dx, dy)
   self.parent   = parent
   self.dim      = {w=6, h=6}
   self.trans    = {r=0, sx=1, sy=1, ox=.5, oy=2}
-  self.vel      = {x=vel_x or 0,y=vel_y or 0,lx=400,ly=400}
+  self.vel      = {x=vel_x or 0,y=vel_y or 0,lx=300,ly=300}
   self.damp     = {x=3,y=2}
   self.gravity  = 30
   self.lifetime = 3.5

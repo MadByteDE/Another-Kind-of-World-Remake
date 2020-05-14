@@ -162,14 +162,17 @@ function Actor:update(dt)
   local y = self.pos.y + self.vel.y * dt
   -- Resolve collisions & update position
   if self.collisionWorld and self.collisionWorld:hasItem(self) then
-    -- AI movement on platform (pretty expensive to use & ugly :/)
+    -- AI movement on platform
     if self.isAI then
-      local left  = self.collisionWorld:queryPoint(x-1, y+(self.dim.h/2), self.filter)
-      local right = self.collisionWorld:queryPoint(x+self.dim.w+1, y+(self.dim.h/2), self.filter)
-      local downLeft  = self.collisionWorld:queryRect(x-3, y+self.dim.h, 2, 2, self.filter)
-      local downRight  = self.collisionWorld:queryRect(x+self.dim.w, y+self.dim.h, 2, 2, self.filter)
-      if self.dir.x > 0 and #downRight==0 or #right > 0 then self.dir.x = -1
-      elseif self.dir.x < 0 and #downLeft==0 or #left > 0 then self.dir.x = 1 end
+      if self.dir.x > 0 then
+        local right = self.collisionWorld:queryPoint(x+self.dim.w+1, y+(self.dim.h/2), self.filter)
+        local downRight  = self.collisionWorld:queryRect(x+self.dim.w, y+self.dim.h, 2, 2, self.filter)
+        if #downRight==0 or #right > 0 then self.dir.x = -1 end
+      elseif self.dir.x < 0 then
+        local left  = self.collisionWorld:queryPoint(x-1, y+(self.dim.h/2), self.filter)
+        local downLeft  = self.collisionWorld:queryRect(x-3, y+self.dim.h, 2, 2, self.filter)
+        if #downLeft==0 or #left > 0 then self.dir.x = 1 end
+      end
     end
     local cols
     self.pos.x, self.pos.y, cols = self.collisionWorld:move(self, x, y, self.filter)
