@@ -1,4 +1,11 @@
 
+1.2.0:
+- Added new level 8
+- Some tweaks
+  + This version is the closest to the original game.
+     From now on changes will not represent the vision
+     of the original author of the game (daandruff).
+
 1.1.0:
 - Added animated tiles (grass + waterfall)
 - added "up" and "space" keys for jumping
@@ -10,6 +17,5 @@
 
 
 ToDo:
-- add missing level (new level 8)
 - Bomb cooking
 - level editor

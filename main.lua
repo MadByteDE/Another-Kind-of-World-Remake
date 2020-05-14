@@ -1,6 +1,6 @@
 
 local _Another_Kind_of_World = {
-  _VERSION          = '1.3.0',
+  _VERSION          = '1.2.0',
   _ORIGINAL_AUTHOR  = 'Markus Kothe (Daandruff)',
   _REMADE_BY        = 'Lars Lönneker (MadByte)',
 }
