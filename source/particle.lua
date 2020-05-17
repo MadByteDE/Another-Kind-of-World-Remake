@@ -1,17 +1,12 @@
 
-local lg = love.graphics
-
-local Assets    = require("source.assets")
-local Actor     = require("source.actor")
-local Class     = require("source.lib.class")
-local Particle  = Class()
+local Particle = Class()
 Particle:include(Actor)
-
 local quads = { -- not flexible that way - need to change that!
   Assets.newQuad(1, 3),
   Assets.newQuad(2, 3),
   Assets.newQuad(3, 3),
 }
+
 
 function Particle:init(world, x, y, quad)
   Actor.init(self, world, x, y)

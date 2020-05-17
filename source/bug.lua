@@ -1,9 +1,5 @@
 
-local Screen  = require("source.screen")
-local Assets  = require("source.assets")
-local Class   = require("source.lib.class")
-local Actor   = require("source.actor")
-local Bug     = Class()
+local Bug = Class()
 Bug:include(Actor)
 
 
@@ -15,8 +11,8 @@ function Bug:init(world, x, y)
   self.acc      = {x=3,y=0}
   self.vel      = {x=0,y=0,lx=10,ly=0}
   self.damp     = {x=0,y=0}
-  self.isAI     = true
   self.canDie   = true
+  self.isAI     = true
   self.filter   = function(other)
     if other.isSolid then
       return "slide"
@@ -27,8 +23,9 @@ function Bug:init(world, x, y)
   if dir == 1 then self.dir.x  = -1
   else self.dir.x = 1 end
   -- Sprite(s)
-  self:newAnimation("idle", '1-6', 2, .15)
-  self:setAnimation("idle")
+  self:newSprite("idle", '1-6', 2, .15)
+  self:setSprite("idle")
+  self.sprite:gotoFrame(math.random(1, #self.sprite.frames))
 end
 
 

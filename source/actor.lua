@@ -1,15 +1,10 @@
 
-local lg = love.graphics
+local Actor = Class()
 
 local function clamp(val, min, max)
   if not val then return end
   return math.min(math.max(val, min), max)
 end
-
-local Screen  = require("source.screen")
-local Assets  = require("source.assets")
-local Class   = require("source.lib.class")
-local Actor   = Class()
 
 
 function Actor:init(world, x, y, t)
@@ -37,30 +32,21 @@ function Actor:init(world, x, y, t)
   self.sprite   = self.sprite or nil
   self.inAir    = self.inAir or false
   self.dead     = false
-
-  if self.collides then
-    self.collisionWorld = world.collisionWorld
-    -- default collision filter
-    self.filter = self.filter or function(self, other)
-      if self.bounciness > 0 then return "bounce"
-      elseif self.isSolid and other.isSolid then return "slide"
-      else return "cross" end
-    end
-    -- Create collider
-    local x, y = self.pos.x, self.pos.y
-    local w, h = self.dim.w, self.dim.h
-    self.collisionWorld:add(self, x, y, w, h, self.filter)
-  end
+  if self.collides then self:addCollider() end
 end
 
 
-function Actor:newAnimation(name, frames, row, durations, onLoop)
-  self.sprites[name] = Assets.newAnimation(frames, row, durations, onLoop)
-  return self.sprites[name]
+function Actor:newSprite(name, frames, row, durations, onLoop)
+  local sprite
+  if type(frames) == "string" then
+    sprite = Assets.newAnimation(frames, row, durations, onLoop)
+  else sprite = Assets.newQuad(frames, row) end
+  self.sprites[name] = sprite
+  return sprite
 end
 
 
-function Actor:setAnimation(name)
+function Actor:setSprite(name)
   self.sprite = self.sprites[name]
 end
 
@@ -68,6 +54,29 @@ end
 function Actor:setDamping(x, y)
   self.damp.x = clamp(x or 0, 0, 100)
   self.damp.y = clamp(y or 0, 0, 100)
+end
+
+
+function Actor:addCollider(colWorld)
+  self.collisionWorld = colWorld or self.world.collisionWorld
+  if self.collisionWorld:hasItem(self) then return end
+  -- default collision filter
+  self.filter = self.filter or function(self, other)
+    if self.bounciness > 0 then return "bounce"
+    elseif self.isSolid and other.isSolid then return "slide"
+    else return "cross" end
+  end
+  -- Create collider
+  local x, y = self.pos.x, self.pos.y
+  local w, h = self.dim.w, self.dim.h
+  self.collisionWorld:add(self, x, y, w, h, self.filter)
+end
+
+
+function Actor:removeCollider()
+  if self.collisionWorld and self.collisionWorld:hasItem(self) then
+    self.collisionWorld:remove(self)
+  end
 end
 
 
@@ -119,16 +128,14 @@ function Actor:drawRectangle(mode)
 end
 
 
-function Actor:onDead()
+function Actor:onDead(v)
   self:destroy()
 end
 
 
 function Actor:destroy()
   self._flags.removed = true -- Conta lib removal
-  if self.collisionWorld and self.collisionWorld:hasItem(self) then
-    self.collisionWorld:remove(self)
-  end
+  self:removeCollider()
 end
 
 
@@ -206,7 +213,9 @@ function Actor:update(dt)
     self.pos.x, self.pos.y = x, y
   end
   -- update the sprite / animation
-  if self.sprite then self.sprite:update(dt) end
+  if self.sprite and self.sprite:type() == "Animation" then
+    self.sprite:update(dt)
+  end
   -- update additional game logic
   if self.logic then self:logic(dt) end
 end
@@ -218,7 +227,12 @@ function Actor:draw()
     local x, y = self.pos.x, self.pos.y
     local sx, sy = self.trans.sx, self.trans.sy
     local ox, oy = self.trans.ox, self.trans.oy
-    self.sprite:draw(Assets.sprite.image, x, y, r, sx, sy, ox, oy)
+    local type = self.sprite:type()
+    if type == "Animation" then
+      self.sprite:draw(Assets.sprite.image, x, y, r, sx, sy, ox, oy)
+    elseif type == "Quad" then
+       lg.draw(Assets.sprite.image, self.sprite, x, y, r, sx, sy, ox, oy)
+     end
   end
   if self.render then self:render() end
 end

@@ -262,6 +262,10 @@ function Animation:resume()
   self.status = "playing"
 end
 
+function Animation:type()
+  return "Animation"
+end
+
 function Animation:draw(image, x, y, r, sx, sy, ox, oy, kx, ky)
   love.graphics.draw(image, self:getFrameInfo(x, y, r, sx, sy, ox, oy, kx, ky))
 end

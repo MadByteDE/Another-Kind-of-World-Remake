@@ -2,6 +2,7 @@ function love.conf(t)
     -- Standard settings
     t.title = 'Another Kind of World'
     t.author = 'Markus Kothe (Daandruff) - Remake by MadByte'
+    t.identity = "Another Kind of World"
 
     -- Window
     t.window.width = 768

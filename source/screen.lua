@@ -1,17 +1,22 @@
 
 local Screen = {}
-
-local transAlpha = 0
-local transTime = 0
-local transTimer = 0
-local shakeTime = 0
+local transAlpha  = 0
+local transTime   = 0
+local transTimer  = 0
+local shakeTime   = 0
 local onTransition, triggered, rgb
 
 
-function Screen:init(w, h, s)
-  self.width   = w or 800
-  self.height  = h or 600
-  self.scale   = s or 1
+function Screen:init(width, height, scale)
+  self.width   = width  or 800
+  self.height  = height or 600
+  self.scale   = scale  or 1
+end
+
+
+function Screen:getMousePosition()
+  local mx, my = love.mouse.getPosition()
+  return mx/self.scale, my/self.scale
 end
 
 
@@ -31,16 +36,15 @@ end
 
 
 function Screen:update(dt)
-  if shakeTime > 0 then shakeTime = shakeTime - dt end
-  if shakeTime < 0 then shakeTime = 0 end
+  if shakeTime > 0 then shakeTime = shakeTime - dt
+  else shakeTime = 0 end
   if transTimer > 0 then
     transTimer = transTimer - dt
-  end
+  else transTimer = 0 end
   if transTimer < transTime/2 and not triggered then
     onTransition()
     triggered = true
   end
-  if transTimer < 0 then transTimer = 0 end
   local elapsed = transTime-transTimer
   transAlpha = elapsed/transTime*transTimer/(transTime/4)
 end
