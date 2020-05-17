@@ -8,6 +8,7 @@
 io.stdout:setvbuf("no")
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.mouse.setVisible(false)
+love.mouse.setGrabbed(true)
 
 -- Shortcuts
 la = love.audio
@@ -20,20 +21,21 @@ Bump    = require("source.lib.bump")
 Anim8   = require("source.lib.anim8")
 Conta   = require("source.lib.conta")
 -- Game dependencies
+Object  = require("source.objects.object")
+Actor   = require("source.objects.actor")
+Tile    = require("source.objects.tile")
 Screen  = require("source.screen")
 Assets  = require("source.assets")
-Actor   = require("source.actor")
-Tile    = require("source.tile")
 World   = require("source.world")
 -- States
-Game    = require("source.game")
-Editor  = require("source.editor")
+Game    = require("source.scenes.game")
+Editor  = require("source.scenes.editor")
 
 -- Locals
 local _NULL_  = function()end
 local Scene   = {init=_NULL_, update=_NULL_, draw=_NULL_, keypressed=_NULL_,
 mousepressed=_NULL_, mousereleased=_NULL_}
-local cursor  = Assets.newQuad(7, 2)
+local cursor  = Assets.newQuad({7, 2})
 
 
 -- Main callbacks
@@ -56,7 +58,7 @@ function love.draw()
   Screen:unset()
   Assets.drawDirtCover()
   Assets.drawCursor(cursor)
-  -- lg.print("FPS: "..love.timer.getFPS(), 10, 10)
+  --lg.print("FPS: "..love.timer.getFPS(), 10, 10)
 end
 
 

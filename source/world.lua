@@ -1,11 +1,11 @@
 
 -- Entities
 local entities = {
-  ["player"]  = require("source.player"),
-  ["bug"]     = require("source.bug"),
-  ["exit"]    = require("source.exit"),
-  ["bomb"]    = require("source.bomb"),
-  ["particle"]= require("source.particle"),
+  ["player"]  = require("source.objects.player"),
+  ["bug"]     = require("source.objects.bug"),
+  ["exit"]    = require("source.objects.exit"),
+  ["bomb"]    = require("source.objects.bomb"),
+  ["particle"]= require("source.objects.particle"),
 }
 
 local World = Class()
@@ -39,7 +39,7 @@ function World:init(id)
       -- Generate from imageData
       if self.tileImage then
         local pixelColor = {self.tileImage:getPixel(x-1, y-1)}
-        for k,v in pairs(Assets.tileset.tiles) do
+        for k,v in pairs(Assets.getTiles()) do
           if compare(pixelColor, v.pixelColor) then
             local tile = Tile(self, tx, ty, v)
             if v.anim then self.animatedTiles:add(tile) end

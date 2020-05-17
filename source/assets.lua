@@ -39,11 +39,14 @@ local sprite      = {
   image     = spritesheet,
   grid      = Anim8.newGrid(tw, tw, iw, ih),
 }
-sprite.newQuad   = function(frame, row)
+sprite.newQuad   = function(data)
+  local frame, row = unpack(data)
   return sprite.grid(frame.."-"..frame, row)[1]
 end
-sprite.newAnimation = function(frames, row, durations, onLoop)
-  local anim = Anim8.newAnimation(sprite.grid(frames, row), durations, onLoop):clone()
+sprite.newAnimation = function(data)
+  local frames, row, duration, onLoop = unpack(data)
+  local grid = sprite.grid(frames, row)
+  local anim = Anim8.newAnimation(grid, duration, onLoop):clone()
   return anim
 end
 
@@ -144,13 +147,14 @@ return {
   audio         = audio,
   image         = image,
   -- Spritesheet
-  sprite        = sprite,
+  spritesheet   = spritesheet,
   newQuad       = sprite.newQuad,
   newAnimation  = sprite.newAnimation,
   -- Tileset
-  tileset       = tileset,
+  tilesheet     = tilesheet,
   getTilesize   = function() return tw end,
   getTile       = tileset.getTile,
+  getTiles      = function()return tileset.tiles end,
   -- Game cursor
   drawCursor    = function(cursor)
     local mx, my  = love.mouse.getPosition()
