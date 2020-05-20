@@ -7,16 +7,23 @@ local time    = 0
 
 function Editor:init()
   self.world = World()
-  self.currentTile = Assets.getTile("wall")
+  self.mouse = {
+    pos         = {x=0, y=0},
+    dim         = {w=1, h=1},
+    hover       = false,
+    currentTile = Assets.getTile("wall"),
+    update      = function(self, dt)
+    end,}
 end
 
 
 function Editor:update(dt)
+  -- Update mouse position
   self.world:update(dt)
   if self.currentTile.anim then self.currentTile.anim:update(dt) end
+  local mx, my = Screen:getMousePosition()
   time = time - dt
   if time <= 0 then
-    local mx, my = Screen:getMousePosition()
     local tx, ty = self:toTileCoords(mx, my)
     if love.mouse.isDown(1) then
       local previous = self.world:getTile(tx, ty)
@@ -43,9 +50,9 @@ function Editor:draw()
   local tx, ty = self:toTileCoords(mx, my)
   lg.setColor(1, 1, 1, .3)
   if self.currentTile.anim then
-    self.currentTile.anim:draw(Assets.tileset.image, tx*tw-tw, ty*tw-tw)
+    self.currentTile.anim:draw(Assets.tilesheet, tx*tw-tw, ty*tw-tw)
   elseif self.currentTile.quad then
-    lg.draw(Assets.tileset.image, self.currentTile.quad, tx*tw-tw, ty*tw-tw)
+    lg.draw(Assets.tilesheet, self.currentTile.quad, tx*tw-tw, ty*tw-tw)
   end
   lg.setColor(1, 1, 1, 1)
 end

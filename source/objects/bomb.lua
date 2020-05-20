@@ -5,7 +5,7 @@ Bomb:include(Actor)
 
 function Bomb:init(world, dx, dy, parent)
   local x = parent.pos.x+parent.dim.w/2-3
-  local y = parent.pos.y+parent.dim.w/2-3
+  local y = parent.pos.y+parent.dim.h/2-3
   local dx = dx-parent.pos.x
   local dy = dy-parent.pos.y
   local angle = math.sqrt(dx*dx+dy*dy)
@@ -27,7 +27,7 @@ function Bomb:init(world, dx, dy, parent)
     else return "bounce" end
   end
 
-  self:newAnimation("lit", Assets.spritesheet, {'4-7', 3, .1})
+  self:newSprite("lit", Assets.spritesheet, {'4-7', 3, .1})
   self:setSprite("lit")
   Assets.audio.play("toss", .65)
 end

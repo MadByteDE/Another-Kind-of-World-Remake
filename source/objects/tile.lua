@@ -6,8 +6,8 @@ Tile:include(Object)
 function Tile:init(world, x, y, tile)
   for k,v in pairs(tile) do self[k] = v end
   local tw = Assets.getTilesize()
-  Actor.init(self, world, x, y, {dim={w=tw, h=tw}})
-  if self.collides then self:addCollider() end
+  Object.init(self, x, y, {dim={w=tw, h=tw}})
+  if self.collides then self:addCollider(world.collisionWorld) end
   if self.anim then
     self.anim = self.anim:clone()
     if self.randomFrame then

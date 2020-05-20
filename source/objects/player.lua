@@ -13,7 +13,7 @@ function Player:init(world, x, y)
   self.damp     = {x=30,y=0}
   self.gravity  = 30
   self.canDie   = true
-  self:newAnimation("idle", Assets.spritesheet, {'1-6', 1, .1})
+  self:newSprite("idle", Assets.spritesheet, {'1-6', 1, .1})
   self:setSprite("idle")
 end
 

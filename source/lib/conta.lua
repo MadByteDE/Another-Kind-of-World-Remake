@@ -93,9 +93,9 @@ end
 function Conta:update(dt, type)
   self:iterate(function(k,v)
     if type and not matchType(v, type) then return end
-    if not v._flags.removed then
+    if v._flags.removed then table.remove(self.items, k)
+    else
       if v.update and v._flags.update then v:update(dt) end
-    else table.remove(self.items, k)
     end
   end)
 end

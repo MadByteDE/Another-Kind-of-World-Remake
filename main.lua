@@ -2,7 +2,7 @@
       NAME            = "Another Kind of World (Remake)"
       VERSION         = "1.2.0"
       ORIGINAL_AUTHOR = "Markus Kothe (Daandruff)"
-      REMAKE_BY       = "Lars Lönneker (MadByte)"
+      REMADE_BY       = "Lars Lönneker (MadByte)"
 ]]--
 
 io.stdout:setvbuf("no")
@@ -24,6 +24,7 @@ Conta   = require("source.lib.conta")
 Object  = require("source.objects.object")
 Actor   = require("source.objects.actor")
 Tile    = require("source.objects.tile")
+Gui     = require("source.gui")
 Screen  = require("source.screen")
 Assets  = require("source.assets")
 World   = require("source.world")
@@ -32,10 +33,9 @@ Game    = require("source.scenes.game")
 Editor  = require("source.scenes.editor")
 
 -- Locals
-local _NULL_  = function()end
-local Scene   = {init=_NULL_, update=_NULL_, draw=_NULL_, keypressed=_NULL_,
-mousepressed=_NULL_, mousereleased=_NULL_}
-local cursor  = Assets.newQuad({7, 2})
+local _NULL   = function()end
+local Scene   = {init=_NULL_, update=_NULL, draw=_NULL, keypressed=_NULL,
+mousepressed=_NULL, mousereleased=_NULL}
 
 
 -- Main callbacks
@@ -57,8 +57,8 @@ function love.draw()
   Scene:draw()
   Screen:unset()
   Assets.drawDirtCover()
-  Assets.drawCursor(cursor)
-  --lg.print("FPS: "..love.timer.getFPS(), 10, 10)
+  -- lg.print("FPS: "..love.timer.getFPS(), 10, 10)
+  -- lg.print("MEM: "..math.floor(collectgarbage("count")).."kb", 10, 20)
 end
 
 

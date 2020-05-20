@@ -9,7 +9,8 @@ end
 
 
 function Actor:init(world, x, y, t)
-  Object.init(self, world, x, y, t)
+  Object.init(self, x, y, t)
+  self.world    = world
   self.vel      = self.vel or {x=0, y=0, lx=150, ly=150}
   self.acc      = self.acc or {x=50, y=50}
   self.gravity  = self.gravity or 0
@@ -20,6 +21,7 @@ function Actor:init(world, x, y, t)
   self.isAI     = self.isAI or false
   self.lifetime = clamp(self.lifetime, 0, 999)
   self.inAir    = self.inAir or false
+  if self.collides then self:addCollider(self.world.collisionWorld) end
 end
 
 
@@ -64,7 +66,7 @@ function Actor:jump(vel)
 end
 
 
-function Actor:onDead(v)
+function Actor:onDead()
   self:destroy()
 end
 

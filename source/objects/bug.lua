@@ -23,7 +23,7 @@ function Bug:init(world, x, y)
   if dir == 1 then self.dir.x  = -1
   else self.dir.x = 1 end
   -- Sprite(s)
-  self:newAnimation("idle", Assets.spritesheet, {'1-6', 2, .15})
+  self:newSprite("idle", Assets.spritesheet, {'1-6', 2, .15})
   self:setSprite("idle")
   self.sprite:gotoFrame(math.random(1, #self.sprite.frames))
 end

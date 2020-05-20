@@ -155,14 +155,8 @@ return {
   getTilesize   = function() return tw end,
   getTile       = tileset.getTile,
   getTiles      = function()return tileset.tiles end,
-  -- Game cursor
-  drawCursor    = function(cursor)
-    local mx, my  = love.mouse.getPosition()
-    local scale   = Screen.scale
-    love.graphics.draw(sprite.image, cursor, mx-12, my-12, 0, scale, scale)
-  end,
   drawDirtCover = function()
-    love.graphics.setColor(1, 1, 1, .5)
+    love.graphics.setColor(1, 1, 1, .65)
     love.graphics.draw(image["dirtcover"])
     love.graphics.setColor(1, 1, 1, 1)
   end,

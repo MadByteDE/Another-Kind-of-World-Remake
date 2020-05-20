@@ -2,39 +2,33 @@
 local Object = Class()
 
 
-function Object:init(world, x, y, t)
+function Object:init(x, y, t)
   local t = t or {}
   for k,v in pairs(t) do self[k] = v end
-  self.world    = world
-  self.pos      = self.pos or {x=x or 0, y=y or 0}
+  self.pos      = {x=x or 0, y=y or 0}
+  self.dim      = {w=8, h=8}
   self.type     = self.type or "object"
   self.rgba     = self.rgba or {1, 1, 1, 1}
-  self.dim      = self.dim or {w=8, h=8}
   self.trans    = self.trans or {r=0, sx=1, sy=1, ox=0, oy=0}
   self.visible  = self.visible or true
   self.isSolid  = self.isSolid or false
   self.collides = self.collides or false
   self.sprites  = self.sprites or {}
   self.sprite   = self.sprite or nil
-  if self.collides then self:addCollider() end
 end
 
 
-function Object:newQuad(name, image, data)
+function Object:newSprite(name, image, data)
   local sprite = {}
-  sprite.image = image
-  sprite.update = function()end
+  sprite.name = name or "Sprite"
+  sprite.type = "Quad"
+  sprite.update = function(dt)end
   sprite.draw = function(self, image, ...) lg.draw(self.image, self.quad, ...)end
   if type(data) == "table" then
-    sprite.quad = Assets.newQuad(data)
+    if type(data[1]) == "number" then
+      sprite.quad = Assets.newQuad(data)
+    elseif type(data[1]) == "string" then sprite = Assets.newAnimation(data) end
   else sprite.quad = data end
-  self.sprites[name] = sprite
-  return sprite
-end
-
-
-function Object:newAnimation(name, image, data)
-  local sprite = Assets.newAnimation(data)
   sprite.image = image
   self.sprites[name] = sprite
   return sprite
@@ -42,12 +36,12 @@ end
 
 
 function Object:setSprite(name)
-  self.sprite = self.sprites[name]
+  self.sprite = self.sprites[name] or self.sprite
 end
 
 
-function Object:addCollider(colWorld)
-  self.collisionWorld = colWorld or self.world.collisionWorld
+function Object:addCollider(collisionWorld)
+  self.collisionWorld = collisionWorld
   if self.collisionWorld:hasItem(self) then return end
   -- default collision filter
   self.filter = self.filter or function(self, other)
@@ -81,15 +75,19 @@ function Object:destroy()
 end
 
 
+function Object:logic(dt) end
+
+
 function Object:update(dt)
-  if self._flags.removed then return end
-  -- update the sprite / animation
-  if self.sprite then
-    self.sprite:update(dt)
-  end
+  if self._flags and self._flags.removed then return end
   -- update additional game logic
-  if self.logic then self:logic(dt) end
+  self:logic(dt)
+  -- update the sprite / animation
+  if self.sprite then self.sprite:update(dt) end
 end
+
+
+function Object:render() end
 
 
 function Object:draw()
@@ -100,7 +98,7 @@ function Object:draw()
     local ox, oy = self.trans.ox, self.trans.oy
      self.sprite:draw(self.sprite.image, x, y, r, sx, sy, ox, oy)
   end
-  if self.render then self:render() end
+  self:render()
 end
 
 return Object

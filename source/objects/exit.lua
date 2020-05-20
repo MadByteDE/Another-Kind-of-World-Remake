@@ -6,10 +6,11 @@ local iw, ih  = Assets.tilesheet:getDimensions()
 
 
 function Exit:init(world, x, y)
-  Object.init(self, world, x, y)
+  Object.init(self, x, y)
+  self.world    = world
   self.type     = "exit"
   self.visible  = false
-  self:newQuad("exit", Assets.tilesheet, lg.newQuad(tw*4, 0, tw, tw, iw, ih))
+  self:newSprite("exit", Assets.tilesheet, lg.newQuad(tw*4, 0, tw, tw, iw, ih))
   self:setSprite("exit")
 end
 
@@ -18,7 +19,7 @@ function Exit:logic(dt)
   if not self.visible and #self.world.objects:get("bug") == 0 then
     self.visible  = true
     self.collides = true
-    self:addCollider()
+    self:addCollider(self.world.collisionWorld)
   end
 end
 

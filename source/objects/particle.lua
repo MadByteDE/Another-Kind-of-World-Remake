@@ -21,14 +21,8 @@ function Particle:init(world, x, y, quad)
 end
 
 
-function  Particle:onDead()
-  self:destroy()
-end
-
-
 function Particle:logic(dt)
   self.trans.r = self.trans.r + (self.vel.x/2) * dt
-  if self.anim then self.anim:update(dt) end
 end
 
 
@@ -37,8 +31,7 @@ function Particle:render()
   local x, y = self.pos.x, self.pos.y
   local sx, sy = self.trans.sx, self.trans.sy
   local ox, oy = self.trans.ox, self.trans.oy
-  if self.quad then lg.draw(Assets.spritesheet, self.quad, x, y, r, sx, sy, ox, oy)
-  elseif self.anim then self.anim:draw(Assets.spritesheet, self.pos.x, self.pos.y) end
+  lg.draw(Assets.spritesheet, self.quad, x, y, r, sx, sy, ox, oy)
 end
 
 return Particle
