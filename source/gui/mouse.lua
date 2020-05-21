@@ -3,9 +3,8 @@ local Mouse = Class()
 Mouse:include(Object)
 
 
-local function getMousePosition(mx, my)
-  local mx = mx or love.mouse.getX()
-  local my = my or love.mouse.getY()
+local function getMousePosition()
+  local mx, my = love.mouse.getPosition()
   return mx/Screen.scale, my/Screen.scale
 end
 
@@ -16,17 +15,26 @@ function Mouse:init(x, y, t)
   Object.init(self, mx, my, t)
   self.type     = "mouse"
   self.dim      = t.dim or {w=1, h=1}
-  self.hover    = false
-  local sprite  = self:newSprite("cursor", Assets.spritesheet, Assets.newQuad({7, 2}))
-  local _, _, qw, qh = sprite.quad:getViewport()
+  self.child    = nil
+  self:newSprite("normal", Assets.spritesheet, Assets.newQuad({7, 2}))
+  -- self:newSprite("hover", Assets.spritesheet, Assets.newQuad({7, 2}))
+  self:setSprite("normal")
+  local _, _, qw, qh = self.sprite.quad:getViewport()
   self.trans.ox = qw/2
   self.trans.oy = qh/2
-  self:setSprite("cursor")
+end
+
+
+function Mouse:onEnter()
+end
+
+
+function Mouse:onExit()
 end
 
 
 function Mouse:setPosition(x, y)
-  self.pos.x, self.pos.y = love.mouse.setPosition(getMousePosition(x, y))
+  love.mouse.setPosition(x*Screen.scale, y*Screen.scale)
 end
 
 

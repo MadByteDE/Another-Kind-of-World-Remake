@@ -1,18 +1,19 @@
 
-local Game = {}
+local Game = Class()
+Game:include(Scene)
 
 
 function Game:init(lvl)
+  Scene.init(self)
   self.level  = lvl or self.level or 0
   self.world  = World(self.level)
-  self.gui    = Gui()
-  self.gui:add("button", Screen.width-13, 5, {
-    text = "Exit Game",
-    action = function(button, mouse)
-      Screen:transition(function() love.event.quit() end, 3)
-    end,
-  })
   self.player = self.world:getObject("player")[1]
+  -- Quit button
+  self.gui:add("button", Screen.width-13, 3, {
+    quad    = Assets.getButton("back"),
+    action  = function(button)
+      if button == 1 then Screen:transition(function() love.event.quit() end, 3) end
+    end})
 end
 
 
@@ -33,20 +34,13 @@ function Game:fail()
 end
 
 
--- function Game:getMouse()
---   return self.gui:getMouse()
--- end
-
-
-function Game:update(dt)
+function Game:logic(dt)
   self.world:update(dt)
-  self.gui:update(dt)
 end
 
 
-function Game:draw()
+function Game:render()
   self.world:draw()
-  self.gui:draw()
 end
 
 
@@ -59,15 +53,10 @@ function Game:keypressed(key)
 end
 
 
-function Game:mousepressed(x, y, button)
-  self.gui:mousepressed(x, y, button)
-end
-
-
 function Game:mousereleased(x, y, button)
+  Scene.mousereleased(self, x, y, button)
   local mouse = self.gui:getMouse()
-  self.gui:mousereleased(x, y, button)
-  if self.player and not mouse.hover then
+  if self.player and not mouse.child then
     self.player:mousereleased(x, y, button)
   end
 end

@@ -32,19 +32,20 @@ end
 function Gui:update(dt)
   self.mouse:update(dt)
   self.elements:update(dt)
-  self.elements:iterate(function(k, v)
-    if not v.collides then return end
-    local col = aabb(self.mouse, v)
-    if col then self.mouse.hover = true
-    else self.mouse.hover = false end
-    if not v.parent and col then
-      self.mouse.child = v
-      v.parent = self.mouse
-      v:onEnter(v.parent)
-    elseif v.parent and not col then
-      v:onExit(v.parent)
-      v.parent = nil
-      self.mouse.child = nil
+  self.elements:iterate(function(k, other)
+    if not other.collides then return end
+    local mouse = self.mouse
+    local col = aabb(mouse, other)
+    if not other.parent and col then
+      mouse.child = other
+      other.parent = self.mouse
+      mouse:onEnter()
+      other:onEnter()
+    elseif other.parent and not col then
+      other:onExit()
+      mouse:onExit()
+      other.parent = nil
+      mouse.child = nil
     end
   end)
 end
@@ -57,13 +58,12 @@ end
 
 
 function Gui:mousepressed(x, y, button)
-  local child = self.mouse.child
-  if child then child:onClick(self.mouse, button) end
+  if self.mouse.child then self.mouse.child:onClick(button) end
 end
 
 
 function Gui:mousereleased(x, y, button)
-  if child then child:onRelease(self.mouse, button) end
+  if self.mouse.child then self.mouse.child:onRelease(button) end
 end
 
 return Gui

@@ -21,27 +21,32 @@ Bump    = require("source.lib.bump")
 Anim8   = require("source.lib.anim8")
 Conta   = require("source.lib.conta")
 -- Game dependencies
+Assets  = require("source.assets")
 Object  = require("source.objects.object")
 Actor   = require("source.objects.actor")
 Tile    = require("source.objects.tile")
 Gui     = require("source.gui")
 Screen  = require("source.screen")
-Assets  = require("source.assets")
 World   = require("source.world")
 -- States
+Scene   = require("source.scenes.scene")
 Game    = require("source.scenes.game")
 Editor  = require("source.scenes.editor")
 
 -- Locals
-local _NULL   = function()end
-local Scene   = {init=_NULL_, update=_NULL, draw=_NULL, keypressed=_NULL,
-mousepressed=_NULL, mousereleased=_NULL}
+local NULL   = function()end
+local Scene   = {init=NULL, update=NULL, draw=NULL, keypressed=NULL,
+mousepressed=_NULL, mousereleased=NULL}
 
 
 -- Main callbacks
 function love.load()
   Screen:init(256, 160, 3)
-  Screen:transition(function() Scene = Game; Scene:init() end, 2)
+  Screen:transition(function()
+    Scene = Game
+    Scene:init()
+    Scene:getMouse():setPosition(Screen.width/2, Screen.height/2)
+  end, 2)
   Assets.audio.play("music", .35, true)
 end
 

@@ -23,7 +23,7 @@ function Object:newSprite(name, image, data)
   sprite.name = name or "Sprite"
   sprite.type = "Quad"
   sprite.update = function(dt)end
-  sprite.draw = function(self, image, ...) lg.draw(self.image, self.quad, ...)end
+  sprite.draw = function(self, image, ...) lg.draw(image or self.image, self.quad, ...)end
   if type(data) == "table" then
     if type(data[1]) == "number" then
       sprite.quad = Assets.newQuad(data)
@@ -40,7 +40,7 @@ function Object:setSprite(name)
 end
 
 
-function Object:addCollider(collisionWorld)
+function Object:addCollider(collisionWorld, x, y, w, h)
   self.collisionWorld = collisionWorld
   if self.collisionWorld:hasItem(self) then return end
   -- default collision filter
@@ -49,8 +49,8 @@ function Object:addCollider(collisionWorld)
     else return "cross" end
   end
   -- Create collider
-  local x, y = self.pos.x, self.pos.y
-  local w, h = self.dim.w, self.dim.h
+  local x, y = x or self.pos.x, y or self.pos.y
+  local w, h = w or self.dim.w, h or self.dim.h
   self.collisionWorld:add(self, x, y, w, h, self.filter)
 end
 
@@ -96,7 +96,9 @@ function Object:draw()
     local x, y = self.pos.x, self.pos.y
     local sx, sy = self.trans.sx, self.trans.sy
     local ox, oy = self.trans.ox, self.trans.oy
+    lg.setColor(self.rgba)
      self.sprite:draw(self.sprite.image, x, y, r, sx, sy, ox, oy)
+     lg.setColor(1, 1, 1, 1)
   end
   self:render()
 end

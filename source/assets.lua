@@ -66,7 +66,7 @@ tileset.getTile = function(id)
   if type(id) == "number" then
     return tileset.tiles[id]
   else
-    for k=0, #tileset.tiles do
+    for k=1, #tileset.tiles do
       local v = tileset.tiles[k]
       if v.name == string.lower(id) then return v end
     end
@@ -75,70 +75,70 @@ end
 
 -- Tiles
 tileset.tiles = {
-  [0] = {
-    type = "tile",
+  { type = "tile",
     name = "back",
     pixelColor = {0, 0, 0},
     quad = lg.newQuad(tw*5, 0, tw, tw, iw, ih)},
-  [1] = {
-    type = "tile",
+  { type = "tile",
     name = "wall",
     pixelColor = {1, 0, 0},
     quad = lg.newQuad(tw*0, 0, tw, tw, iw, ih),
     collides = true,
     isSolid = true},
-  [2] = {
-    type = "tile",
+  { type = "tile",
     name = "top",
     pixelColor = {0, 1, 0},
     quad = lg.newQuad(tw*3, 0, tw, tw, iw, ih),
     collides = true,
     isSolid = true},
-  [3] = {
-    type = "tile",
+  { type = "tile",
     name = "grass",
     pixelColor = {0, 1, 1},
     anim = tileset.newAnimation('1-4', 4, .2),
     randomFrame = true},
-  [4] = {
-    type = "tile",
+  { type = "tile",
     name = "under",
     pixelColor = {1, 1, 0},
     quad = lg.newQuad(tw*2, 0, tw, tw, iw, ih),
     collides = true,
     isSolid = true},
-  [5] = {
-    type = "tile",
+  { type = "tile",
     name = "pillar",
     pixelColor = {128/255, 0, 128/255},
     quad = lg.newQuad(tw*1, 0, tw, tw, iw, ih)},
-  [6] = {
-    type = "tile",
+  { type = "tile",
     name = "drain",
     pixelColor = {128/255, 0, 0},
     anim = tileset.newAnimation('1-8', 2, .05),
     collides = true,
     isSolid = true},
-  [7] = {
-    type = "tile",
+  { type = "tile",
     name = "water",
     pixelColor = {0, 0, 128/255},
     anim = tileset.newAnimation('1-8', 3, .05)},
-  [8] = {
-    type = "entity",
+  { type = "entity",
     name = "exit",
     pixelColor = {1, 1, 1},
     quad = lg.newQuad(tw*5, 0, tw, tw, iw, ih)},
-  [9] = {
-    type = "entity",
+  { type = "entity",
     name = "player",
     pixelColor = {1, 0, 1},
     quad = lg.newQuad(tw*5, 0, tw, tw, iw, ih)},
-  [10] = {
-    type = "entity",
+  { type = "entity",
     name = "bug",
     pixelColor = {0, 0, 1},
     quad = lg.newQuad(tw*5, 0, tw, tw, iw, ih)},
+}
+
+local gui = {}
+local buttonsheet = lg.newImage("assets/buttonsheet.png")
+local bw, bh = 10, 9
+local iw, ih  = buttonsheet:getDimensions()
+gui.buttons = {
+  ["clear"]     = lg.newQuad(bw*0, bh*0, bw, bh, iw, ih),
+  ["back"]      = lg.newQuad(bw*1, bh*0, bw, bh, iw, ih),
+  ["play"]      = lg.newQuad(bw*0, bh*1, bw, bh, iw, ih),
+  ["save"]      = lg.newQuad(bw*1, bh*1, bw, bh, iw, ih),
 }
 
 
@@ -155,6 +155,11 @@ return {
   getTilesize   = function() return tw end,
   getTile       = tileset.getTile,
   getTiles      = function()return tileset.tiles end,
+  -- Gui sheet
+  buttonsheet   = buttonsheet,
+  getButton     = function(name)
+    return gui.buttons[name]
+  end,
   drawDirtCover = function()
     love.graphics.setColor(1, 1, 1, .65)
     love.graphics.draw(image["dirtcover"])

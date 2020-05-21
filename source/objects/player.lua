@@ -62,8 +62,9 @@ end
 
 
 function Player:mousereleased(x, y, button)
+  local mouse = Game:getMouse()
   if button == 1 and #self.world:getObject("bomb") < 3 then
-    self.world:spawn("bomb", (x-8)/Screen.scale, y/Screen.scale, self)
+    self.world:spawn("bomb", mouse.pos.x-self.dim.w/2, mouse.pos.y, self)
   end
 end
 
