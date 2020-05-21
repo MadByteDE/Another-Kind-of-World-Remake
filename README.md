@@ -6,4 +6,4 @@ The original files released by Daandruff are not available anymore, so I decided
 
 - [Old LÖVE forum topic](https://love2d.org/forums/viewtopic.php?f=14&t=8933&p=55171&hilit=another+kind+of+world#p55171)
 
-![Preview](https://i.imgur.com/pTmAj.jpg)
+![Preview](https://i.imgur.com/t4NOqlM.png)
