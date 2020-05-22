@@ -3,10 +3,9 @@ local Object = Class()
 
 
 function Object:init(x, y, t)
-  local t = t or {}
-  for k,v in pairs(t) do self[k] = v end
+  for k,v in pairs(t or {}) do self[k] = v end
   self.pos      = {x=x or 0, y=y or 0}
-  self.dim      = {w=8, h=8}
+  self.dim      = self.dim or {w=8, h=8}
   self.type     = self.type or "object"
   self.rgba     = self.rgba or {1, 1, 1, 1}
   self.trans    = self.trans or {r=0, sx=1, sy=1, ox=0, oy=0}
@@ -19,15 +18,16 @@ end
 
 
 function Object:newSprite(name, image, data)
+  print(name)
   local sprite = {}
   sprite.name = name or "Sprite"
   sprite.type = "Quad"
   sprite.update = function(dt)end
-  sprite.draw = function(self, image, ...) lg.draw(image or self.image, self.quad, ...)end
+  sprite.draw = function(self, image, ...)
+    lg.draw(image or self.image, self.quad, ...)
+  end
   if type(data) == "table" then
-    if type(data[1]) == "number" then
-      sprite.quad = Assets.newQuad(data)
-    elseif type(data[1]) == "string" then sprite = Assets.newAnimation(data) end
+    sprite = data
   else sprite.quad = data end
   sprite.image = image
   self.sprites[name] = sprite
@@ -97,8 +97,8 @@ function Object:draw()
     local sx, sy = self.trans.sx, self.trans.sy
     local ox, oy = self.trans.ox, self.trans.oy
     lg.setColor(self.rgba)
-     self.sprite:draw(self.sprite.image, x, y, r, sx, sy, ox, oy)
-     lg.setColor(1, 1, 1, 1)
+    self.sprite:draw(self.sprite.image, x, y, r, sx, sy, ox, oy)
+    lg.setColor(1, 1, 1, 1)
   end
   self:render()
 end

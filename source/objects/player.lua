@@ -13,8 +13,8 @@ function Player:init(world, x, y)
   self.damp     = {x=30,y=0}
   self.gravity  = 30
   self.canDie   = true
-  self:newSprite("idle", Assets.spritesheet, {'1-6', 1, .1})
-  self:setSprite("idle")
+  self:newSprite(self.type, Assets.spritesheet, Assets.getAnimation(self.type))
+  self:setSprite(self.type)
 end
 
 
@@ -55,7 +55,7 @@ end
 
 function Player:keypressed(key)
   if key == "w" or key == "up" or key == "space" then
-    if not self.inAir then Assets.audio.play("jump") end
+    if not self.inAir then Assets.playSound("jump") end
     self:jump()
   end
 end
@@ -65,6 +65,7 @@ function Player:mousereleased(x, y, button)
   local mouse = Game:getMouse()
   if button == 1 and #self.world:getObject("bomb") < 3 then
     self.world:spawn("bomb", mouse.pos.x-self.dim.w/2, mouse.pos.y, self)
+    Assets.playSound("toss", .6)
   end
 end
 

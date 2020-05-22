@@ -18,7 +18,7 @@ end
 
 
 function Game:success()
-  Assets.audio.play("success", .25)
+  Assets.playSound("success", .25)
   Screen:transition(function()
     self:init(self.world.id+1)
   end, 1)
@@ -26,7 +26,7 @@ end
 
 
 function Game:fail()
-  Assets.audio.play("fail", .30)
+  Assets.playSound("fail", .30)
   Screen:transition(function()
     if self.level == 11 then self:init(0)
     else self:init() end

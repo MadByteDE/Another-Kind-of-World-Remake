@@ -2,9 +2,9 @@
 local Particle = Class()
 Particle:include(Actor)
 local quads = { -- not flexible that way - need to change that!
-  Assets.newQuad({1, 3}),
-  Assets.newQuad({2, 3}),
-  Assets.newQuad({3, 3}),
+  Assets.getQuad("sprite", {1, 3}),
+  Assets.getQuad("sprite", {2, 3}),
+  Assets.getQuad("sprite", {3, 3}),
 }
 
 

@@ -1,15 +1,13 @@
 
--- Entities
+local World = Class()
+local tw    = Assets.tilesize
+
 local entities = {
   ["player"]  = require("source.objects.player"),
   ["bug"]     = require("source.objects.bug"),
   ["exit"]    = require("source.objects.exit"),
   ["bomb"]    = require("source.objects.bomb"),
-  ["particle"]= require("source.objects.particle"),
-}
-
-local World = Class()
-local tw    = Assets.getTilesize()
+  ["particle"]= require("source.objects.particle"), }
 
 local function compare(a, b)
   return a[1] == b[1] and a[2] == b[2] and a[3] == b[3]
@@ -27,9 +25,10 @@ function World:init(id)
   -- init canvas & data containers
   self.canvas   = lg.newCanvas(Screen.width, Screen.height)
   self.tiles    = {}
-  self.animatedTiles = Conta()
   self.objects  = Conta()
+  self.animatedTiles = Conta()
   self.collisionWorld = Bump.newWorld(24)
+
   -- Generate tiles
   for y = 1, Screen.height/tw do
     self.tiles[y] = {}
@@ -39,12 +38,16 @@ function World:init(id)
       -- Generate from imageData
       if self.tileImage then
         local pixelColor = {self.tileImage:getPixel(x-1, y-1)}
-        for k,v in pairs(Assets.getTiles()) do
+        for k,v in pairs(Assets.tiles) do
           if compare(pixelColor, v.pixelColor) then
             local tile = Tile(self, tx, ty, v)
-            if v.anim then self.animatedTiles:add(tile) end
+            if v.type == "animatedTile" then
+              self.animatedTiles:add(tile)
+            elseif v.type == "entity" then
+              tile = Tile(self, tx, ty, Assets.getTile("back"))
+              self:spawn(v.name, tx, ty, v)
+            end
             self.tiles[y][x] = tile
-            if v.type == "entity" then self:spawn(v.name, tx, ty, v) end
           end
         end
       else
@@ -79,10 +82,10 @@ end
 function World:setTile(x, y, v)
   if self.tiles[y] then
     local tile = self.tiles[y][x]
-    if tile.anim then self.animatedTiles:remove(tile) end
+    if tile.type == "animatedTile" then self.animatedTiles:remove(tile) end
     tile:removeCollider()
     tile = v
-    if tile.anim then self.animatedTiles:add(tile) end
+    if tile.type == "animatedTile" then self.animatedTiles:add(tile) end
     self.tiles[y][x] = tile
   else error("There's no tile at X:"..x.." Y:"..y) end
 end

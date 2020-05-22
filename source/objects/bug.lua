@@ -23,8 +23,8 @@ function Bug:init(world, x, y)
   if dir == 1 then self.dir.x  = -1
   else self.dir.x = 1 end
   -- Sprite(s)
-  self:newSprite("idle", Assets.spritesheet, {'1-6', 2, .15})
-  self:setSprite("idle")
+  self:newSprite(self.type, Assets.spritesheet, Assets.getAnimation(self.type))
+  self:setSprite(self.type)
   self.sprite:gotoFrame(math.random(1, #self.sprite.frames))
 end
 
@@ -33,11 +33,6 @@ function Bug:logic(dt)
   if self.dir.x < 0 then self.sprite.flippedH = true
   else self.sprite.flippedH = false end
   self:accelerate(dt)
-end
-
-
-function Bug:render()
-  --self:drawRectangle("line")
 end
 
 return Bug

@@ -1,8 +1,9 @@
 
+local Gui = Class()
+
 local elements = {
-  ["mouse"]  = require("source.gui.mouse"),
-  ["button"] = require("source.gui.button"),
-}
+  ["button"]    = require("source.gui.button"),
+  ["tilepanel"] = require("source.gui.tilepanel"), }
 
 local function aabb(a, b)
   return a.pos.x + a.dim.w > b.pos.x and a.pos.x < b.pos.x + b.dim.w and
@@ -10,12 +11,9 @@ local function aabb(a, b)
 end
 
 
-local Gui = Class()
-
-
 function Gui:init()
   self.elements = Conta()
-  self.mouse    = elements["mouse"]()
+  self.mouse    = Mouse()
 end
 
 
@@ -64,6 +62,11 @@ end
 
 function Gui:mousereleased(x, y, button)
   if self.mouse.child then self.mouse.child:onRelease(button) end
+end
+
+
+function Gui:wheelmoved(x, y)
+  if self.mouse.child then self.mouse.child:onScroll(button) end
 end
 
 return Gui

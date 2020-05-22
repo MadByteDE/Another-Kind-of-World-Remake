@@ -20,14 +20,18 @@ Class   = require("source.lib.class")
 Bump    = require("source.lib.bump")
 Anim8   = require("source.lib.anim8")
 Conta   = require("source.lib.conta")
--- Game dependencies
+-- Basics
 Assets  = require("source.assets")
+Screen  = require("source.screen")
+-- Objects
 Object  = require("source.objects.object")
 Actor   = require("source.objects.actor")
 Tile    = require("source.objects.tile")
-Gui     = require("source.gui")
-Screen  = require("source.screen")
 World   = require("source.world")
+-- Gui
+Element = require("source.gui.element")
+Mouse   = require("source.gui.mouse")
+Gui     = require("source.gui")
 -- States
 Scene   = require("source.scenes.scene")
 Game    = require("source.scenes.game")
@@ -47,7 +51,7 @@ function love.load()
     Scene:init()
     Scene:getMouse():setPosition(Screen.width/2, Screen.height/2)
   end, 2)
-  Assets.audio.play("music", .35, true)
+  Assets.playSound("music", .35, true)
 end
 
 

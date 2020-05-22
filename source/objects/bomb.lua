@@ -26,15 +26,13 @@ function Bomb:init(world, dx, dy, parent)
     elseif not other.isSolid then return
     else return "bounce" end
   end
-
-  self:newSprite("lit", Assets.spritesheet, {'4-7', 3, .1})
-  self:setSprite("lit")
-  Assets.audio.play("toss", .65)
+  self:newSprite(self.type, Assets.spritesheet, Assets.getAnimation(self.type))
+  self:setSprite(self.type)
 end
 
 
 function Bomb:onDead()
-  Assets.audio.play("boom", .5)
+  Assets.playSound("boom", .5)
   Screen:shake()
   for i=1, math.random(20,25) do
     self.world:spawn("particle", self.pos.x, self.pos.y)
@@ -46,7 +44,7 @@ function Bomb:onDead()
   for i=1, #cols do
     local other = cols[i]
     if other.canDie then
-      Assets.audio.play("splat", .6)
+      Assets.playSound("splat", .6)
       other:onDead()
     end
   end
