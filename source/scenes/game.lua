@@ -12,7 +12,9 @@ function Game:init(lvl)
   self.gui:add("button", Screen.width-13, 3, {
     quad    = Assets.getButton("back"),
     action  = function(e, button)
-      if button == 1 then Screen:transition(function() love.event.quit() end, 3) end
+      if button == 1 then Screen:transition(function()
+        love.event.quit()
+      end, 1.5) end
     end})
 end
 
@@ -20,7 +22,8 @@ end
 function Game:success()
   Assets.playSound("success", .25)
   Screen:transition(function()
-    self:init(self.world.id+1)
+    if type(self.world.id) == "string" then CurrentScene = Editor
+    else self:init(self.world.id+1) end
   end, 1)
 end
 
@@ -28,7 +31,7 @@ end
 function Game:fail()
   Assets.playSound("fail", .30)
   Screen:transition(function()
-    if self.level == 11 then self:init(0)
+    if self.level == 12 then self:init(0)
     else self:init() end
   end, .75, {.1, .05, .05})
 end
@@ -47,6 +50,11 @@ end
 function Game:keypressed(key)
   if self.player then self.player:keypressed(key) end
   if key == "r" then self:fail()
+  elseif key == "tab" then
+    Screen:transition(function()
+      CurrentScene = Editor
+      CurrentScene:init()
+    end, 1.5)
   elseif key == "escape" then
     Screen:transition(function() love.event.quit() end, 3)
   end

@@ -53,10 +53,10 @@ mousepressed=_NULL_, mousereleased=_NULL_}
 
 -- Main callbacks
 function love.load()
-  Screen:init(256, 160, 4)
+  Screen:init(256, 160, 3)
   Screen:transition(function()
-    CurrentScene = Editor
-    CurrentScene:init()
+    CurrentScene = Game
+    CurrentScene:init(9)
     CurrentScene:getMouse():setPosition(Screen.width/2, Screen.height/2)
   end, 2)
   Assets.playSound("music", .35, true)
@@ -76,6 +76,14 @@ function love.draw()
   Assets.drawDirtCover(Screen.scale)
   -- lg.print("FPS: "..lt.getFPS(), 10, 10)
   -- lg.print("MEM: "..math.floor(collectgarbage("count")).."kb", 10, 25)
+  lg.setColor(.5, .5, .5, .2)
+  lg.print("'TAB' - Switch Editor/Game mode", 10, 10)
+  lg.print("'ESC' - Quit", 10, 25)
+  if CurrentScene == Editor then
+    lg.print("LMB - Place selected tile", 10, 50)
+    lg.print("RMB - Pick tile from map", 10, 65)
+  end
+  lg.setColor(1, 1, 1, 1)
 end
 
 

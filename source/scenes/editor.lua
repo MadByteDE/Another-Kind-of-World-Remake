@@ -5,9 +5,10 @@ Editor:include(Scene)
 local tw = Assets.tilesize
 
 
-function Editor:init()
+function Editor:init(lvl)
   Scene.init(self)
-  self.world  = World()
+  if lf.getInfo("/levels/saved.png") and not lvl then self.world  = World("saved")
+  else self.world = World(lvl) end
   self.currentTile = Assets.getTile("wall")
   -- Quit button
   self.gui:add("button", Screen.width-13, 3, {
@@ -30,6 +31,11 @@ function Editor:init()
         end end })
     self.gui:add("button", x+11, y+h+1, {
       quad    = Assets.getButton("save"),
+      action  = function(e, button)
+        if button == 1 then
+          self.world:save("saved")
+          print("Successfully saved level")
+        end end,
       parent  = panel, })
     self.gui:add("button", x+22, y+h+1, {
       quad    = Assets.getButton("play"),
@@ -38,8 +44,9 @@ function Editor:init()
         if button == 1 then
           Screen:transition(function()
             CurrentScene = Game
-            CurrentScene:init()
-          end, 2)
+            self.world:save("saved")
+            CurrentScene:init("saved")
+          end, 1.5)
         end
       end })
 end
@@ -64,8 +71,7 @@ function Editor:logic(dt)
     self.world:setTile(tx, ty, Tile(self.world, tx*tw-tw, ty*tw-tw, self.currentTile))
     self.world:renderCanvas()
   elseif love.mouse.isDown(2) and not mouse.child then
-    self.world:setTile(tx, ty, Tile(self.world, tx*tw-tw, ty*tw-tw, Assets.getTile("back")))
-    self.world:renderCanvas()
+    self.currentTile = Assets.getTile(self.world:getTile(tx, ty).name)
   end
 end
 
@@ -85,7 +91,13 @@ end
 function Editor:keypressed(key)
   if key == "escape" then
     Screen:transition(function() love.event.quit() end, 3)
+  elseif key == "tab" then
+    Screen:transition(function()
+      CurrentScene = Game
+      CurrentScene:init(0)
+    end, 1.5)
   end
+
 end
 
 return Editor

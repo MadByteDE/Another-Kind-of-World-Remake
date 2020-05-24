@@ -9,12 +9,14 @@ end
 
 
 function World:init(id)
-  self.id = id or self.id or "World"
+  self.id = id or self.id
   local path  = lf.getAppdataDirectory().."/levels/"
   if not lf.getInfo(path) then lf.createDirectory("levels") end
   if type(self.id) == "number" then
     self.tileImage = li.newImageData("assets/levels/".."lvl"..self.id.."col.png")
     self.overlayImage = lg.newImage("assets/levels/".."lvl"..self.id.."over.png")
+  elseif type(self.id) == "string" then
+    self.tileImage = li.newImageData("/levels/"..id..".png")
   end
   -- init canvas & data containers
   self.canvas   = lg.newCanvas(Screen.width, Screen.height)
@@ -37,7 +39,7 @@ function World:init(id)
             local tile = Tile(self, tx, ty, v)
             if v.type == "animatedTile" then
               self.animatedTiles:add(tile)
-            elseif v.type == "entity" then
+            elseif v.type == "entity" and CurrentScene == Game then
               tile = Tile(self, tx, ty, Assets.getTile("back"))
               self:spawn(v.name, tx, ty, v)
             end
@@ -51,6 +53,18 @@ function World:init(id)
     end
   end
   self:renderCanvas()
+end
+
+
+function World:save(name)
+  local imageData = love.image.newImageData(Screen.width/tw, Screen.height/tw)
+  for y = 1, Screen.height/tw do
+    for x = 1, Screen.width/tw do
+      local pixelColor = self.tiles[y][x].pixelColor
+      imageData:setPixel(x-1, y-1, unpack(pixelColor))
+    end
+  end
+  imageData:encode("png", "/levels/"..name..".png")
 end
 
 
