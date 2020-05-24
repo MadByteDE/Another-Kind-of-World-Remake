@@ -56,7 +56,7 @@ function love.load()
   Screen:init(256, 160, 3)
   Screen:transition(function()
     CurrentScene = Game
-    CurrentScene:init(9)
+    CurrentScene:init()
     CurrentScene:getMouse():setPosition(Screen.width/2, Screen.height/2)
   end, 2)
   Assets.playSound("music", .35, true)
