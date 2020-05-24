@@ -1,4 +1,9 @@
 
+1.2.5:
+- Some simple gui elements
+~ Working level editor (kind of)!
+- Bonus level (Level 11)!
+
 1.2.0:
 - Added new level 8
 - Some tweaks

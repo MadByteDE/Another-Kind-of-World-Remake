@@ -1,6 +1,6 @@
 --[[
       NAME            = "Another Kind of World (Remake)"
-      VERSION         = "1.2.0"
+      VERSION         = "1.2.5"
       ORIGINAL_AUTHOR = "Markus Kothe (Daandruff)"
       REMADE_BY       = "Lars Lönneker (MadByte)"
 ]]--
@@ -31,17 +31,17 @@ Object  = require("source.objects.object")
 Actor   = require("source.objects.actor")
 Tile    = require("source.objects.tile")
 Entities = {}
-Entities.player = require("source.objects.player")
-Entities.bug = require("source.objects.bug")
-Entities.exit = require("source.objects.exit")
-Entities.bomb = require("source.objects.bomb")
+Entities.player   = require("source.objects.player")
+Entities.bug      = require("source.objects.bug")
+Entities.exit     = require("source.objects.exit")
+Entities.bomb     = require("source.objects.bomb")
 Entities.particle = require("source.objects.particle")
 -- Gui elements
 Element   = require("source.gui.element")
 Elements  = {}
-Elements.mouse = require("source.gui.mouse")
-Elements.button = require("source.gui.button")
-Elements.tilepanel = require("source.gui.tilepanel")
+Elements.mouse      = require("source.gui.mouse")
+Elements.button     = require("source.gui.button")
+Elements.tilepanel  = require("source.gui.tilepanel")
 -- Scenes
 Scene   = require("source.scenes.scene")
 Game    = require("source.scenes.game")
@@ -80,8 +80,8 @@ function love.draw()
   lg.print("'TAB' - Switch Editor/Game mode", 10, 10)
   lg.print("'ESC' - Quit", 10, 25)
   if CurrentScene == Editor then
-    lg.print("LMB - Place selected tile", 10, 50)
-    lg.print("RMB - Pick tile from map", 10, 65)
+    lg.print("'LMB' - Place selected tile", 10, 50)
+    lg.print("'RMB' - Pick tile from map", 10, 65)
   end
   lg.setColor(1, 1, 1, 1)
 end
