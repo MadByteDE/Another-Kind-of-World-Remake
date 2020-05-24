@@ -31,10 +31,15 @@ local getImage = function(name)
   return images[name]
 end
 
-local drawDirtCover = function()
-  love.graphics.setColor(1, 1, 1, .75)
+local drawDirtCover = function(scale)
+  if scale then
+    lg.push()
+    lg.scale(scale, scale)
+  end
+  love.graphics.setColor(1, 1, 1, .45)
   love.graphics.draw(getImage("dirtcover"))
   love.graphics.setColor(1, 1, 1, 1)
+  if scale then lg.pop() end
 end
 
 local tw      = 8
@@ -127,6 +132,14 @@ local getButton = function(name)
   return buttons[name]
 end
 
+local elements = {
+  ["tilepanel"] = lg.newQuad(0, 32, 32, 48, iw, ih),
+}
+
+local getElement = function(name)
+  return elements[name]
+end
+
 local newAnimation = function(grid, data)
   local frames, row, duration, onLoop = unpack(data)
   local anim = Anim8.newAnimation(grids[grid](frames, row), duration, onLoop)
@@ -153,6 +166,7 @@ return {
   newAnimation  = newAnimation,
   getAnimation  = getAnimation,
   getButton     = getButton,
+  getElement    = getElement,
   tiles         = tiles,
   getTile       = getTile,
   getAnimation  = getAnimation,

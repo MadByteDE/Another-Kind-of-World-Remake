@@ -6,7 +6,7 @@ local tw = Assets.tilesize
 function Tile:init(world, x, y, tile)
   for k,v in pairs(tile) do self[k] = v end
   Object.init(self, x, y, {dim={w=tw, h=tw}})
-  if self.collides then self:addCollider(world.collisionWorld) end
+  if world and self.collides then self:addCollider(world.collisionWorld) end
   if self.type == "animatedTile" then
     self:newSprite(self.name, Assets.spritesheet, Assets.getAnimation(self.name))
     self:setSprite(self.name)

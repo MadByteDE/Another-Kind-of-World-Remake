@@ -7,10 +7,13 @@ local shakeTime   = 0
 local onTransition, triggered, rgb
 
 
-function Screen:init(width, height, scale)
-  self.width   = width  or 800
-  self.height  = height or 600
-  self.scale   = scale  or 1
+function Screen:init(width, height, scale, flags)
+  self.width  = width  or 800
+  self.height = height or 600
+  self.scale  = scale  or 1
+  self.flags  = {vsync = true, borderless = true}
+  for k,v in pairs(flags or {}) do self.flags[k] = v end
+  love.window.setMode(self.width*self.scale, self.height*self.scale, self.flags)
 end
 
 

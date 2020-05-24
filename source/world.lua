@@ -2,12 +2,6 @@
 local World = Class()
 local tw    = Assets.tilesize
 
-local entities = {
-  ["player"]  = require("source.objects.player"),
-  ["bug"]     = require("source.objects.bug"),
-  ["exit"]    = require("source.objects.exit"),
-  ["bomb"]    = require("source.objects.bomb"),
-  ["particle"]= require("source.objects.particle"), }
 
 local function compare(a, b)
   return a[1] == b[1] and a[2] == b[2] and a[3] == b[3]
@@ -70,7 +64,7 @@ end
 
 
 function World:spawn(type, x, y, v)
-  return self.objects:add(entities[type](self, x, y, v))
+  return self.objects:add(Entities[type](self, x, y, v))
 end
 
 

@@ -22,7 +22,7 @@ function Bomb:init(world, dx, dy, parent)
   self.lifetime = 3.5
   self.bounciness = .6
   self.filter = function(self, other)
-    if other == parent or other.type == "bomb" then return "cross"
+    if other == parent then return "cross"
     elseif not other.isSolid then return
     else return "bounce" end
   end

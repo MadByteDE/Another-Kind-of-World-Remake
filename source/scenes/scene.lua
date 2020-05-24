@@ -9,8 +9,8 @@ end
 
 
 function Scene:update(dt)
-  self.gui:update(dt)
   self:logic(dt)
+  self.gui:update(dt)
 end
 
 
@@ -21,7 +21,7 @@ end
 
 function Scene:draw()
   self:render()
-  self.gui:draw(dt)
+  self.gui:draw()
 end
 
 function Scene:logic(dt) end

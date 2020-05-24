@@ -11,7 +11,7 @@ function Game:init(lvl)
   -- Quit button
   self.gui:add("button", Screen.width-13, 3, {
     quad    = Assets.getButton("back"),
-    action  = function(button)
+    action  = function(e, button)
       if button == 1 then Screen:transition(function() love.event.quit() end, 3) end
     end})
 end

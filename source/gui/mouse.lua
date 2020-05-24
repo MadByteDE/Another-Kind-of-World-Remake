@@ -3,14 +3,8 @@ local Mouse = Class()
 Mouse:include(Element)
 
 
-local function getMousePosition()
-  local mx, my = love.mouse.getPosition()
-  return mx/Screen.scale, my/Screen.scale
-end
-
-
 function Mouse:init(x, y, t)
-  local mx, my = getMousePosition(x, y)
+  local mx, my = self:getPosition(x, y)
   Element.init(self, mx, my, t)
   self.type     = "mouse"
   self.dim      = {w=1, h=1}
@@ -23,18 +17,44 @@ function Mouse:init(x, y, t)
 end
 
 
-function Mouse:onEnter() end
-
-function Mouse:onExit() end
-
-
 function Mouse:setPosition(x, y)
   love.mouse.setPosition(x*Screen.scale, y*Screen.scale)
 end
 
 
+function Mouse:getPosition()
+  local mx, my = love.mouse.getPosition()
+  return mx/Screen.scale, my/Screen.scale
+end
+
+
 function Mouse:logic(dt)
-  self.pos.x, self.pos.y = getMousePosition()
+  self.pos.x, self.pos.y = self:getPosition()
+end
+
+
+function Mouse:mousepressed(x, y, button)
+  if self.child then
+    local x, y = self:getPosition()
+      print("PRESS")
+    self.child:onClick(button, x, y)
+  end
+end
+
+
+function Mouse:mousereleased(x, y, button)
+  if self.child then
+    local x, y = self:getPosition()
+    print("RELEASE")
+    self.child:onRelease(button, x, y)
+  end
+end
+
+
+function Mouse:wheelmoved(x, y)
+  if self.child then
+    self.child:onScroll(x, y)
+  end
 end
 
 return Mouse

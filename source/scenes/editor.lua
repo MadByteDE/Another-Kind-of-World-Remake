@@ -2,9 +2,7 @@
 local Editor  = Class()
 Editor:include(Scene)
 
-local tw      = Assets.tilesize
-local tick    = 1/60
-local time    = 0
+local tw = Assets.tilesize
 
 
 function Editor:init()
@@ -14,11 +12,36 @@ function Editor:init()
   -- Quit button
   self.gui:add("button", Screen.width-13, 3, {
     quad    = Assets.getButton("back"),
-    action  = function(button)
+    action  = function(e, button)
       if button == 1 then
         Screen:transition(function() love.event.quit() end, 3)
       end
     end})
+    -- Tile panel
+    local panel = self.gui:add("tilepanel", 220, 50)
+    panel:createTileButtons(self.gui)
+    local x, y, w, h = panel.pos.x, panel.pos.y, panel.dim.w, panel.dim.h
+    self.gui:add("button", x, y+h+1, {
+      quad    = Assets.getButton("clear"),
+      parent  = panel,
+      action  = function(e, button)
+        if button == 1 then
+          Screen:transition(function() self.world = World() end, .5)
+        end end })
+    self.gui:add("button", x+11, y+h+1, {
+      quad    = Assets.getButton("save"),
+      parent  = panel, })
+    self.gui:add("button", x+22, y+h+1, {
+      quad    = Assets.getButton("play"),
+      parent  = panel,
+      action  = function(e, button)
+        if button == 1 then
+          Screen:transition(function()
+            CurrentScene = Game
+            CurrentScene:init()
+          end, 2)
+        end
+      end })
 end
 
 
@@ -35,18 +58,14 @@ end
 function Editor:logic(dt)
   self.world:update(dt)
   local mouse = self:getMouse()
-  time = time - dt
-  if time <= 0 then
-    local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
-    if love.mouse.isDown(1) and not mouse.child then
-      local previous = self.world:getTile(tx, ty)
-      self.world:setTile(tx, ty, Tile(self.world, tx*tw-tw, ty*tw-tw, self.currentTile))
-      self.world:renderCanvas()
-    elseif love.mouse.isDown(2) then
-      self.world:setTile(tx, ty, Tile(self.world, tx*tw-tw, ty*tw-tw, Assets.getTile("back")))
-      self.world:renderCanvas()
-    end
-    time = tick
+  local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
+  if love.mouse.isDown(1) and not mouse.child then
+    local previous = self.world:getTile(tx, ty)
+    self.world:setTile(tx, ty, Tile(self.world, tx*tw-tw, ty*tw-tw, self.currentTile))
+    self.world:renderCanvas()
+  elseif love.mouse.isDown(2) and not mouse.child then
+    self.world:setTile(tx, ty, Tile(self.world, tx*tw-tw, ty*tw-tw, Assets.getTile("back")))
+    self.world:renderCanvas()
   end
 end
 

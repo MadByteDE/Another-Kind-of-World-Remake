@@ -12,7 +12,6 @@ function Bug:init(world, x, y)
   self.vel      = {x=0,y=0,lx=10,ly=0}
   self.damp     = {x=0,y=0}
   self.canDie   = true
-  self.isAI     = true
   self.filter   = function(other)
     if other.isSolid then
       return "slide"
@@ -32,6 +31,18 @@ end
 function Bug:logic(dt)
   if self.dir.x < 0 then self.sprite.flippedH = true
   else self.sprite.flippedH = false end
+  -- AI movement on platform
+  local x = self.pos.x + self.vel.x * dt
+  local y = self.pos.y + self.vel.y * dt
+  if self.dir.x > 0 then
+    local right = self.collisionWorld:queryPoint(x+self.dim.w+1, y+(self.dim.h/2), self.filter)
+    local downRight  = self.collisionWorld:queryRect(x+self.dim.w, y+self.dim.h, 2, 2, self.filter)
+    if #downRight==0 or #right > 0 then self.dir.x = -1 end
+  elseif self.dir.x < 0 then
+    local left  = self.collisionWorld:queryPoint(x-1, y+(self.dim.h/2), self.filter)
+    local downLeft  = self.collisionWorld:queryRect(x-3, y+self.dim.h, 2, 2, self.filter)
+    if #downLeft==0 or #left > 0 then self.dir.x = 1 end
+  end
   self:accelerate(dt)
 end
 
