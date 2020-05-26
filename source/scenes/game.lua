@@ -12,7 +12,7 @@ end
 
 
 function Game:success()
-  Assets.playSound("success", .25)
+  Assets.playSound("success", .7)
   Screen:transition(function()
     if type(self.world.id) == "string" then CurrentScene = Editor
     else self:init(self.world.id+1) end
@@ -21,7 +21,7 @@ end
 
 
 function Game:fail()
-  Assets.playSound("fail", .30)
+  Assets.playSound("fail", .7)
   Screen:transition(function()
     if self.level == 12 then self:init(0)
     else self:init() end
@@ -36,6 +36,7 @@ end
 
 function Game:render()
   self.world:draw()
+  Assets.print("'TAB' - Switch to editor", 3, 2, {1, 1, 1, .075})
 end
 
 

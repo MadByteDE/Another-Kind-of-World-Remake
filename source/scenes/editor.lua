@@ -50,6 +50,8 @@ function Editor:render()
   if self.currentTile.quad then
     lg.draw(Assets.spritesheet, self.currentTile.quad, tx*tw-tw, ty*tw-tw)
   end
+  lg.setColor(1, 1, 1, .075)
+  lg.printf("TAB - Switch to game\nLMB/RMB - Place/Pick tile\nSpace - Play level", 3, 2, 100)
   lg.setColor(1, 1, 1, 1)
 end
 

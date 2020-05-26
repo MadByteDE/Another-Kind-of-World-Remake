@@ -16,7 +16,7 @@ function Bomb:init(world, dx, dy, parent)
   self.parent   = parent
   self.dim      = {w=6, h=6}
   self.trans    = {r=0, sx=1, sy=1, ox=.5, oy=2}
-  self.vel      = {x=vel_x or 0,y=vel_y or 0,lx=265,ly=265}
+  self.vel      = {x=vel_x or 0,y=vel_y or 0,lx=260,ly=260}
   self.damp     = {x=3,y=2}
   self.gravity  = 33
   self.lifetime = 3.5
@@ -32,7 +32,7 @@ end
 
 
 function Bomb:onDead()
-  Assets.playSound("boom", .5)
+  Assets.playSound("boom")
   Screen:shake()
   for i=1, math.random(20,25) do
     self.world:spawn("particle", self.pos.x, self.pos.y)
@@ -44,7 +44,7 @@ function Bomb:onDead()
   for i=1, #cols do
     local other = cols[i]
     if other.canDie then
-      Assets.playSound("splat", .6)
+      Assets.playSound("splat")
       other:onDead()
     end
   end

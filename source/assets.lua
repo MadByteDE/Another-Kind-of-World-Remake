@@ -1,5 +1,24 @@
 
-local fonts     = {}
+local fonts     = {
+  ["normal"] = lg.newFont("assets/fonts/tinypixels.ttf", 8)
+}
+
+local print = function(text, x, y, color)
+  color = color or {1, 1, 1, 1}
+  lg.setColor(color)
+  lg.print(text, x or 0, y or 0)
+  lg.setColor(1, 1, 1, 1)
+end
+
+
+local printf = function(text, x, y, w, mode, color)
+  color = color or {1, 1, 1, 1}
+  lg.setColor(color)
+  lg.printf(text, x or 0, y or 0, w or text:getLineWidth(), mode or "center")
+  lg.setColor(1, 1, 1, 1)
+end
+
+
 local sounds    = {
   ["music"]   = la.newSource("assets/sounds/music.ogg", "stream"),
   ["boom"]    = la.newSource("assets/sounds/boom.ogg", "static"),
@@ -12,6 +31,7 @@ local sounds    = {
 
 local playSound = function(name, vol, loop)
   local source = sounds[name]
+  local vol = vol or 1
   if vol then source:setVolume(vol) end
   if source:isPlaying() then source:stop() end
   source:play()
@@ -161,6 +181,9 @@ end
 
 return {
   tilesize      = tw,
+  fonts         = fonts,
+  print         = print,
+  printf        = printf,
   spritesheet   = images["spritesheet"],
   getQuad       = getQuad,
   newAnimation  = newAnimation,
