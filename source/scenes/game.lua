@@ -53,6 +53,11 @@ function Game:keypressed(key)
 end
 
 
+function Game:keyreleased(key)
+  if self.player then self.player:keyreleased(key) end
+end
+
+
 function Game:mousereleased(x, y, button)
   Scene.mousereleased(self, x, y, button)
   local mouse = self.gui:getMouse()

@@ -92,6 +92,11 @@ function love.keypressed(...)
 end
 
 
+function love.keyreleased(...)
+  CurrentScene:keyreleased(...)
+end
+
+
 function love.mousepressed(...)
   CurrentScene:mousepressed(...)
 end

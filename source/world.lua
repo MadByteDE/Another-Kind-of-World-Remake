@@ -10,7 +10,7 @@ end
 
 function World:init(id)
   self.id = id or self.id
-  local path  = lf.getAppdataDirectory().."/levels/"
+  local path = lf.getAppdataDirectory().."/levels/"
   if not lf.getInfo(path) then lf.createDirectory("levels") end
   if type(self.id) == "number" then
     self.tileImage = li.newImageData("assets/levels/".."lvl"..self.id.."col.png")

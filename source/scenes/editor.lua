@@ -62,8 +62,13 @@ function Editor:keypressed(key)
       CurrentScene = Game
       CurrentScene:init(0)
     end, 1.5)
+  elseif key == "space" then
+    Screen:transition(function()
+      CurrentScene.world:save("saved")
+      CurrentScene = Game
+      CurrentScene:init("saved")
+    end, 1)
   end
-
 end
 
 return Editor
