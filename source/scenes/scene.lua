@@ -5,6 +5,14 @@ local Scene = Class()
 
 function Scene:init()
   self.gui = Gui()
+  -- Quit button
+  self.gui:add("button", Screen.width-13, 3, {
+    quad    = Assets.getButton("back"),
+    action  = function(e, button)
+      if button == 1 then
+        Screen:transition(function() love.event.quit() end, 3)
+      end
+    end})
 end
 
 

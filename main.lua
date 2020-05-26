@@ -4,7 +4,6 @@
       ORIGINAL_AUTHOR = "Markus Kothe (Daandruff)"
       REMADE_BY       = "Lars Lönneker (MadByte)"
 ]]--
-
 io.stdout:setvbuf("no")
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.mouse.setVisible(false)
@@ -26,22 +25,22 @@ Assets  = require("source.assets")
 Screen  = require("source.screen")
 Gui     = require("source.gui")
 World   = require("source.world")
--- Objects
+-- Entities
 Object  = require("source.objects.object")
 Actor   = require("source.objects.actor")
 Tile    = require("source.objects.tile")
-Entities = {}
-Entities.player   = require("source.objects.player")
-Entities.bug      = require("source.objects.bug")
-Entities.exit     = require("source.objects.exit")
-Entities.bomb     = require("source.objects.bomb")
-Entities.particle = require("source.objects.particle")
+Entities = {
+player   = require("source.objects.player"),
+bug      = require("source.objects.bug"),
+exit     = require("source.objects.exit"),
+bomb     = require("source.objects.bomb"),
+particle = require("source.objects.particle"),}
 -- Gui elements
 Element   = require("source.gui.element")
-Elements  = {}
-Elements.mouse      = require("source.gui.mouse")
-Elements.button     = require("source.gui.button")
-Elements.tilepanel  = require("source.gui.tilepanel")
+Elements  = {
+mouse      = require("source.gui.mouse"),
+button     = require("source.gui.button"),
+tilepanel  = require("source.gui.tilepanel"),}
 -- Scenes
 Scene   = require("source.scenes.scene")
 Game    = require("source.scenes.game")
@@ -74,8 +73,9 @@ function love.draw()
   CurrentScene:draw()
   Screen:unset()
   Assets.drawDirtCover(Screen.scale)
-  -- lg.print("FPS: "..lt.getFPS(), 10, 10)
-  -- lg.print("MEM: "..math.floor(collectgarbage("count")).."kb", 10, 25)
+  -- lg.setColor(.5, .5, .5, .5)
+  -- lg.print("FPS: "..lt.getFPS(), 250, 10)
+  -- lg.print("MEM: "..math.floor(collectgarbage("count")).."kb", 250, 25)
   lg.setColor(.5, .5, .5, .2)
   lg.print("'TAB' - Switch Editor/Game mode", 10, 10)
   lg.print("'ESC' - Quit", 10, 25)

@@ -8,14 +8,6 @@ function Game:init(lvl)
   self.level  = lvl or self.level or 0
   self.world  = World(self.level)
   self.player = self.world:getObject("player")[1]
-  -- Quit button
-  self.gui:add("button", Screen.width-13, 3, {
-    quad    = Assets.getButton("back"),
-    action  = function(e, button)
-      if button == 1 then Screen:transition(function()
-        love.event.quit()
-      end, 1.5) end
-    end})
 end
 
 
@@ -64,9 +56,7 @@ end
 function Game:mousereleased(x, y, button)
   Scene.mousereleased(self, x, y, button)
   local mouse = self.gui:getMouse()
-  if self.player and not mouse.child then
-    self.player:mousereleased(x, y, button)
-  end
+  if self.player then self.player:mousereleased() end
 end
 
 return Game

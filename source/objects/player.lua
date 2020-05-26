@@ -61,9 +61,9 @@ function Player:keypressed(key)
 end
 
 
-function Player:mousereleased(x, y, button)
-  if button == 1 and #self.world:getObject("bomb") < 3 then
-    local mouse = Game:getMouse()
+function Player:mousereleased()
+  local mouse = CurrentScene:getMouse()
+  if mouse.button == 1 and #self.world:getObject("bomb") < 3 then
     self.world:spawn("bomb", mouse.pos.x-self.dim.w/2, mouse.pos.y, self)
     Assets.playSound("toss", .6)
   end

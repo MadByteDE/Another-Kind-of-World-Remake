@@ -7,48 +7,14 @@ local tw = Assets.tilesize
 
 function Editor:init(lvl)
   Scene.init(self)
+  -- Load world from file if available
   if lf.getInfo("/levels/saved.png") and not lvl then self.world  = World("saved")
   else self.world = World(lvl) end
+  -- Pre-selected tile when entering editor mode
   self.currentTile = Assets.getTile("wall")
-  -- Quit button
-  self.gui:add("button", Screen.width-13, 3, {
-    quad    = Assets.getButton("back"),
-    action  = function(e, button)
-      if button == 1 then
-        Screen:transition(function() love.event.quit() end, 3)
-      end
-    end})
-    -- Tile panel
-    local panel = self.gui:add("tilepanel", 220, 50)
-    panel:createTileButtons(self.gui)
-    local x, y, w, h = panel.pos.x, panel.pos.y, panel.dim.w, panel.dim.h
-    self.gui:add("button", x, y+h+1, {
-      quad    = Assets.getButton("clear"),
-      parent  = panel,
-      action  = function(e, button)
-        if button == 1 then
-          Screen:transition(function() self.world = World() end, .5)
-        end end })
-    self.gui:add("button", x+11, y+h+1, {
-      quad    = Assets.getButton("save"),
-      action  = function(e, button)
-        if button == 1 then
-          self.world:save("saved")
-          print("Successfully saved level")
-        end end,
-      parent  = panel, })
-    self.gui:add("button", x+22, y+h+1, {
-      quad    = Assets.getButton("play"),
-      parent  = panel,
-      action  = function(e, button)
-        if button == 1 then
-          Screen:transition(function()
-            CurrentScene = Game
-            self.world:save("saved")
-            CurrentScene:init("saved")
-          end, 1.5)
-        end
-      end })
+  -- Add tile panel
+  local panel = self.gui:add("tilepanel", 220, 50)
+  panel:createButtons()
 end
 
 
@@ -66,11 +32,11 @@ function Editor:logic(dt)
   self.world:update(dt)
   local mouse = self:getMouse()
   local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
-  if love.mouse.isDown(1) and not mouse.child then
+  if mouse.button == 1 then
     local previous = self.world:getTile(tx, ty)
     self.world:setTile(tx, ty, Tile(self.world, tx*tw-tw, ty*tw-tw, self.currentTile))
     self.world:renderCanvas()
-  elseif love.mouse.isDown(2) and not mouse.child then
+  elseif mouse.button == 2 then
     self.currentTile = Assets.getTile(self.world:getTile(tx, ty).name)
   end
 end

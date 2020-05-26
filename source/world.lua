@@ -107,7 +107,6 @@ end
 function World:renderCanvas()
   lg.setCanvas(self.canvas)
   self:iterateTiles(function(tile, x, y) tile:draw() end)
-  if self.overlayImage then lg.draw(self.overlayImage) end
   lg.setCanvas()
 end
 
@@ -122,6 +121,7 @@ function World:draw()
   lg.draw(self.canvas)
   self.animatedTiles:draw()
   self.objects:draw()
+  if self.overlayImage then lg.draw(self.overlayImage) end
 end
 
 return World

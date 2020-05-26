@@ -2,6 +2,7 @@
 local Tilepanel = Class()
 Tilepanel:include(Element)
 
+
 function Tilepanel:init(x, y, t)
   Element.init(self, x, y, t)
   self.type       = "tilepanel"
@@ -14,7 +15,9 @@ function Tilepanel:init(x, y, t)
 end
 
 
-function Tilepanel:createTileButtons(gui)
+function Tilepanel:createButtons()
+  local x, y, w, h = self.pos.x, self.pos.y, self.dim.w, self.dim.h
+  -- Buttons for individual tiles
   local tw = Assets.tilesize
   for i=1, #Assets.tiles do
     local rowsize = 3
@@ -23,20 +26,46 @@ function Tilepanel:createTileButtons(gui)
     local column  = (i-1)%rowsize
     local x       = self.pos.x+2+column*tw+spacing*column
     local y       = self.pos.y+4+row*tw+spacing*row
-    gui:add("button", x, y, {
-      dim={w=tw, h=tw},
-      quad = Assets.tiles[i].quad,
-      parent = self,
-      tile = Assets.tiles[i],
-      action = function(e, button)
-        CurrentScene.currentTile = e.tile
-      end })
+    -- Clear button
+    local button = {quad = Assets.tiles[i].quad, parent = self}
+    button.dim  = {w=tw, h=tw}
+    button.tile  = Assets.tiles[i]
+    button.action = function(button, pressed)
+      if pressed == 1 then
+        CurrentScene.currentTile = button.tile
+      end
+    end
+    self._gui:add("button", x, y, button)
   end
-end
-
-
-function Tilepanel:getCurrentTile()
-  return self.currentTile
+  -- Clear button
+  local button = {quad = Assets.getButton("clear"), parent = self}
+  button.action = function(button, pressed)
+    if pressed == 1 then
+      Screen:transition(function() CurrentScene.world = World() end, .5)
+    end
+  end
+  self._gui:add("button", x, y+h+1, button)
+  -- Save button
+  local button = {quad = Assets.getButton("save"), parent = self}
+  button.action = function(button, pressed)
+    if pressed == 1 then
+      CurrentScene.world:save("saved")
+      print("Successfully saved level")
+    end
+  end
+  self._gui:add("button", x+11, y+h+1, button)
+  -- Play button
+  local button = {quad = Assets.getButton("play"), parent = self}
+  button.action = function(button, pressed)
+    if pressed == 1 then
+      Screen:transition(function()
+        CurrentScene.world:save("saved")
+        CurrentScene = Game
+        CurrentScene:init("saved")
+      end)
+    end
+  end
+  self._gui:add("button", x+22, y+h+1, button)
 end
 
 

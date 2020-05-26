@@ -32,7 +32,7 @@ end
 
 function Button:onClick(button, x, y)
   self.rgba = {.45, .45, .45, 1}
-  self:action(button)
+  self.action(self, button)
 end
 
 

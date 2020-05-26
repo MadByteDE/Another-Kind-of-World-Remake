@@ -10,12 +10,15 @@ end
 
 function Gui:init()
   self.elements = Conta()
-  self.mouse    = Elements.mouse()
+  self.mouse = Elements.mouse()
 end
 
 
 function Gui:add(name, x, y, t)
-  return self.elements:add(Elements[name](x, y, t))
+  local t = t or {}
+  t._gui=self
+  local element = Elements[name](x, y, t)
+  return self.elements:add(element)
 end
 
 
