@@ -4,7 +4,8 @@ Player:include(Actor)
 
 
 function Player:init(world, x, y)
-  Actor.init(self, world, x+1, y+1, {collides=true, isSolid=true})
+  -- Init
+  Actor.init(self, world, x, y, {collide=true, solid=true, canDie=true})
   self.type     = "player"
   self.dim      = {w=6, h=7}
   self.trans    = {r=0, sx=1, sy=1, ox=1, oy=1}
@@ -12,7 +13,7 @@ function Player:init(world, x, y)
   self.vel      = {x=0,y=0,lx=70,ly=130}
   self.damp     = {x=30,y=0}
   self.gravity  = 33
-  self.canDie   = true
+  -- Additional
   self:newSprite(self.type, Assets.spritesheet, Assets.getAnimation(self.type))
   self:setSprite(self.type)
 end
@@ -24,11 +25,9 @@ function Player:onDead(v)
 end
 
 
-function Player:onCollision(col)
-  local other = col.other
-  if other.type == "bug" then
-    self:onDead()
-  elseif other.type == "exit" and other.collides then
+function Player:onCollision(other)
+  Actor.onCollision(self, other)
+  if other.type == "exit" then
     self:destroy()
     Game:success()
   end
@@ -78,7 +77,7 @@ end
 function Player:mousereleased()
   local mouse = CurrentScene:getMouse()
   if mouse.button == 1 and #self.world:getObject("bomb") < 3 then
-    self.world:spawn("bomb", mouse.pos.x-self.dim.w/2, mouse.pos.y, self)
+    self.world:spawn("bomb", mouse.pos.x-self.dim.w, mouse.pos.y, self)
     Assets.playSound("toss")
   end
 end

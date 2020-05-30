@@ -10,17 +10,21 @@ end
 
 function Actor:init(world, x, y, t)
   Object.init(self, x, y, t)
-  self.world    = world
+  -- Core
+  self.world = world
+  -- Movement component
   self.vel      = self.vel or {x=0, y=0, lx=150, ly=150}
   self.acc      = self.acc or {x=50, y=50}
   self.gravity  = self.gravity or 0
   self.damp     = self.damp or {x=0, y=0}
   self.dir      = self.dir or {x=0, y=0}
+  -- Properties
+  self.noWrap     = self.noWrap or false
+  self.lifetime   = clamp(self.lifetime, 0, 999)
+  self.inAir      = self.inAir or false
   self.bounciness = self.bounciness or 0
-  self.noWrap   = self.noWrap or false
-  self.lifetime = clamp(self.lifetime, 0, 999)
-  self.inAir    = self.inAir or false
-  if self.collides then self:addCollider(self.world.collisionWorld) end
+  -- Additional
+  if self.collide then self:addCollider(self.world.collisionWorld) end
 end
 
 
@@ -70,18 +74,27 @@ function Actor:onDead()
 end
 
 
+function Actor:onCollision(other)
+  if other.deadly and self.canDie then self:onDead(other) end
+end
+
+
 function Actor:update(dt)
   Object.update(self, dt)
-  -- wrap around the screen
+  -- wrap object around the screen
   if not self.noWrap then
-    if self.pos.x > Screen.width then self.pos.x = -self.dim.w+2
-    elseif self.pos.x < -self.dim.w then self.pos.x = Screen.width-2 end
-    if self.pos.y > Screen.height then self.pos.y = -self.dim.h+2
-    elseif self.pos.y < -self.dim.h then self.pos.y = Screen.height-2 end
-    if self.collisionWorld and self.collisionWorld:hasItem(self) then
-      self.collisionWorld:update(self, self.pos.x, self.pos.y, self.dim.w, self.dim.h)
+    if self.pos.x > Screen.width then
+      self.pos.x = -self.dim.w+2
+    elseif self.pos.x < -self.dim.w then
+      self.pos.x = Screen.width-2
+    elseif self.pos.y > Screen.height then
+      self.pos.y = -self.dim.h+2
+    elseif self.pos.y < -self.dim.h then
+      self.pos.y = Screen.height-2
     end
   end
+  -- Update collsion rect
+  self:updateCollider()
   -- Update lifetime
   if self.lifetime then
     self.lifetime = self.lifetime-dt
@@ -99,7 +112,7 @@ function Actor:update(dt)
   local x = self.pos.x + self.vel.x * dt
   local y = self.pos.y + self.vel.y * dt
   -- Resolve collisions & update position
-  if self.collisionWorld and self.collisionWorld:hasItem(self) then
+  if self.collider then
     local cols
     self.pos.x, self.pos.y, cols = self.collisionWorld:move(self, x, y, self.filter)
     for k,col in ipairs(cols) do
@@ -126,7 +139,7 @@ function Actor:update(dt)
         end
       end
       -- Apply additional changes if specified
-      if self.onCollision then self:onCollision(col) end
+      if self.onCollision then self:onCollision(col.other) end
     end
   else
     self.pos.x, self.pos.y = x, y

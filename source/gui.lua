@@ -31,7 +31,7 @@ function Gui:update(dt)
   self.mouse:update(dt)
   self.elements:update(dt)
   self.elements:iterate(function(k, other)
-    if not other.collides then return end
+    if not other.collide then return end
     local mouse = self.mouse
     local col = aabb(mouse, other)
     if col then

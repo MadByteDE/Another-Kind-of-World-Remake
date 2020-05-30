@@ -8,7 +8,7 @@ function Element:init(x, y, t)
   Object.init(self, x, y, t)
   self.type       = "element"
   self.text       = self.text or self.type
-  self.collides   = self.collides or true
+  self.collide    = self.collide or true
   self.draggable  = self.draggable or false
   self.dragged    = false
   self.diff       = {x=0, y=0}

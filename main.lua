@@ -50,6 +50,7 @@ _NULL_ = function() end
 CurrentScene = {init=_NULL_, update=_NULL_, draw=_NULL_, keypressed=_NULL_,
 mousepressed=_NULL_, mousereleased=_NULL_}
 
+
 -- Main callbacks
 function love.load()
   lg.setFont(Assets.fonts["normal"])
@@ -59,7 +60,7 @@ function love.load()
     CurrentScene:init()
     CurrentScene:getMouse():setPosition(Screen.width/2, Screen.height/2)
   end, 2)
-  Assets.playSound("music", .30, true)
+  Assets.playSound("music", .275, true)
 end
 
 
@@ -73,8 +74,6 @@ function love.draw()
   Screen:set()
   CurrentScene:draw()
   Screen:unset()
-  -- lg.print("FPS: "..lt.getFPS(), 250, 10)
-  -- lg.print("MEM: "..math.floor(collectgarbage("count")).."kb", 250, 25)
   Assets.drawDirtCover(Screen.scale)
 end
 
