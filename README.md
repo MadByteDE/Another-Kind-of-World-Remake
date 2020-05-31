@@ -1,6 +1,5 @@
 # Another Kind of World (Remake)
-
-![Preview](https://i.imgur.com/t4NOqlM.png)
+![Preview](https://i.imgur.com/lbnJgp5.png)
 
 Remake of an old [Ludum Dare 23](http://ludumdare.com/compo/ludum-dare-23/) entry submitted by [Daandruff](https://github.com/daandruff).
 
