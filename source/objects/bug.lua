@@ -3,7 +3,7 @@ local Bug = Class()
 Bug:include(Actor)
 
 
-function Bug:init(world, x, y)
+function Bug:init(level, x, y)
   -- Core
   self.type     = "bug"
   self.dim      = {w=8, h=6}
@@ -17,7 +17,7 @@ function Bug:init(world, x, y)
     else return end
   end
   -- Init
-  Actor.init(self, world, x, y, {collide=true, canDie=true, deadly=true})
+  Actor.init(self, level, x, y, {collide=true, canDie=true, deadly=true})
   -- Additional
   -- Random movement direction when spawning
   local dir = love.math.random(1, 2)

@@ -8,10 +8,10 @@ local function clamp(val, min, max)
 end
 
 
-function Actor:init(world, x, y, t)
+function Actor:init(level, x, y, t)
   Object.init(self, x, y, t)
   -- Core
-  self.world = world
+  self.level = level
   -- Movement component
   self.vel      = self.vel or {x=0, y=0, lx=150, ly=150}
   self.acc      = self.acc or {x=50, y=50}
@@ -24,7 +24,7 @@ function Actor:init(world, x, y, t)
   self.inAir      = self.inAir or false
   self.bounciness = self.bounciness or 0
   -- Additional
-  if self.collide then self:addCollider(self.world.collisionWorld) end
+  if self.collide then self:addCollider(self.level.collisionWorld) end
 end
 
 
@@ -114,7 +114,7 @@ function Actor:update(dt)
   -- Resolve collisions & update position
   if self.collider then
     local cols
-    self.pos.x, self.pos.y, cols = self.collisionWorld:move(self, x, y, self.filter)
+    x, y, cols = self.collisionWorld:move(self, x, y, self.filter)
     for k,col in ipairs(cols) do
       -- Reset velocities
       if col.type == "slide" then
@@ -141,9 +141,8 @@ function Actor:update(dt)
       -- Apply additional changes if specified
       if self.onCollision then self:onCollision(col.other) end
     end
-  else
-    self.pos.x, self.pos.y = x, y
   end
+  self.pos.x, self.pos.y = x, y
 end
 
 return Actor

@@ -7,9 +7,9 @@ local quads = { -- not flexible that way - need to change that!
   Assets.getQuad("sprite", {3, 3}), }
 
 
-function Particle:init(world, x, y, quad)
+function Particle:init(level, x, y, quad)
   -- Init
-  Actor.init(self, world, x, y)
+  Actor.init(self, level, x, y)
   self.pos.x    = self.pos.x - love.math.random(-12, 12)
   self.pos.y    = self.pos.y - love.math.random(-12, 12)
   self.trans    = {r=love.math.random(-24, 24), sx=1, sy=1, ox=self.dim.w/2, oy=self.dim.h/2}

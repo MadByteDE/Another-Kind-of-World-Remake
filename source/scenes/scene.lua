@@ -30,7 +30,7 @@ end
 function Scene:draw()
   self:render()
   self.gui:draw()
-  -- Assets.print("FPS: "..lt.getFPS(), 3, 30)
+  -- Assets.print("FPS: "..love.timer.getFPS(), 3, 30)
   -- Assets.print("MEM: "..math.floor(collectgarbage("count")).."kb", 3, 40)
 end
 

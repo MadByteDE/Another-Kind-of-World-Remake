@@ -3,17 +3,12 @@
 -- ORIGINAL_AUTHOR = "Markus Kothe (Daandruff)"
 -- REMADE_BY       = "Lars Lönneker (MadByte)"
 
+
 io.stdout:setvbuf("no")
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.mouse.setVisible(false)
 love.mouse.setGrabbed(true)
 
--- Shortcuts
-la = love.audio
-lf = love.filesystem
-li = love.image
-lg = love.graphics
-lt = love.timer
 -- Libs
 Class  = require("source.lib.class")
 Bump   = require("source.lib.bump")
@@ -52,7 +47,7 @@ mousepressed=_NULL_, mousereleased=_NULL_}
 
 -- Main callbacks
 function love.load()
-  lg.setFont(Assets.fonts["normal"])
+  love.graphics.setFont(Assets.fonts["normal"])
   Screen:init(256, 160, 4)
   Screen:transition(function()
     CurrentScene = Game

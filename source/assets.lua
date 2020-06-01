@@ -1,32 +1,32 @@
 
 local fonts     = {
-  ["normal"] = lg.newFont("assets/fonts/tinypixels.ttf", 8)
+  ["normal"] = love.graphics.newFont("assets/fonts/tinypixels.ttf", 8)
 }
 
 local print = function(text, x, y, color)
   color = color or {1, 1, 1, 1}
-  lg.setColor(color)
-  lg.print(text, x or 0, y or 0)
-  lg.setColor(1, 1, 1, 1)
+  love.graphics.setColor(color)
+  love.graphics.print(text, x or 0, y or 0)
+  love.graphics.setColor(1, 1, 1, 1)
 end
 
 
 local printf = function(text, x, y, w, mode, color)
   color = color or {1, 1, 1, 1}
-  lg.setColor(color)
-  lg.printf(text, x or 0, y or 0, w or text:getLineWidth(), mode or "center")
-  lg.setColor(1, 1, 1, 1)
+  love.graphics.setColor(color)
+  love.graphics.printf(text, x or 0, y or 0, w or text:getLineWidth(), mode or "center")
+  love.graphics.setColor(1, 1, 1, 1)
 end
 
 
 local sounds    = {
-  ["music"]   = la.newSource("assets/sounds/music.ogg", "stream"),
-  ["boom"]    = la.newSource("assets/sounds/boom.ogg", "static"),
-  ["toss"]    = la.newSource("assets/sounds/toss.ogg", "static"),
-  ["jump"]    = la.newSource("assets/sounds/jump.ogg", "static"),
-  ["splat"]   = la.newSource("assets/sounds/splat.ogg", "static"),
-  ["success"] = la.newSource("assets/sounds/success.ogg", "static"),
-  ["fail"]    = la.newSource("assets/sounds/fail.ogg", "static"),
+  ["music"]   = love.audio.newSource("assets/sounds/music.ogg", "stream"),
+  ["boom"]    = love.audio.newSource("assets/sounds/boom.ogg", "static"),
+  ["toss"]    = love.audio.newSource("assets/sounds/toss.ogg", "static"),
+  ["jump"]    = love.audio.newSource("assets/sounds/jump.ogg", "static"),
+  ["splat"]   = love.audio.newSource("assets/sounds/splat.ogg", "static"),
+  ["success"] = love.audio.newSource("assets/sounds/success.ogg", "static"),
+  ["fail"]    = love.audio.newSource("assets/sounds/fail.ogg", "static"),
 }
 
 local playSound = function(name, vol, loop)
@@ -43,8 +43,8 @@ local cloneSound = function(name)
 end
 
 local images = {
-  ["spritesheet"] = lg.newImage("assets/spritesheet.png"),
-  ["dirtcover"]   = lg.newImage("assets/dirtcover.png"),
+  ["spritesheet"] = love.graphics.newImage("assets/spritesheet.png"),
+  ["dirtcover"]   = love.graphics.newImage("assets/dirtcover.png"),
 }
 
 local getImage = function(name)
@@ -53,13 +53,13 @@ end
 
 local drawDirtCover = function(scale)
   if scale then
-    lg.push()
-    lg.scale(scale, scale)
+    love.graphics.push()
+    love.graphics.scale(scale, scale)
   end
   love.graphics.setColor(1, 1, 1, .45)
   love.graphics.draw(getImage("dirtcover"))
   love.graphics.setColor(1, 1, 1, 1)
-  if scale then lg.pop() end
+  if scale then love.graphics.pop() end
 end
 
 local tw      = 8
@@ -168,7 +168,7 @@ local getButton = function(name)
 end
 
 local elements = {
-  ["tilepanel"] = lg.newQuad(0, 32, 32, 48, iw, ih),
+  ["tilepanel"] = love.graphics.newQuad(0, 32, 32, 48, iw, ih),
 }
 
 local getElement = function(name)

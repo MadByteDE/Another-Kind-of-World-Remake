@@ -29,7 +29,7 @@ function Object:newSprite(name, image, data)
   sprite.type = "Quad"
   sprite.update = function(dt)end
   sprite.draw = function(self, image, ...)
-    lg.draw(image or self.image, self.quad, ...)
+    love.graphics.draw(image or self.image, self.quad, ...)
   end
   if type(data) == "table" then sprite = data
   else sprite.quad = data end
@@ -83,9 +83,9 @@ end
 
 
 function Object:drawRectangle(mode)
-  lg.setColor(self.rgba)
-  lg.rectangle(mode or "fill", self.pos.x, self.pos.y, self.dim.w, self.dim.h)
-  lg.setColor(1, 1, 1, 1)
+  love.graphics.setColor(self.rgba)
+  love.graphics.rectangle(mode or "fill", self.pos.x, self.pos.y, self.dim.w, self.dim.h)
+  love.graphics.setColor(1, 1, 1, 1)
 end
 
 
@@ -116,9 +116,9 @@ function Object:draw()
     local x, y = self:getRect()
     local sx, sy = self.trans.sx, self.trans.sy
     local ox, oy = self.trans.ox, self.trans.oy
-    lg.setColor(self.rgba)
+    love.graphics.setColor(self.rgba)
     self.sprite:draw(self.sprite.image, x, y, r, sx, sy, ox, oy)
-    lg.setColor(1, 1, 1, 1)
+    love.graphics.setColor(1, 1, 1, 1)
   end
   self:render()
 end

@@ -5,6 +5,7 @@ local Level = Class()
 -- Local functions --
 ----------------------------
 
+-- Fill a table with tile id's instead of tile objects
 local function generateTileData(self)
   local tileData = {}
   for y = 1, Screen.height / self.tileSize do
@@ -79,7 +80,7 @@ function Level:init(id)
   self.animatedTiles = Conta()
   self.collisionWorld = Bump.newWorld(24)
 
-  -- Create level from tileData & pre-render it to an canvas
+  -- Create level from tileData & pre-render it to a canvas
   createLevel(self)
   self:renderCanvas()
 end
@@ -93,8 +94,10 @@ function Level:loadLevelData(id)
   local id = tostring(id) or ""
   local paths = {
     "assets/levels/", -- working directory
-    "/levels/", }     -- appdata directory
+    "levels/", }     -- appdata directory
 
+    print(paths[1])
+    print(paths[2])
   -- loop over each path
   for i=1, #paths do
     local levelPath = (paths[i] .. id .. ".akwlvl")
@@ -180,7 +183,6 @@ function Level:setTile(x, y, tile)
     end
 
     self.tiles[y][x] = currentTile
-    self:renderCanvas()
   end
 end
 
@@ -202,6 +204,9 @@ end
 function Level:renderCanvas()
   love.graphics.setCanvas(self.canvas)
   self:iterateTiles(function(tile, x, y) tile:draw() end)
+  if self.overlay and CurrentScene == Game then
+    love.graphics.draw(self.overlay)
+  end
   love.graphics.setCanvas()
 end
 
@@ -232,9 +237,6 @@ end
 
 function Level:draw()
   love.graphics.draw(self.canvas)
-  if self.overlay and CurrentScene == Game then
-    love.graphics.draw(self.overlay)
-  end
   self.animatedTiles:draw()
   self.objects:draw()
 end

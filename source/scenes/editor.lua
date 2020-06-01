@@ -38,6 +38,7 @@ function Editor:logic(dt)
   if mouse.button == 1 then
     local previous = self.level:getTile(tx, ty)
     self.level:setTile(tx, ty, Tile(self.level, tx*tw-tw, ty*tw-tw, self.currentTile))
+    self.level:renderCanvas()
   elseif mouse.button == 2 then
     self.currentTile = Assets.getTile(self.level:getTile(tx, ty).name)
   end
@@ -48,13 +49,13 @@ function Editor:render()
   self.level:draw()
   local mx, my = Screen:getMousePosition()
   local tx, ty = self:toTileCoords(mx, my)
-  lg.setColor(1, 1, 1, .3)
+  love.graphics.setColor(1, 1, 1, .3)
   if self.currentTile.quad then
-    lg.draw(Assets.spritesheet, self.currentTile.quad, tx*tw-tw, ty*tw-tw)
+    love.graphics.draw(Assets.spritesheet, self.currentTile.quad, tx*tw-tw, ty*tw-tw)
   end
-  lg.setColor(1, 1, 1, .075)
-  lg.printf("TAB - Switch to game\nLMB/RMB - Place/Pick tile\nSpace - Play level", 3, 2, 100)
-  lg.setColor(1, 1, 1, 1)
+  love.graphics.setColor(1, 1, 1, .075)
+  love.graphics.printf("TAB - Switch to game\nLMB/RMB - Place/Pick tile\nSpace - Play level", 3, 2, 100)
+  love.graphics.setColor(1, 1, 1, 1)
 end
 
 
@@ -64,7 +65,7 @@ function Editor:keypressed(key)
   elseif key == "tab" then
     Screen:transition(function()
       CurrentScene = Game
-      CurrentScene:init(0)
+      CurrentScene:init(self.level.id)
     end, 1.5)
   elseif key == "space" then
     Screen:transition(function()

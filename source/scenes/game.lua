@@ -9,7 +9,9 @@ function Game:init(id, isEditorLevel)
   self.level = Level(self.currentId)
   self.isEditorLevel = isEditorLevel or false
   self.player = self.level:getObject("player")[1]
-  print(self.level.collisionWorld:countItems())
+  print("Col Obj: "..self.level.collisionWorld:countItems())
+  print("Anim Obj: "..#self.level.animatedTiles:get())
+  print("Ent Obj: "..#self.level.objects:get())
 end
 
 

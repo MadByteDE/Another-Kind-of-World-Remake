@@ -3,9 +3,9 @@ local Player  = Class()
 Player:include(Actor)
 
 
-function Player:init(world, x, y)
+function Player:init(level, x, y)
   -- Init
-  Actor.init(self, world, x, y, {collide=true, solid=true, canDie=true})
+  Actor.init(self, level, x, y, {collide=true, solid=true, canDie=true})
   self.type     = "player"
   self.dim      = {w=6, h=7}
   self.trans    = {r=0, sx=1, sy=1, ox=1, oy=1}
@@ -76,8 +76,8 @@ end
 
 function Player:mousereleased()
   local mouse = CurrentScene:getMouse()
-  if mouse.button == 1 and #self.world:getObject("bomb") < 3 then
-    self.world:spawn("bomb", mouse.pos.x-self.dim.w, mouse.pos.y, self)
+  if mouse.button == 1 and #self.level:getObject("bomb") < 3 then
+    self.level:spawn("bomb", mouse.pos.x-self.dim.w, mouse.pos.y, self)
     Assets.playSound("toss")
   end
 end

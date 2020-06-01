@@ -3,7 +3,7 @@ local Tile = Class()
 Tile:include(Object)
 local tw = Assets.tilesize
 
-function Tile:init(world, x, y, tile)
+function Tile:init(level, x, y, tile)
   for k,v in pairs(tile or {}) do self[k] = v end
   -- Init
   Object.init(self, x, y, {dim=tile.dim or {w=tw, h=tw}})
@@ -14,7 +14,7 @@ function Tile:init(world, x, y, tile)
     self.solid = false
   end
   -- Add collider
-  if world and self.collide then self:addCollider(world.collisionWorld) end
+  if level and self.collide then self:addCollider(level.collisionWorld) end
   -- Add sprite
   if self.type == "animatedTile" then
     self:newSprite(self.name, Assets.spritesheet, Assets.getAnimation(self.name))

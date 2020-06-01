@@ -3,19 +3,19 @@ local Bomb = Class()
 Bomb:include(Actor)
 
 
-function Bomb:init(world, dx, dy, parent)
+function Bomb:init(level, dx, dy, parent)
   -- init
   self.type     = "bomb"
   self.parent   = parent
   self.dim      = {w=6, h=6}
   self.trans    = {r=0, sx=1, sy=1, ox=.5, oy=2}
-  self.damp     = {x=3,y=2}
+  self.damp     = {x=3.15,y=2}
   self.gravity  = 33
   self.lifetime = 3.5
   self.bounciness = .6
-  local bx = parent.pos.x+parent.dim.w/2-self.dim.w/2
-  local by = parent.pos.y+parent.dim.h/2-self.dim.h/2-3
-  Actor.init(self, world, bx, by, {collide=true})
+  local bx = parent.pos.x+parent.dim.w/2-self.dim.w/2-.5
+  local by = parent.pos.y+parent.dim.h/2-self.dim.h/2-2
+  Actor.init(self, level, bx, by, {collide=true})
   local dx = dx-parent.pos.x+parent.dim.w/2
   local dy = dy-parent.pos.y+parent.dim.h/2
   local angle = math.sqrt(dx*dx+dy*dy)
@@ -37,12 +37,12 @@ function Bomb:onDead()
   Assets.playSound("boom")
   Screen:shake()
   for i=1, math.random(20,25) do
-    self.world:spawn("particle", self.pos.x, self.pos.y)
+    self.level:spawn("particle", self.pos.x, self.pos.y)
   end
   local radius = 24
   local x = self.pos.x+self.dim.w/2-radius/2
   local y = self.pos.y+self.dim.h/2-radius/2
-  local cols = self.world.collisionWorld:queryRect(x, y, radius, radius)
+  local cols = self.level.collisionWorld:queryRect(x, y, radius, radius)
   for i=1, #cols do
     local other = cols[i]
     if other.canDie then
