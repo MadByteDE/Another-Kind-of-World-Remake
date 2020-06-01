@@ -2,16 +2,19 @@
 local Editor  = Class()
 Editor:include(Scene)
 
-local tw = Assets.tilesize
+local tw
 
 
-function Editor:init(lvl)
+function Editor:init(id)
   Scene.init(self)
-  -- Load world from file if available
-  if lf.getInfo("/levels/saved.png") and not lvl then self.world  = World("saved")
-  else self.world = World(lvl) end
+
+  -- Load level
+  self.level = Level(id)
+  tw = self.level.tileSize
+
   -- Pre-selected tile when entering editor mode
   self.currentTile = Assets.getTile("wall")
+
   -- Add tile panel
   local panel = self.gui:add("tilepanel", 220, 50)
   panel:createButtons()
@@ -29,21 +32,20 @@ end
 
 
 function Editor:logic(dt)
-  self.world:update(dt)
+  self.level:update(dt)
   local mouse = self:getMouse()
   local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
   if mouse.button == 1 then
-    local previous = self.world:getTile(tx, ty)
-    self.world:setTile(tx, ty, Tile(self.world, tx*tw-tw, ty*tw-tw, self.currentTile))
-    self.world:renderCanvas()
+    local previous = self.level:getTile(tx, ty)
+    self.level:setTile(tx, ty, Tile(self.level, tx*tw-tw, ty*tw-tw, self.currentTile))
   elseif mouse.button == 2 then
-    self.currentTile = Assets.getTile(self.world:getTile(tx, ty).name)
+    self.currentTile = Assets.getTile(self.level:getTile(tx, ty).name)
   end
 end
 
 
 function Editor:render()
-  self.world:draw()
+  self.level:draw()
   local mx, my = Screen:getMousePosition()
   local tx, ty = self:toTileCoords(mx, my)
   lg.setColor(1, 1, 1, .3)
@@ -66,9 +68,9 @@ function Editor:keypressed(key)
     end, 1.5)
   elseif key == "space" then
     Screen:transition(function()
-      CurrentScene.world:save("saved")
+      self.level:saveLevelData()
       CurrentScene = Game
-      CurrentScene:init("saved")
+      CurrentScene:init(self.level.id, true)
     end, 1)
   end
 end

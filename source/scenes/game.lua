@@ -3,19 +3,21 @@ local Game = Class()
 Game:include(Scene)
 
 
-function Game:init(lvl)
+function Game:init(id, isEditorLevel)
   Scene.init(self)
-  self.level  = lvl or self.level or 0
-  self.world  = World(self.level)
-  self.player = self.world:getObject("player")[1]
+  self.currentId = id or self.currentId or 0
+  self.level = Level(self.currentId)
+  self.isEditorLevel = isEditorLevel or false
+  self.player = self.level:getObject("player")[1]
+  print(self.level.collisionWorld:countItems())
 end
 
 
 function Game:success()
   Assets.playSound("success", .7)
   Screen:transition(function()
-    if type(self.world.id) == "string" then CurrentScene = Editor
-    else self:init(self.world.id+1) end
+    if self.isEditorLevel then CurrentScene = Editor
+    else self:init(tonumber(self.level.id)+1) end
   end, 1)
 end
 
@@ -23,19 +25,19 @@ end
 function Game:fail()
   Assets.playSound("fail", .7)
   Screen:transition(function()
-    if self.level == 12 then self:init(0)
+    if tonumber(self.level.id) == 12 then self:init(0)
     else self:init() end
   end, .75, {.1, .05, .05})
 end
 
 
 function Game:logic(dt)
-  self.world:update(dt)
+  self.level:update(dt)
 end
 
 
 function Game:render()
-  self.world:draw()
+  self.level:draw()
   Assets.print("'TAB' - Switch to editor", 3, 2, {1, 1, 1, .075})
 end
 
@@ -46,8 +48,9 @@ function Game:keypressed(key)
   elseif key == "tab" then
     Screen:transition(function()
       CurrentScene = Editor
-      CurrentScene:init()
-    end, 1.5)
+      if self.isEditorLevel then CurrentScene = Editor
+      else CurrentScene:init(self.level.id) end
+    end, 1)
   elseif key == "escape" then
     Screen:transition(function() love.event.quit() end, 3)
   end

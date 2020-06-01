@@ -78,6 +78,9 @@ local getQuad = function(grid, data)
   else return quads[1] end
 end
 
+-- pixelColor is a legency variable and is no longer actively used in the code.
+-- It can be used to convert old png files into the new .akowlvl format with
+-- the following function: https://gist.github.com/MadByteDE/8b922d3e938639bccb9048ac0e4e703d
 local tiles   = {
   { name        = "back",
     type        = "tile",
@@ -185,7 +188,6 @@ local animations = {
   ["grass"]  = newAnimation("animatedTile", {'1-4', 3, .2}),
   ["drain"]  = newAnimation("animatedTile", {'1-8', 1, .05}),
   ["water"]  = newAnimation("animatedTile", {'1-8', 2, .05}),
-  -- ["lava"]   = newAnimation("animatedTile", {'1-4', 4, .5}),
 }
 
 local getAnimation = function(name)

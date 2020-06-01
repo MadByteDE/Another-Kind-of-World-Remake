@@ -1,9 +1,8 @@
---[[
-      NAME            = "Another Kind of World (Remake)"
-      VERSION         = "1.2.5"
-      ORIGINAL_AUTHOR = "Markus Kothe (Daandruff)"
-      REMADE_BY       = "Lars Lönneker (MadByte)"
-]]--
+-- NAME            = "Another Kind of World (Remake)"
+-- VERSION         = "1.3"
+-- ORIGINAL_AUTHOR = "Markus Kothe (Daandruff)"
+-- REMADE_BY       = "Lars Lönneker (MadByte)"
+
 io.stdout:setvbuf("no")
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.mouse.setVisible(false)
@@ -24,7 +23,7 @@ Conta  = require("source.lib.conta")
 Assets  = require("source.assets")
 Screen  = require("source.screen")
 Gui     = require("source.gui")
-World   = require("source.world")
+Level   = require("source.level")
 -- Entities
 Object  = require("source.objects.object")
 Actor   = require("source.objects.actor")

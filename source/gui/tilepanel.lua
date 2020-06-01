@@ -41,7 +41,7 @@ function Tilepanel:createButtons()
   local button = {quad = Assets.getButton("clear"), parent = self}
   button.action = function(button, pressed)
     if pressed == 1 then
-      Screen:transition(function() CurrentScene.world = World() end, .5)
+      Screen:transition(function() CurrentScene.level = Level() end, .5)
     end
   end
   self._gui:add("button", x, y+h+1, button)
@@ -49,7 +49,7 @@ function Tilepanel:createButtons()
   local button = {quad = Assets.getButton("save"), parent = self}
   button.action = function(button, pressed)
     if pressed == 1 then
-      CurrentScene.world:save("saved")
+      CurrentScene.level:saveLevelData()
       print("Successfully saved level")
     end
   end
@@ -59,9 +59,9 @@ function Tilepanel:createButtons()
   button.action = function(button, pressed)
     if pressed == 1 then
       Screen:transition(function()
-        CurrentScene.world:save("saved")
+        CurrentScene.level:saveLevelData()
         CurrentScene = Game
-        CurrentScene:init("saved")
+        CurrentScene:init(CurrentScene.level.id, true)
       end)
     end
   end

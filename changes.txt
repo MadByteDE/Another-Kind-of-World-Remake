@@ -1,4 +1,16 @@
 
+
+1.3.0:
+- New level file format!
+- New sprite and tile graphics made by daandruff!
+- New sounds & a new loop song made by daanndruff!
+- Improvments to the level editor!
+- New tile: Lava!
+Notes:
+- With the new file format, transitions between levels got a
+bit laggy. This will be fixed shortly!
+- The level editor still is pretty much wip - more is coming soon(ish)
+
 1.2.5:
 - Some simple gui elements
 ~ Working level editor (kind of)!
