@@ -130,6 +130,7 @@ local tiles   = {
     dim         = {w=8, h=5},
     trans       = {r=0, sx=1, sy=1, ox=0, oy=3},
     deadly      = true,
+    solid       = true,
     collide     = true, },
   { name        = "exit",
     type        = "entity",

@@ -15,7 +15,7 @@ function Bomb:init(level, dx, dy, parent)
   self.bounciness = .6
   local bx = parent.pos.x+parent.dim.w/2-self.dim.w/2-.5
   local by = parent.pos.y+parent.dim.h/2-self.dim.h/2-2
-  Actor.init(self, level, bx, by, {collide=true})
+  Actor.init(self, level, bx, by, {collide=true, canDie=true})
   local dx = dx-parent.pos.x+parent.dim.w/2
   local dy = dy-parent.pos.y+parent.dim.h/2
   local angle = math.sqrt(dx*dx+dy*dy)
@@ -30,6 +30,11 @@ function Bomb:init(level, dx, dy, parent)
   -- Additional
   self:newSprite(self.type, Assets.spritesheet, Assets.getAnimation(self.type))
   self:setSprite(self.type)
+end
+
+
+function Bomb:onCollision(other)
+  if other.name == "lava" then self:destroy() end
 end
 
 
