@@ -15,7 +15,7 @@ function Bomb:init(level, dx, dy, parent)
   self.bounciness = .6
   local bx = parent.pos.x+parent.dim.w/2-self.dim.w/2-.5
   local by = parent.pos.y+parent.dim.h/2-self.dim.h/2-2
-  Actor.init(self, level, bx, by, {collide=true, canDie=true})
+  Actor.init(self, level, bx, by, {collide=true})
   local dx = dx-parent.pos.x+parent.dim.w/2
   local dy = dy-parent.pos.y+parent.dim.h/2
   local angle = math.sqrt(dx*dx+dy*dy)
