@@ -123,6 +123,12 @@ end
 
 function Level:saveLevelData(id)
   local id = id or self.id
+
+  -- Create level directory in save directory if not already created
+  if not love.filesystem.getInfo("/levels/") then
+    love.filesystem.createDirectory("/levels/")
+  end
+
   -- Set output
   local screenFilePath = love.filesystem.getSaveDirectory() .. "/levels/" .. id .. ".akwlvl"
   local screenFileHandle
