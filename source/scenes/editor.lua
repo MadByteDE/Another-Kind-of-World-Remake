@@ -18,6 +18,17 @@ function Editor:init(id)
   -- Add tile panel
   local panel = self.gui:add("tilepanel", 220, 50)
   panel:createButtons()
+  local data = {
+    text = self.level.id,
+    dim = {w=72,h=8},
+    action = function(textbox) -- On keypress (return/enter)
+      if textbox.text ~= "" then
+        textbox.textColor = {.25, .85, .35, 1}
+        self.newLevelId = textbox.text
+        textbox.gui:deselect(textbox)
+      end
+    end, }
+  local titleBox = self.gui:add("textbox", Screen.width/2-36, 2, data)
 end
 
 
@@ -53,23 +64,22 @@ function Editor:render()
   if self.currentTile.quad then
     love.graphics.draw(Assets.spritesheet, self.currentTile.quad, tx*tw-tw, ty*tw-tw)
   end
-  love.graphics.setColor(1, 1, 1, .075)
-  love.graphics.printf("TAB - Switch to game\nLMB/RMB - Place/Pick tile\nSpace - Play level", 3, 2, 100)
-  love.graphics.setColor(1, 1, 1, 1)
+  Assets.print("TAB - Switch to game\nLMB/RMB - Place/Pick tile\nSpace - Play level", 3, 2, {rgba={1, 1, 1, .075}, width=100})
 end
 
 
 function Editor:keypressed(key)
+  self.gui:keypressed(key)
   if key == "escape" then
     Screen:transition(function() love.event.quit() end, 3)
   elseif key == "tab" then
     Screen:transition(function()
       CurrentScene = Game
-      CurrentScene:init(self.level.id)
+      CurrentScene:init(0)
     end, 1.5)
-  elseif key == "space" then
+  elseif key == "space" and not self.gui.selectedElement then
     Screen:transition(function()
-      self.level:saveLevelData()
+      self.level:saveLevelData(self.newLevelId)
       CurrentScene = Game
       CurrentScene:init(self.level.id, true)
     end, 1)

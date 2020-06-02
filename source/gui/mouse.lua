@@ -39,8 +39,12 @@ function Mouse:mousepressed(x, y, button)
   if self.child then
     local x, y = self:getPosition()
     self.child:onClick(button, x, y)
+    if self.child.selectable then self.gui:select(self.child) end
   else
     self.button = button
+  end
+  if self.gui.selectedElement and self.gui.selectedElement ~= self.child then
+    self.gui:deselect(self.gui.selectedElement)
   end
 end
 

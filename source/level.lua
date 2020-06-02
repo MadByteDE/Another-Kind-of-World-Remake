@@ -96,8 +96,6 @@ function Level:loadLevelData(id)
     "assets/levels/", -- working directory
     "levels/", }     -- appdata directory
 
-    print(paths[1])
-    print(paths[2])
   -- loop over each path
   for i=1, #paths do
     local levelPath = (paths[i] .. id .. ".akwlvl")
@@ -122,7 +120,8 @@ end
 
 
 function Level:saveLevelData(id)
-  local id = id or self.id
+  -- Replace the level id with a new one if provided
+  self.id = id or self.id
 
   -- Create level directory in save directory if not already created
   if not love.filesystem.getInfo("/levels/") then
@@ -130,7 +129,7 @@ function Level:saveLevelData(id)
   end
 
   -- Set output
-  local screenFilePath = love.filesystem.getSaveDirectory() .. "/levels/" .. id .. ".akwlvl"
+  local screenFilePath = love.filesystem.getSaveDirectory() .. "/levels/" .. self.id .. ".akwlvl"
   local screenFileHandle
   local screenFileData = ""
 

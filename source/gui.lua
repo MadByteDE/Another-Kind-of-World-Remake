@@ -10,15 +10,33 @@ end
 
 function Gui:init()
   self.elements = Conta()
-  self.mouse = Elements.mouse()
+  self.mouse = Elements.mouse(nil, nil, {gui=self})
 end
 
 
 function Gui:add(name, x, y, t)
   local t = t or {}
-  t._gui=self
+  t.gui=self
   local element = Elements[name](x, y, t)
   return self.elements:add(element)
+end
+
+
+function Gui:select(element)
+  print("SELECT")
+  if self.selectedElement and self.selectedElement == element then return end
+  if self.selectedElement then self:deselect(self.selectedElement) end
+  self.selectedElement = element
+  element:onSelect()
+end
+
+
+function Gui:deselect(element)
+  print("DESELECT")
+  if (element and self.selectedElement == element) then
+    self.selectedElement = nil
+  end
+  element:onDeselect()
 end
 
 
@@ -53,6 +71,11 @@ function Gui:draw()
 end
 
 
+function Gui:keypressed(...)
+  if self.selectedElement then self.selectedElement:keypressed(...) end
+end
+
+
 function Gui:mousepressed(x, y, button)
   self.mouse:mousepressed(x, y, button)
 end
@@ -65,6 +88,11 @@ end
 
 function Gui:wheelmoved(x, y)
   self.mouse:wheelmoved(x, y)
+end
+
+
+function Gui:textinput(...)
+  if self.selectedElement then self.selectedElement:onTextInput(...) end
 end
 
 return Gui

@@ -28,32 +28,32 @@ function Tilepanel:createButtons()
     local y       = self.pos.y+4+row*tw+spacing*row
     -- Clear button
     local button = {quad = Assets.tiles[i].quad, parent = self}
-    button.dim  = {w=tw, h=tw}
-    button.tile  = Assets.tiles[i]
+    button.dim = {w=tw, h=tw}
+    button.tile = Assets.tiles[i]
     button.action = function(button, pressed)
       if pressed == 1 then
         CurrentScene.currentTile = button.tile
       end
     end
-    self._gui:add("button", x, y, button)
+    self.gui:add("button", x, y, button)
   end
   -- Clear button
   local button = {quad = Assets.getButton("clear"), parent = self}
   button.action = function(button, pressed)
     if pressed == 1 then
-      Screen:transition(function() CurrentScene.level = Level() end, .5)
+      Screen:transition(function() CurrentScene:init() end, .5)
     end
   end
-  self._gui:add("button", x, y+h+1, button)
+  self.gui:add("button", x, y+h+1, button)
   -- Save button
   local button = {quad = Assets.getButton("save"), parent = self}
   button.action = function(button, pressed)
     if pressed == 1 then
-      CurrentScene.level:saveLevelData()
+      CurrentScene.level:saveLevelData(CurrentScene.newLevelId)
       print("Successfully saved level")
     end
   end
-  self._gui:add("button", x+11, y+h+1, button)
+  self.gui:add("button", x+11, y+h+1, button)
   -- Play button
   local button = {quad = Assets.getButton("play"), parent = self}
   button.action = function(button, pressed)
@@ -65,7 +65,7 @@ function Tilepanel:createButtons()
       end)
     end
   end
-  self._gui:add("button", x+22, y+h+1, button)
+  self.gui:add("button", x+22, y+h+1, button)
 end
 
 

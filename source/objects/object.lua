@@ -111,16 +111,20 @@ function Object:render() end
 
 
 function Object:draw()
-  if self.visible and self.sprite then
-    local r = self.trans.r
-    local x, y = self:getRect()
-    local sx, sy = self.trans.sx, self.trans.sy
-    local ox, oy = self.trans.ox, self.trans.oy
-    love.graphics.setColor(self.rgba)
-    self.sprite:draw(self.sprite.image, x, y, r, sx, sy, ox, oy)
-    love.graphics.setColor(1, 1, 1, 1)
+  if self.visible then
+
+    if self.sprite then
+      local r = self.trans.r
+      local x, y = self:getRect()
+      local sx, sy = self.trans.sx, self.trans.sy
+      local ox, oy = self.trans.ox, self.trans.oy
+      love.graphics.setColor(self.rgba)
+      self.sprite:draw(self.sprite.image, x, y, r, sx, sy, ox, oy)
+      love.graphics.setColor(1, 1, 1, 1)
+    end
+
+    self:render()
   end
-  self:render()
 end
 
 return Object

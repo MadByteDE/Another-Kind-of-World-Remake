@@ -38,16 +38,16 @@ function Scene:logic(dt) end
 
 function Scene:render() end
 
-function Scene:mousepressed(...)
-  self.gui:mousepressed(...)
-end
+function Scene:mousepressed(...) self.gui:mousepressed(...) end
 
-function Scene:mousereleased(...)
-  self.gui:mousereleased(...)
-end
+function Scene:mousereleased(...) self.gui:mousereleased(...) end
+
+function Scene:wheelmoved(...) self.gui:wheelmoved(...) end
 
 function Scene:keypressed(...)end
 
 function Scene:keyreleased(...)end
+
+function Scene:textinput(...) self.gui:textinput(...) end
 
 return Scene

@@ -8,6 +8,7 @@ io.stdout:setvbuf("no")
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.mouse.setVisible(false)
 love.mouse.setGrabbed(true)
+love.keyboard.setKeyRepeat(true)
 
 -- Libs
 Class  = require("source.lib.class")
@@ -34,6 +35,7 @@ Element   = require("source.gui.element")
 Elements  = {
 mouse      = require("source.gui.mouse"),
 button     = require("source.gui.button"),
+textbox    = require("source.gui.textbox"),
 tilepanel  = require("source.gui.tilepanel"),}
 -- Scenes
 Scene   = require("source.scenes.scene")
@@ -72,21 +74,14 @@ function love.draw()
 end
 
 
-function love.keypressed(...)
-  CurrentScene:keypressed(...)
-end
+function love.keypressed(...) CurrentScene:keypressed(...) end
 
+function love.keyreleased(...) CurrentScene:keyreleased(...) end
 
-function love.keyreleased(...)
-  CurrentScene:keyreleased(...)
-end
+function love.mousepressed(...) CurrentScene:mousepressed(...) end
 
+function love.mousereleased(...) CurrentScene:mousereleased(...) end
 
-function love.mousepressed(...)
-  CurrentScene:mousepressed(...)
-end
+function love.wheelmoved(...) CurrentScene:wheelmoved(...) end
 
-
-function love.mousereleased(...)
-  CurrentScene:mousereleased(...)
-end
+function love.textinput(...) CurrentScene:textinput(...) end

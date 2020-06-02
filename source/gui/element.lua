@@ -7,12 +7,18 @@ Element:include(Object)
 function Element:init(x, y, t)
   Object.init(self, x, y, t)
   self.type       = "element"
+  self.tooltip    = self.tooltip or "No info available"
   self.text       = self.text or self.type
   self.collide    = self.collide or true
   self.draggable  = self.draggable or false
+  self.selectable = self.selectable or false
+  self.selected   = false
   self.dragged    = false
   self.diff       = {x=0, y=0}
-  self.tooltip    = self.tooltip or "No info available"
+  self.timeout    = self.timeout or 0
+  if self.timeout > 0 then
+    self.timer = self.timeout
+  end
 end
 
 
@@ -36,7 +42,26 @@ function Element:onRelease(button, x, y)
   end
 end
 
+function Element:onSelect()
+  self.selected = true
+end
+
+function Element:onDeselect()
+  self.selected = false
+end
+
+function Element:setTimeout(timeout)
+  self.timeout = timeout or 0
+  self.timer = self.timeout
+end
+
 function Element:onScroll(x, y) end
+
+function Element:onTimeout() end
+
+function Element:onTextInput(text)
+  self.text = self.text .. text
+end
 
 function Element:update(dt)
   local mouse = CurrentScene:getMouse()
@@ -52,6 +77,15 @@ function Element:update(dt)
   if self.dragged then
     self.pos.x = mouse.pos.x-self.diff.x
     self.pos.y = mouse.pos.y-self.diff.y
+  end
+  if self.timeout > 0 then
+    self.timer = self.timer - dt
+    if self.timer <= 0 then
+      self:onTimeout()
+      if self.selected then self.gui:deselect(self) end
+      self.timer = 0
+      self.timeout = 0
+    end
   end
   self:logic(dt)
 end

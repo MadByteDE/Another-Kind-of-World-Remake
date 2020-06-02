@@ -40,7 +40,7 @@ end
 
 function Game:render()
   self.level:draw()
-  Assets.print("'TAB' - Switch to editor", 3, 2, {1, 1, 1, .075})
+  Assets.print("'TAB' - Switch to editor", 3, 2, {rgba={1, 1, 1, .075}})
 end
 
 

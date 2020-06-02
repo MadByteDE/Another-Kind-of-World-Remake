@@ -1,21 +1,28 @@
 
 local fonts     = {
-  ["normal"] = love.graphics.newFont("assets/fonts/tinypixels.ttf", 8)
+  ["normal"] = love.graphics.newFont("assets/fonts/tinypixels.ttf", 8),
+  ["big"] = love.graphics.newFont("assets/fonts/tinypixels.ttf", 16),
 }
 
-local print = function(text, x, y, color)
-  color = color or {1, 1, 1, 1}
-  love.graphics.setColor(color)
-  love.graphics.print(text, x or 0, y or 0)
+local print = function(text, x, y, t)
+  if not t then t = {} end
+  local rgba = t.rgba or {1, 1, 1, 1}
+  local previousFont = love.graphics.getFont()
+  local font = t.font or love.graphics.getFont()
+  local w = t.width or font:getWidth(text)
+  local x = x or 0
+  local y = y or 0
+  local mode = t.mode or "left"
+  if (mode == "center") then
+    local fontHeight = font:getHeight()
+    y = y - fontHeight / 2
+  end
+  love.graphics.setFont(font)
+  love.graphics.setColor(rgba)
+  if w or mode then love.graphics.printf(text, x, y, w, mode)
+  else love.graphics.print(text, x, y) end
   love.graphics.setColor(1, 1, 1, 1)
-end
-
-
-local printf = function(text, x, y, w, mode, color)
-  color = color or {1, 1, 1, 1}
-  love.graphics.setColor(color)
-  love.graphics.printf(text, x or 0, y or 0, w or text:getLineWidth(), mode or "center")
-  love.graphics.setColor(1, 1, 1, 1)
+  love.graphics.setFont(previousFont)
 end
 
 
@@ -199,7 +206,6 @@ return {
   tilesize      = tw,
   fonts         = fonts,
   print         = print,
-  printf        = printf,
   spritesheet   = images["spritesheet"],
   getQuad       = getQuad,
   newAnimation  = newAnimation,
