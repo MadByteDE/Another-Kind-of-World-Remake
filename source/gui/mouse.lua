@@ -13,6 +13,8 @@ function Mouse:init(x, y, t)
   local _, _, qw, qh = self.sprite.quad:getViewport()
   self.trans.ox = qw/2
   self.trans.oy = qh/2
+  self.hoverTimer = 0
+  self.tooltipTimeout = 1.5
   self.button = 0
   self.scroll = {x=0, y=0}
 end
@@ -32,19 +34,26 @@ end
 function Mouse:logic(dt)
   self.pos.x, self.pos.y = self:getPosition()
   if not love.mouse.isDown(self.button) then self.button = 0 end
+  if self.child and self.child.hasTooltip then
+    self.hoverTimer = self.hoverTimer + dt
+    if self.hoverTimer >= self.tooltipTimeout then
+      -- Show Tooltip
+    end
+  end
 end
 
 
 function Mouse:mousepressed(x, y, button)
+  if self.gui.selectedElement and self.gui.selectedElement ~= self.child then
+    self.gui:deselect(self.gui.selectedElement)
+  end
+  
   if self.child then
     local x, y = self:getPosition()
     self.child:onClick(button, x, y)
     if self.child.selectable then self.gui:select(self.child) end
   else
     self.button = button
-  end
-  if self.gui.selectedElement and self.gui.selectedElement ~= self.child then
-    self.gui:deselect(self.gui.selectedElement)
   end
 end
 

@@ -23,7 +23,6 @@ end
 
 
 function Gui:select(element)
-  print("SELECT")
   if self.selectedElement and self.selectedElement == element then return end
   if self.selectedElement then self:deselect(self.selectedElement) end
   self.selectedElement = element
@@ -32,7 +31,6 @@ end
 
 
 function Gui:deselect(element)
-  print("DESELECT")
   if (element and self.selectedElement == element) then
     self.selectedElement = nil
   end
@@ -59,6 +57,7 @@ function Gui:update(dt)
       end
     elseif not col and other == mouse.child then
       mouse.child:onExit(mouse)
+      mouse.hoverTimer = 0
       mouse.child = nil
     end
   end)

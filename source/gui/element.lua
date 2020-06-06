@@ -65,6 +65,7 @@ end
 
 function Element:update(dt)
   local mouse = CurrentScene:getMouse()
+
   if self.parent then
     if self.parent.dragged and not self.dragged then
       self.dragged = true
@@ -74,10 +75,12 @@ function Element:update(dt)
       self.diff = {x=0, y=0}
     end
   end
+
   if self.dragged then
     self.pos.x = mouse.pos.x-self.diff.x
     self.pos.y = mouse.pos.y-self.diff.y
   end
+
   if self.timeout > 0 then
     self.timer = self.timer - dt
     if self.timer <= 0 then
@@ -87,6 +90,7 @@ function Element:update(dt)
       self.timeout = 0
     end
   end
+
   self:logic(dt)
 end
 

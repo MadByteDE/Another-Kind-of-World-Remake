@@ -1,3 +1,4 @@
+
 -- NAME            = "Another Kind of World (Remake)"
 -- VERSION         = "1.3"
 -- ORIGINAL_AUTHOR = "Markus Kothe (Daandruff)"

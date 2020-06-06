@@ -21,11 +21,9 @@ function Editor:init(id)
   local data = {
     text = self.level.id,
     dim = {w=72,h=8},
-    action = function(textbox) -- On keypress (return/enter)
+    action = function(textbox)
       if textbox.text ~= "" then
-        textbox.textColor = {.25, .85, .35, 1}
         self.newLevelId = textbox.text
-        textbox.gui:deselect(textbox)
       end
     end, }
   local titleBox = self.gui:add("textbox", Screen.width/2-36, 2, data)
@@ -70,13 +68,16 @@ end
 
 function Editor:keypressed(key)
   self.gui:keypressed(key)
+
   if key == "escape" then
     Screen:transition(function() love.event.quit() end, 3)
+
   elseif key == "tab" then
     Screen:transition(function()
       CurrentScene = Game
       CurrentScene:init(0)
     end, 1.5)
+
   elseif key == "space" and not self.gui.selectedElement then
     Screen:transition(function()
       self.level:saveLevelData(self.newLevelId)

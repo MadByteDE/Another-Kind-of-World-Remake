@@ -37,14 +37,14 @@ end
 
 function Textbox:onDeselect()
   Element.onDeselect(self)
-  self:setTimeout(2)
+  self:action()
+  self.visible = false
+  self.rgba = {.05, .05, .05, .5}
+  self.textColor = {1, 1, 1, .75}
 end
 
 
 function Textbox:onTimeout()
-  self.visible = false
-  self.rgba = {.05, .05, .05, .5}
-  self.textColor = {1, 1, 1, .75}
 end
 
 
@@ -63,7 +63,7 @@ function Textbox:keypressed(key)
     if byteoffset then
         self.text = string.sub(self.text, 1, byteoffset-1)
     end
-  elseif key == "return" then self:action() end
+  end
 end
 
 
@@ -71,7 +71,7 @@ function Textbox:onTextInput(text)
   local font = love.graphics.getFont()
   if font:getWidth(self.text) > self.dim.w-5 then return end
   self:setTimeout(0)
-  self.text = self.text .. text
+  self.text = self.text .. text:gsub('[%p%c%s]', '') -- remove symbols etc.
 end
 
 

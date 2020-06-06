@@ -8,17 +8,21 @@ local Level = Class()
 -- Fill a table with tile id's instead of tile objects
 local function generateTileData(self)
   local tileData = {}
+
   for y = 1, Screen.height / self.tileSize do
     tileData[y] = {}
     for x = 1, Screen.width / self.tileSize do
+
       local tile = self:getTile(x, y)
       for assKey, assVal in ipairs(Assets.tiles) do
         if (tile.name == assVal.name) then
           tileData[y][x] = assKey
         end
       end
+
     end
   end
+
   return tileData
 end
 
@@ -28,12 +32,15 @@ local function createLevel(self)
 
   -- Load in an empty level
   for y = 1, Screen.height / self.tileSize do
+
     self.tiles[y] = {}
+
     for x = 1, Screen.width / self.tileSize do
       local tx = x * self.tileSize - self.tileSize
       local ty = y * self.tileSize - self.tileSize
       self.tiles[y][x] = Tile(self, tx, ty, Assets.getTile("back"))
     end
+
   end
 
   -- Load from existing tile data
@@ -56,8 +63,10 @@ local function createLevel(self)
               self:setTile(x, y, Tile(self, tx, ty, Assets.getTile("back")))
               self:spawn(assVal.name, tx, ty, assVal)
             end
+
           end
         end
+
       end
     end
   end
@@ -71,7 +80,7 @@ end
 function Level:init(id)
   -- init levelData data
   for k,v in pairs(self:loadLevelData(id) or {}) do self[k] = v end
-  self.id       = self.id or "noname"
+  self.id       = self.id or "New level"
   self.tileSize = self.tileSize or 8
 
   -- init data containers
@@ -136,7 +145,7 @@ function Level:saveLevelData(id)
   -- Get save data and write it to the file
   local saveData = self:getSaveData()
   screenFileData = screenFileData .. "return {\n"
-  screenFileData = screenFileData .. "\tid = '".. id .."',\n"
+  screenFileData = screenFileData .. "\tid = '".. self.id .."',\n"
   screenFileData = screenFileData .. "\ttileSize = ".. saveData.tileSize ..",\n"
   screenFileData = screenFileData .. "\ttileData = {\n"
 
@@ -208,10 +217,13 @@ end
 
 function Level:renderCanvas()
   love.graphics.setCanvas(self.canvas)
+
   self:iterateTiles(function(tile, x, y) tile:draw() end)
+
   if self.overlay and CurrentScene == Game then
     love.graphics.draw(self.overlay)
   end
+
   love.graphics.setCanvas()
 end
 
