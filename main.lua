@@ -6,6 +6,7 @@
 -- VERSION    = "1.3"
 
 io.stdout:setvbuf("no")
+if arg[2] == "debug" then require( "lldebugger" ).start() end
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.mouse.setVisible(false)
 love.mouse.setGrabbed(true)
