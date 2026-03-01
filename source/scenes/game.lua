@@ -7,13 +7,17 @@ Game:include(Scene)
 
 function Game:init(id, isEditorLevel)
   Scene.init(self)
+  self.debugMode = false
   self.currentId = id or self.currentId or 0
   self.level = Level(self.currentId)
   self.isEditorLevel = isEditorLevel or false
   self.player = self.level:getObject("player")[1]
-  print("Col Obj: "..self.level.collisionWorld:countItems())
-  print("Anim Obj: "..#self.level.animatedTiles:get())
-  print("Ent Obj: "..#self.level.objects:get())
+
+  if self.debugMode then
+    print("Col Obj: "..self.level.collisionWorld:countItems())
+    print("Anim Obj: "..#self.level.animatedTiles:get())
+    print("Ent Obj: "..#self.level.objects:get())
+  end
 end
 
 
