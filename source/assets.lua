@@ -216,7 +216,6 @@ return {
   getElement    = getElement,
   tiles         = tiles,
   getTile       = getTile,
-  getAnimation  = getAnimation,
   playSound     = playSound,
   cloneSound    = cloneSound,
   getImage      = getImage,
