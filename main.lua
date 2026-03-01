@@ -1,9 +1,9 @@
 
--- NAME            = "Another Kind of World (Remake)"
--- VERSION         = "1.3"
--- ORIGINAL_AUTHOR = "Markus Kothe (Daandruff)"
--- REMADE_BY       = "Lars Lönneker (MadByte)"
+-- Copyright © 2020-2026 AKOW Developers
+-- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+-- NAME       = "Another Kind of World (Remake)"
+-- VERSION    = "1.3"
 
 io.stdout:setvbuf("no")
 love.graphics.setDefaultFilter("nearest", "nearest")
