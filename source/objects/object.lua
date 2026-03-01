@@ -10,7 +10,7 @@ function Object:init(x, y, t)
   self.type     = self.type or "object"
   self.trans    = self.trans or {r=0, sx=1, sy=1, ox=0, oy=0}
   self.dim      = self.dim or {w=8, h=8}
-  self.pos      = {x=x+self.trans.ox or 0, y=y+self.trans.oy or 0}
+  self.pos      = {x = (x + self.trans.ox) or 0, y = (y + self.trans.oy) or 0}
   self.rgba     = self.rgba or {1, 1, 1, 1}
   -- Properties
   self.visible  = self.visible or true
@@ -21,7 +21,7 @@ function Object:init(x, y, t)
   -- Undeclared
   self.sprite   = self.sprite or nil
   self.collider = self.collider or nil
-  self._flags   = self._flags or nil
+  self._flags   = self._flags or {}
 end
 
 
@@ -101,7 +101,7 @@ function Object:logic(dt) end
 
 
 function Object:update(dt)
-  if self._flags and self._flags.removed then return end
+  if self._flags.removed then return end
   -- update additional game logic
   self:logic(dt)
   -- update the sprite / animation
