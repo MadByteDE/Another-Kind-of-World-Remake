@@ -1,0 +1,208 @@
+-- Copyright © 2020-2026 AKOW Developers
+-- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
+
+local fonts     = {
+    ["normal"] = love.graphics.newFont("assets/fonts/tinypixels.ttf", 8),
+    ["big"] = love.graphics.newFont("assets/fonts/tinypixels.ttf", 16),
+}
+
+local print = function(text, x, y, t)
+    if not t then t = {} end
+    local rgba = t.rgba or {1, 1, 1, 1}
+    local previousFont = love.graphics.getFont()
+    local font = t.font or love.graphics.getFont()
+    local w = t.width or font:getWidth(text)
+    local x = x or 0
+    local y = y or 0
+    local mode = t.mode or "left"
+    if (mode == "center") then
+        local fontHeight = font:getHeight()
+        y = y - fontHeight / 2
+    end
+    love.graphics.setFont(font)
+    love.graphics.setColor(rgba)
+    if w or mode then love.graphics.printf(text, x, y, w, mode)
+    else love.graphics.print(text, x, y) end
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setFont(previousFont)
+end
+
+
+local sounds    = {
+    ["music"]   = love.audio.newSource("assets/sounds/music.ogg", "stream"),
+    ["boom"]    = love.audio.newSource("assets/sounds/boom.ogg", "static"),
+    ["toss"]    = love.audio.newSource("assets/sounds/toss.ogg", "static"),
+    ["jump"]    = love.audio.newSource("assets/sounds/jump.ogg", "static"),
+    ["splat"]   = love.audio.newSource("assets/sounds/splat.ogg", "static"),
+    ["success"] = love.audio.newSource("assets/sounds/success.ogg", "static"),
+    ["fail"]    = love.audio.newSource("assets/sounds/fail.ogg", "static"),
+}
+
+local playSound = function(name, vol, loop)
+    local src = sounds[name]
+    local vol = vol or 1
+    if vol then src:setVolume(vol) end
+    if src:isPlaying() then src:stop() end
+    src:play()
+    if loop ~= nil then src:setLooping(loop) end
+end
+
+local cloneSound = function(name)
+    return sounds[name]:clone()
+end
+
+local images = {
+    ["spritesheet"] = love.graphics.newImage("assets/spritesheet.png"),
+    ["dirtcover"]   = love.graphics.newImage("assets/dirtcover.png"),
+}
+
+local getImage = function(name)
+    return images[name]
+end
+
+local drawDirtCover = function(scale)
+    if scale then
+        love.graphics.push()
+        love.graphics.scale(scale, scale)
+    end
+    love.graphics.setColor(1, 1, 1, .45)
+    love.graphics.draw(getImage("dirtcover"))
+    love.graphics.setColor(1, 1, 1, 1)
+    if scale then love.graphics.pop() end
+end
+
+local tw      = 8
+local iw, ih  = getImage("spritesheet"):getDimensions()
+local grids   = {
+    ["sprite"]        = Anim8.newGrid(tw, tw, iw, ih),
+    ["tile"]          = Anim8.newGrid(tw, tw, iw, ih, 56, 0),
+    ["animatedTile"]  = Anim8.newGrid(tw, tw, iw, ih, 56, 24),
+    ["button"]        = Anim8.newGrid(10, 9, iw, ih, 32, 32), }
+
+local getQuad = function(grid, data)
+    local frames, row = unpack(data)
+    if type(frames) == "number" then frames = frames.."-"..frames end
+    local quads = grids[grid](frames, row)
+    if #quads > 1 then return quads
+    else return quads[1] end
+end
+
+local tiles   = {
+    { name        = "back",
+        type        = "tile",
+        quad        = getQuad("tile", {6, 1}) },
+    { name        = "wall",
+        type        = "tile",
+        quad        = getQuad("tile", {1, 1}),
+        collide     = true,
+        solid       = true, },
+    { name        = "top",
+        type        = "tile",
+        quad        = getQuad("tile", {4, 1}),
+        collide     = true,
+        solid       = true, },
+    { name        = "under",
+        type        = "tile",
+        quad        = getQuad("tile", {3, 1}),
+        collide     = true,
+        solid       = true, },
+    { name        = "pillar",
+        type        = "tile",
+        quad        = getQuad("tile", {2, 1}), },
+    { name        = "drain",
+        type        = "animatedTile",
+        quad        = getQuad("tile", {1, 2}),
+        collide     = true,
+        solid       = true, },
+    { name        = "grass",
+        type        = "animatedTile",
+        quad        = getQuad("tile", {3, 2}),
+        randomFrame = true, },
+    { name        = "water",
+        type        = "animatedTile",
+        quad        = getQuad("tile", {2, 2}), },
+    { name        = "lava",
+        type        = "tile",
+        quad        = getQuad("tile", {6, 2}),
+        dim         = {w=8, h=5},
+        trans       = {r=0, sx=1, sy=1, ox=0, oy=3},
+        deadly      = true,
+        solid       = true,
+        collide     = true, },
+    { name        = "exit",
+        type        = "entity",
+        quad        = getQuad("tile", {5, 1}), },
+    { name        = "player",
+        type        = "entity",
+        quad        = getQuad("tile", {4, 2}),
+        collide     = true,
+        solid       = true, },
+    { name        = "bug",
+        type        = "entity",
+        quad        = getQuad("tile", {5, 2}),
+        deadly      = true,
+        collide     = true, },
+}
+
+local getTile = function(name)
+    for i=1, #tiles do
+        local tile = tiles[i]
+        if tile.name == string.lower(name) then return tile end
+    end
+end
+
+local buttons = {
+    ["clear"] = getQuad("button", {1, 1}),
+    ["back"]  = getQuad("button", {2, 1}),
+    ["play"]  = getQuad("button", {1, 2}),
+    ["save"]  = getQuad("button", {2, 2}),
+}
+
+local getButton = function(name)
+    return buttons[name]
+end
+
+local elements = {
+    ["tilepanel"] = love.graphics.newQuad(0, 32, 32, 48, iw, ih),
+}
+
+local getElement = function(name)
+    return elements[name]
+end
+
+local newAnimation = function(grid, data)
+    local frames, row, duration, onLoop = unpack(data)
+    local anim = Anim8.newAnimation(grids[grid](frames, row), duration, onLoop)
+    return anim
+end
+
+local animations = {
+    ["player"] = newAnimation("sprite", {'1-6', 1, .1}),
+    ["bomb"]   = newAnimation("sprite", {'4-7', 3, .1}),
+    ["bug"]    = newAnimation("sprite", {'1-6', 2, .15}),
+    ["grass"]  = newAnimation("animatedTile", {'1-4', 3, .2}),
+    ["drain"]  = newAnimation("animatedTile", {'1-8', 1, .05}),
+    ["water"]  = newAnimation("animatedTile", {'1-8', 2, .05}),
+}
+
+local getAnimation = function(name)
+    return animations[name]:clone()
+end
+
+return {
+    tilesize      = tw,
+    fonts         = fonts,
+    print         = print,
+    spritesheet   = images["spritesheet"],
+    getQuad       = getQuad,
+    newAnimation  = newAnimation,
+    getAnimation  = getAnimation,
+    getButton     = getButton,
+    getElement    = getElement,
+    tiles         = tiles,
+    getTile       = getTile,
+    playSound     = playSound,
+    cloneSound    = cloneSound,
+    getImage      = getImage,
+    drawDirtCover = drawDirtCover,
+}

@@ -2,88 +2,87 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
--- NAME       = "Another Kind of World (Remake)"
--- VERSION    = "1.3"
+NAME       = "Another Kind of World (Remake)"
+VERSION    = "1.3"
 
+-- Optimize seed randomization (OS time incl. milliseconds)
+local socket = require("socket")
+math.randomseed(socket.gettime() * 10000)
+
+-- Display terminal messages immediately
 io.stdout:setvbuf("no")
-if arg[2] == "debug" then require( "lldebugger" ).start() end
+
+-- Start debugger
+if arg[2] == "debug" then require("lldebugger").start() end
+
 love.graphics.setDefaultFilter("nearest", "nearest")
+love.graphics.setLineWidth(.1)
 love.mouse.setVisible(false)
-love.mouse.setGrabbed(true)
+if arg[2] ~= "debug" then love.mouse.setGrabbed(true) end
 love.keyboard.setKeyRepeat(true)
+_NULL_ = function() end
 
 -- Libs
-Class  = require("source.lib.class")
-Bump   = require("source.lib.bump")
-Anim8  = require("source.lib.anim8")
-Conta  = require("source.lib.conta")
+require("src.lib.utils")
+Class  = require("src.lib.class")
+Bump   = require("src.lib.bump")
+Anim8  = require("src.lib.anim8")
+Conta  = require("src.lib.conta")
 -- Core
-Assets  = require("source.assets")
-Screen  = require("source.screen")
-Gui     = require("source.gui")
-Level   = require("source.level")
--- Entities
-Object  = require("source.objects.object")
-Actor   = require("source.objects.actor")
-Tile    = require("source.objects.tile")
-Entities = {
-player   = require("source.objects.player"),
-bug      = require("source.objects.bug"),
-exit     = require("source.objects.exit"),
-bomb     = require("source.objects.bomb"),
-particle = require("source.objects.particle"),}
--- Gui elements
-Element   = require("source.gui.element")
-Elements  = {
-mouse      = require("source.gui.mouse"),
-button     = require("source.gui.button"),
-textbox    = require("source.gui.textbox"),
-tilepanel  = require("source.gui.tilepanel"),}
--- Scenes
-Scene   = require("source.scenes.scene")
-Game    = require("source.scenes.game")
-Editor  = require("source.scenes.editor")
+Game = require("src.game")
 
-_NULL_ = function() end
-CurrentScene = {init=_NULL_, update=_NULL_, draw=_NULL_, keypressed=_NULL_,
-mousepressed=_NULL_, mousereleased=_NULL_}
+local callbacks = {"load", "update", "draw"}
 
-
--- Main callbacks
-function love.load()
-  love.graphics.setFont(Assets.fonts["normal"])
-  Screen:init(256, 160, 4)
-  Screen:transition(function()
-    CurrentScene = Game
-    CurrentScene:init()
-    CurrentScene:getMouse():setPosition(Screen.width/2, Screen.height/2)
-  end, 2)
-  Assets.playSound("music", .275, true)
+-- Fetch event callbacks
+for k in pairs(love.handlers) do
+	callbacks[#callbacks+1] = k
 end
 
 
-function love.update(dt)
-  Screen:update(dt)
-  CurrentScene:update(dt)
+-- Initialize main game loop
+for _,f in ipairs(callbacks) do
+    Game[f] = Game[f] or _NULL_
+    love[f] = function(...)
+        Game[f](Game, ...)
+    end
 end
 
 
-function love.draw()
-  Screen:set()
-  CurrentScene:draw()
-  Screen:unset()
-  Assets.drawDirtCover(Screen.scale)
+function love.errorhandler(msg)
+    local error_msg = debug.traceback(tostring(msg), 1 + (2)):gsub("\n[^\n]+$", "")
+
+    -- Print error message to screen and log file
+    if Game.log then
+        Game.log:error(error_msg)
+        Game.log:saveToFile()
+    else print(error_msg) end
+
+    -- No need to continue if certain modules are not enabled
+    if not love.window or not love.graphics or not love.event then
+        return
+    end
+
+    -- Reset input states
+    if love.mouse then
+        love.mouse.setVisible(true)
+        love.mouse.setGrabbed(false)
+        love.mouse.setRelativeMode(false)
+        if love.mouse.isCursorSupported() then
+            love.mouse.setCursor()
+        end
+    end
+
+    if love.joystick then
+        for i, v in ipairs(love.joystick.getJoysticks()) do
+            v:setVibration()
+        end
+    end
+
+    -- Reset audio state
+    if love.audio then love.audio.stop() end
 end
 
 
-function love.keypressed(...) CurrentScene:keypressed(...) end
-
-function love.keyreleased(...) CurrentScene:keyreleased(...) end
-
-function love.mousepressed(...) CurrentScene:mousepressed(...) end
-
-function love.mousereleased(...) CurrentScene:mousereleased(...) end
-
-function love.wheelmoved(...) CurrentScene:wheelmoved(...) end
-
-function love.textinput(...) CurrentScene:textinput(...) end
+function love.quit()
+    Game.log:saveToFile()
+end

@@ -6,10 +6,12 @@ if FFI.os == "Linux" then FFI.C.setenv("SDL_VIDEO_DRIVER", "x11", 1) end
 function love.conf(t)
     -- Setup
     t.title     = 'Another Kind of World'
-    t.author    = 'Markus Kothe (Daandruff) - Remade by MadByte'
+    t.author    = 'AKOW Developers'
     t.identity  = t.title
+    t.version   = "12.0"
 
     -- Other settings
     t.modules.joystick  = false
     t.modules.physics   = false
+    t.modules.video     = false
 end
