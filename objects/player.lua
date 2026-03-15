@@ -8,7 +8,7 @@ Player:include(Actor)
 
 function Player:init(level, x, y)
     -- Init
-    Actor.init(self, level, x, y, {collide=true, solid=true, canDie=true})
+    Actor.init(self, level, x, y, {collide=true, solid=true, can_die=true})
     self.type   = "player"
     self.dim    = {w=6, h=7}
     self.trans  = {r=0, sx=1, sy=1, ox=1, oy=1}

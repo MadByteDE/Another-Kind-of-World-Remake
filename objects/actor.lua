@@ -80,7 +80,7 @@ end
 
 
 function Actor:onCollision(other)
-    if other.deadly and self.canDie then self:onDead(other) end
+    if other.deadly and self.can_die then self:onDead(other) end
 end
 
 

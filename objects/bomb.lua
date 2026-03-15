@@ -71,7 +71,7 @@ function Bomb:onDead()
             else other.vel.y = y_speed/2 end
         end
 
-        if other.canDie then
+        if other.can_die then
             Game:playSound("splat")
             other:onDead(self)
         end

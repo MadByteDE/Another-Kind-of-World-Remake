@@ -19,7 +19,7 @@ function Bug:init(level, x, y)
         else return end
     end
     -- Init
-    Actor.init(self, level, x, y, {collide=true, canDie=true, deadly=true})
+    Actor.init(self, level, x, y, {collide=true, can_die=true, deadly=true})
     -- Additional
     -- Random movement direction when spawning
     local dir = love.math.random(1, 2)
