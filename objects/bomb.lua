@@ -77,11 +77,7 @@ function Bomb:onDead()
             else other.vel.y = y_speed/2 end
         end
 
-        if other.can_die then
-            local pitch = math.random(75, 125)/100
-            Game:playSound("splat"):setPitch(pitch)
-            other:onDead(self)
-        end
+        if other.can_die then other:onDead(self) end
     end
     self:destroy()
 end

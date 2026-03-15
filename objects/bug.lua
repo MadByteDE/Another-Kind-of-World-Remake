@@ -46,6 +46,8 @@ function Bug:onDead(other)
         end
         self.level:spawn("particle", self.pos.x, self.pos.y, data)
     end
+    local pitch = math.random(75, 125)/100
+    Game:playSound("splat"):setPitch(pitch)
     self:destroy()
 end
 
