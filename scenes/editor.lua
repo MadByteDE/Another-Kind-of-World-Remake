@@ -1,0 +1,93 @@
+-- Copyright © 2020-2026 AKOW Developers
+-- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
+
+local Scene = require("scenes.scene")
+local Tile  = require("objects.tile")
+local Editor  = Class()
+Editor:include(Scene)
+
+local tw
+
+
+function Editor:init(level_id)
+    self.name = "Editor"
+
+    -- Pre-selected tile when entering editor mode
+    self.currentTile = Game:getTile("wall")
+
+    Game.level:init(level_id)
+    tw = Game.level.tileSize
+
+    -- Add tile panel
+    self.panel = Game.gui:add("tilepanel", 220, 50)
+    self.panel:createButtons()
+    local data = {
+        text = Game.level.id,
+        dim = {w=72,h=8},
+        action = function(textbox)
+            if textbox.text ~= "" then
+                self.newLevelId = textbox.text
+            end
+        end, }
+    self.titlebox = Game.gui:add("textbox", Game.width/2-36, 2, data)
+end
+
+
+function Editor:leave()
+    if self.panel then self.panel:destroy() end
+    if self.titlebox then self.titlebox:destroy() end
+end
+
+
+function Editor:toTileCoords(x, y)
+    return math.floor(x/tw)+1, math.floor(y/tw)+1
+end
+
+
+function Editor:toScreenCoords(x, y)
+    return x*tw-tw, y*tw-tw
+end
+
+
+function Editor:logic(dt)
+    Game.level:update(dt)
+    local mouse = Game.gui:getMouse()
+    local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
+    if mouse.button == 1 then
+        Game.level:setTile(tx, ty, Tile(Game.level, tx*tw-tw, ty*tw-tw, self.currentTile))
+    elseif mouse.button == 2 then
+        self.currentTile = Game.assets.data.tiles[Game.level:getTile(tx, ty).name]
+    end
+end
+
+
+function Editor:render()
+    Game.level:draw()
+    local mouse = Game.gui:getMouse()
+    local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
+    love.graphics.setColor(1, 1, 1, .3)
+    if self.currentTile then
+        love.graphics.draw(Game.assets.tile[self.currentTile.name], tx*tw-tw, ty*tw-tw)
+    end
+    Game:print("TAB - Switch to game\nLMB/RMB - Place/Pick tile\nSpace - Play level", 3, 2, {rgba={1, 1, 1, .075}, width=100})
+end
+
+
+function Editor:keypressed(key)
+    Game.gui:keypressed(key)
+    if key == "escape" then
+        Game:transition(function() love.event.quit() end, 3)
+    elseif key == "tab" then
+        Game:transition(function()
+            Game:switchScene("Ingame")
+        end, 1.5)
+    elseif key == "space" and not Game.gui.selectedElement then
+        Game:transition(function()
+            Game.level:save(self.newLevelId)
+            Game:switchScene("Ingame", Game.level.id, true)
+        end, 1)
+    end
+end
+
+
+return Editor
