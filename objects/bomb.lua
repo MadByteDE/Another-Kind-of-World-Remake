@@ -11,7 +11,7 @@ function Bomb:init(level, x, y, data)
     self.type   = "bomb"
     self.dim    = {w=5, h=5}
     self.trans  = {r=0, sx=1, sy=1, ox=1, oy=3}
-    self.damp   = {x=1.5,y=1.5}
+    self.damp   = {x=1.5, y=1.5}
     self.gravity = 33
     self.lifetime = math.random(3, 4)
     self.bounciness = .8
@@ -54,7 +54,12 @@ function Bomb:onDead()
         Game.assets.particle.fire,
     }
     for i=1, math.random(25,35) do
-        self.level:spawn("particle", self.pos.x, self.pos.y, sprites)
+        local data = {}
+        data.images = {Game.assets.particle.smoke, Game.assets.particle.fire}
+        data.vel = {x=math.random(-40, 40), y=-love.math.random(40, 120), lx=100, ly=100}
+        data.gravity = 25
+        data.lifetime = .75
+        self.level:spawn("particle", self.pos.x, self.pos.y, data)
     end
     local radius = 24
     local x = self.pos.x+self.dim.w/2-radius/2

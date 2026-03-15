@@ -11,9 +11,9 @@ function Bug:init(level, x, y)
     self.type   = "bug"
     self.dim    = {w=8, h=6}
     self.trans  = {r=0, sx=1, sy=1, ox=0, oy=2}
-    self.acc    = {x=3,y=0}
-    self.vel    = {x=0,y=0,lx=10,ly=0}
-    self.damp   = {x=0,y=0}
+    self.acc    = {x=3, y=0}
+    self.vel    = {x=0, y=0, lx=10, ly=0}
+    self.damp   = {x=0, y=0}
     self.filter = function(other)
         if other.solid then return "slide"
         else return end
@@ -30,6 +30,23 @@ function Bug:init(level, x, y)
     self:setSprite(self.type)
     self.sprite:gotoFrame(math.random(1, #self.sprite.frames))
     return self
+end
+
+
+function Bug:onDead(other)
+    for i=1, math.random(10, 15) do
+        local data = {}
+        data.images = { Game.assets.particle.blood }
+        data.lifetime = .5
+        data.gravity = 25
+        data.vel = {x=math.random(-25, 25), y=-love.math.random(40, 80), lx=100, ly=200}
+        data.filter = function(other)
+            if not other.solid then return "cross"
+            else return end
+        end
+        self.level:spawn("particle", self.pos.x, self.pos.y, data)
+    end
+    self:destroy()
 end
 
 

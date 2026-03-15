@@ -24,6 +24,7 @@ function Actor:init(level, x, y, t)
     -- Properties
     self.wrap       = self.wrap or true
     self.lifetime   = clamp(self.lifetime, 0, 999)
+    self._lifetime  = self.lifetime
     self.in_air      = self.in_air or false
     self.bounciness = self.bounciness or 0
     -- Additional
@@ -101,11 +102,10 @@ function Actor:update(dt)
     -- Update collsion rect
     self:updateCollider()
     -- Update lifetime
-    if self.lifetime then
-        self.lifetime = self.lifetime-dt
-        if self.lifetime <= 0 then
+    if self._lifetime then
+        self._lifetime = self._lifetime-dt
+        if self._lifetime <= 0 then
             self:onDead()
-            self.lifetime = nil
         end
     end
     -- Add gravity
