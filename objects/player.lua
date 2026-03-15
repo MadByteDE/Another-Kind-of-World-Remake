@@ -16,7 +16,8 @@ function Player:init(level, x, y)
     self.vel    = {x=0,y=0,lx=70,ly=150}
     self.damp   = {x=30,y=0}
     self.gravity = 33
-    self.max_bombs = 99
+    self.max_bombs = 3
+    if Game.debug then self.max_bombs = 99 end
     -- Additional
     self:newSprite(self.type, Game.assets.anim.player, Game.assets.data.anims.player:clone())
     self:setSprite(self.type)
