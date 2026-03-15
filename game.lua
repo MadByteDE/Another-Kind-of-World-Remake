@@ -57,7 +57,7 @@ love.keyboard.setKeyRepeat(true)
 function Game:load()
     Log:message("Logs will be saved in: %s", join( love.filesystem.getSaveDirectory(), "logs" ))
     -- Level
-    self.level = Level(2)
+    self.level = Level(0)
     -- Screen
     self:setMode(self.width*4, self.height*4, {usedpiscale=false})
     -- GUI
