@@ -22,12 +22,12 @@ function Actor:init(level, x, y, t)
     self.damp     = self.damp or {x=0, y=0}
     self.dir      = self.dir or {x=0, y=0}
     -- Properties
-    self.noWrap     = self.noWrap or false
+    self.wrap       = self.wrap or true
     self.lifetime   = clamp(self.lifetime, 0, 999)
-    self.inAir      = self.inAir or false
+    self.in_air      = self.in_air or false
     self.bounciness = self.bounciness or 0
     -- Additional
-    if self.collide then self:addCollider(self.level.collisionWorld) end
+    if self.collide then self:addCollider(self.level.collision_world) end
 end
 
 
@@ -67,8 +67,8 @@ end
 
 
 function Actor:jump(vel)
-    if not self.inAir then
-        self.inAir = true
+    if not self.in_air then
+        self.in_air = true
         self.vel.y = vel or -self.acc.y
     end
 end
@@ -87,7 +87,7 @@ end
 function Actor:update(dt)
     Object.update(self, dt)
     -- wrap object around the screen
-    if not self.noWrap then
+    if self.wrap then
         if self.pos.x > Game.width then
             self.pos.x = -self.dim.w+2
         elseif self.pos.x < -self.dim.w then
@@ -119,13 +119,13 @@ function Actor:update(dt)
     -- Resolve collisions & update position
     if self.collider then
         local cols
-        x, y, cols = self.collisionWorld:move(self, x, y, self.filter)
+        x, y, cols = self.collision_world:move(self, x, y, self.filter)
         for k,col in ipairs(cols) do
             -- Reset velocities
             if col.type == "slide" then
                 if col.other.pos.y == self.pos.y + self.dim.h then
                     self.vel.y = 0
-                    self.inAir = false
+                    self.in_air = false
                 elseif col.other.pos.y + col.other.dim.h == self.pos.y then
                     self.vel.y = 0
                 end

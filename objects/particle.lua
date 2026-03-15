@@ -15,7 +15,7 @@ function Particle:init(level, x, y, sprites)
     self.vel    = {x=math.random(-40, 40), y=-love.math.random(40, 120), lx=100, ly=100}
     self.gravity = 25
     self.lifetime = .75
-    self.noWrap = true
+    self.wrap = false
     -- Additional
     self:newSprite(self.type, sprites[math.random(1, #sprites)])
     self:setSprite(self.type)

@@ -9,15 +9,15 @@ Mouse:include(Element)
 function Mouse:init(x, y, t)
     local mx, my = self:getPosition(x, y)
     Element.init(self, mx, my, t)
-    self.type     = "mouse"
-    self.dim      = {w=1, h=1}
+    self.type   = "mouse"
+    self.dim    = {w=1, h=1}
     self:newSprite(self.type, Game.assets.gui.cursor)
     self:setSprite(self.type)
     local w, h = self.sprite.image:getDimensions()
     self.trans.ox = w/2
     self.trans.oy = h/2
-    self.hoverTimer = 0
-    self.tooltipTimeout = 1.5
+    self.hover_timer = 0
+    self.tooltip_timeout = 1.5
     self.button = 0
     self.scroll = {x=0, y=0}
 end
@@ -38,8 +38,8 @@ function Mouse:logic(dt)
   self.pos.x, self.pos.y = self:getPosition()
     if not love.mouse.isDown(self.button) then self.button = 0 end
     if self.child and self.child.hasTooltip then
-        self.hoverTimer = self.hoverTimer + dt
-        if self.hoverTimer >= self.tooltipTimeout then
+        self.hover_timer = self.hover_timer + dt
+        if self.hover_timer >= self.tooltip_timeout then
             -- Show Tooltip
         end
     end
@@ -47,8 +47,8 @@ end
 
 
 function Mouse:mousepressed(x, y, button)
-    if Game.gui.selectedElement and Game.gui.selectedElement ~= self.child then
-        Game.gui:deselect(Game.gui.selectedElement)
+    if Game.gui.selected_element and Game.gui.selected_element ~= self.child then
+        Game.gui:deselect(Game.gui.selected_element)
     end
 
     if self.child then

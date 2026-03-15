@@ -48,15 +48,15 @@ end
 
 
 function Gui:select(element)
-    if self.selectedElement and self.selectedElement == element then return end
-    if self.selectedElement then self:deselect(self.selectedElement) end
-    self.selectedElement = element
+    if self.selected_element and self.selected_element == element then return end
+    if self.selected_element then self:deselect(self.selected_element) end
+    self.selected_element = element
     element:onSelect()
 end
 
 
 function Gui:deselect()
-    self.selectedElement = nil
+    self.selected_element = nil
 end
 
 
@@ -79,7 +79,7 @@ function Gui:update(dt)
             end
             elseif not col and other == mouse.child then
             mouse.child:onExit(mouse)
-            mouse.hoverTimer = 0
+            mouse.hover_timer = 0
             mouse.child = nil
         end
     end)
@@ -93,12 +93,12 @@ end
 
 
 function Gui:keypressed(...)
-    if self.selectedElement then self.selectedElement:keypressed(...) end
+    if self.selected_element then self.selected_element:keypressed(...) end
 end
 
 
 function Gui:keyreleased(...)
-    if self.selectedElement then self.selectedElement:keyreleased(...) end
+    if self.selected_element then self.selected_element:keyreleased(...) end
 end
 
 
@@ -118,7 +118,7 @@ end
 
 
 function Gui:textinput(...)
-    if self.selectedElement then self.selectedElement:onTextInput(...) end
+    if self.selected_element then self.selected_element:onTextInput(...) end
 end
 
 return Gui

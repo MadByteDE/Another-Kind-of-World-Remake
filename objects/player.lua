@@ -70,7 +70,7 @@ function Player:logic(dt)
     self.sprite.flippedH = false
     else self.sprite.flippedH = true end
     -- Prevent jumping while in air
-    if self.vel.y > 50 then self.inAir = true end
+    if self.vel.y > 50 then self.in_air = true end
     -- Key movement
     if keyDown("a") or keyDown("left")  then
         self.sprite.flippedH = true
@@ -86,7 +86,7 @@ end
 
 function Player:keypressed(key)
     if key == "w" or key == "up" or key == "space" then
-        if not self.inAir then Game:playSound("jump", .7) end
+        if not self.in_air then Game:playSound("jump", .7) end
         self:jump()
     end
 end

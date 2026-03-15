@@ -21,7 +21,6 @@ function Object:init(x, y, t)
     -- Undeclared
     self.sprite   = self.sprite or nil
     self.collider = self.collider or nil
-    self._flags   = self._flags or {}
 end
 
 
@@ -51,18 +50,18 @@ function Object:filter(other)
 end
 
 
-function Object:addCollider(collisionWorld, x, y, w, h)
-    self.collisionWorld = collisionWorld
+function Object:addCollider(collision_world, x, y, w, h)
+    self.collision_world = collision_world
     if self.collider then return end
     local x, y, w, h = self:getRect()
-    self.collisionWorld:add(self, x, y, w, h, self.filter)
-    self.collider = self.collisionWorld:getRect(self)
+    self.collision_world:add(self, x, y, w, h, self.filter)
+    self.collider = self.collision_world:getRect(self)
 end
 
 
 function Object:removeCollider()
     if self.collider then
-        self.collisionWorld:remove(self)
+        self.collision_world:remove(self)
         self.collider = nil
     end
 end
@@ -71,7 +70,7 @@ end
 function Object:updateCollider()
     if self.collider then
         local x, y, w, h = self:getRect()
-        self.collisionWorld:update(self, x, y, w, h)
+        self.collision_world:update(self, x, y, w, h)
     end
 end
 

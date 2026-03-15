@@ -23,7 +23,7 @@ function Exit:logic(dt)
     if not self.visible and #self.level.objects:get("bug") == 0 then
         self.visible = true
         self.collide = true
-        self:addCollider(self.level.collisionWorld)
+        self:addCollider(self.level.collision_world)
     end
 end
 

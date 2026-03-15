@@ -18,23 +18,19 @@ local entities = {
 
 -- Fill a table with tile id's instead of tile objects
 local function generateTileData(self)
-    local tileData = {}
+    local tiledata = {}
 
-    for y = 1, Game.height / self.tileSize do
-        tileData[y] = {}
-        for x = 1, Game.width / self.tileSize do
-
+    for y = 1, Game.height / self.tilesize do
+        tiledata[y] = {}
+        for x = 1, Game.width / self.tilesize do
             local tile = self:getTile(x, y)
-            for assKey, assVal in ipairs(Game.assets.data.tiles) do
-                if (tile.name == assVal.name) then
-                    tileData[y][x] = assKey
-                end
+            for k, tiledata in ipairs(Game.assets.data.tiles) do
+                if (tile.name == tiledata.name) then tiledata[y][x] = k end
             end
-
         end
     end
 
-    return tileData
+    return tiledata
 end
 
 
@@ -42,38 +38,38 @@ local function createLevel(self)
     self.tiles = {}
 
     -- Load in an empty level
-    for y = 1, Game.height / self.tileSize do
+    for y = 1, Game.height / self.tilesize do
 
         self.tiles[y] = {}
 
-        for x = 1, Game.width / self.tileSize do
-            local tx = x * self.tileSize - self.tileSize
-            local ty = y * self.tileSize - self.tileSize
+        for x = 1, Game.width / self.tilesize do
+            local tx = x * self.tilesize - self.tilesize
+            local ty = y * self.tilesize - self.tilesize
             self.tiles[y][x] = Tile(self, tx, ty, Game:getTile("back"))
         end
 
     end
 
     -- Load from existing tile data
-    if self.tileData then
+    if self.tiledata then
 
         -- Loop through it's content
-        for y = 1, Game.height / self.tileSize do
-            for x = 1, Game.width / self.tileSize do
-                local tileId = self.tileData[y][x]
-                local tx = x * self.tileSize - self.tileSize
-                local ty = y * self.tileSize - self.tileSize
+        for y = 1, Game.height / self.tilesize do
+            for x = 1, Game.width / self.tilesize do
+                local tileId = self.tiledata[y][x]
+                local tx = x * self.tilesize - self.tilesize
+                local ty = y * self.tilesize - self.tilesize
 
                 -- Set each tile based on the given tile id
-                for assKey, assVal in ipairs(Game.assets.data.tiles) do
-                    if (tileId == assKey) then
-                        local tile = Tile(self, tx, ty, assVal)
+                for k, tiledata in ipairs(Game.assets.data.tiles) do
+                    if (tileId == k) then
+                        local tile = Tile(self, tx, ty, tiledata)
                         self:setTile(x, y, tile)
 
                         -- Tile represents an entity - set background tile and spawn the entity
-                        if (assVal.type == "entity" and Game.scene.name == "Ingame") then
+                        if (tiledata.type == "entity" and Game.scene.name == "Ingame") then
                             self:setTile(x, y, Tile(self, tx, ty, Game:getTile("back")))
-                            self:spawn(assVal.name, tx, ty, assVal)
+                            self:spawn(tiledata.name, tx, ty, tiledata)
                         end
                     end
                 end
@@ -91,15 +87,15 @@ function Level:init(id)
     -- init levelData data
     self.id = id or self.id or "New level"
     for k,v in pairs(self:load(self.id) or {}) do self[k] = v end
-    self.tileSize = self.tileSize or 8
+    self.tilesize = self.tilesize or 8
 
     -- init data containers
     self.canvas = love.graphics.newCanvas(Game.width, Game.height)
     self.objects = Conta()
-    self.animatedTiles = Conta()
-    self.collisionWorld = Bump.newWorld(24)
+    self.animated_tiles = Conta()
+    self.collision_world = Bump.newWorld(24)
 
-    -- Create level from tileData & pre-render it to a canvas
+    -- Create level from tiledata & pre-render it to a canvas
     createLevel(self)
     self:renderCanvas()
 end
@@ -115,14 +111,14 @@ function Level:load(id)
         "/level/",          -- appdata directory
         "assets/level/", } -- game directory
 
-    self.levelPath = nil
+    self.level_path = nil
     self.overlay = nil
 
     -- loop over each path
     for k,v in ipairs(paths) do
-        if not self.levelPath then
+        if not self.level_path then
             local path = (v .. id .. ".akwlvl")
-            if love.filesystem.getInfo(path) then self.levelPath = path end
+            if love.filesystem.getInfo(path) then self.level_path = path end
         end
         if not self.overlay then
             local path = (v .. id .. "over.png")
@@ -132,8 +128,8 @@ function Level:load(id)
     end
 
     -- Yey, file exists! Return it's content
-    if self.levelPath then
-        return love.filesystem.load(self.levelPath)()
+    if self.level_path then
+        return love.filesystem.load(self.level_path)()
     end
 end
 
@@ -148,44 +144,44 @@ function Level:save(id)
     end
 
     -- Set output
-    local screenFilePath = love.filesystem.getSaveDirectory() .. "/level/" .. self.id .. ".akwlvl"
-    local screenFileHandle
-    local screenFileData = ""
+    local file_path = love.filesystem.getSaveDirectory() .. "/level/" .. self.id .. ".akwlvl"
+    local file_handle
+    local serialized_data = ""
 
     -- Get save data and write it to the file
-    local saveData = self:getSaveData()
-    screenFileData = screenFileData .. "return {\n"
-    screenFileData = screenFileData .. "\tid = '".. self.id .."',\n"
-    screenFileData = screenFileData .. "\ttileSize = ".. saveData.tileSize ..",\n"
-    screenFileData = screenFileData .. "\ttileData = {\n"
+    local savedata = self:getSaveData()
+    serialized_data = serialized_data .. "return {\n"
+    serialized_data = serialized_data .. "\tid = '".. self.id .."',\n"
+    serialized_data = serialized_data .. "\ttilesize = ".. savedata.tilesize ..",\n"
+    serialized_data = serialized_data .. "\ttiledata = {\n"
 
-    for y=1, #saveData.tileData do
-        screenFileData = screenFileData .. "\t\t{"
-        for x=1, #saveData.tileData[y] do
-            screenFileData = screenFileData .. saveData.tileData[y][x] .. ","
+    for y=1, #savedata.tiledata do
+        serialized_data = serialized_data .. "\t\t{"
+        for x=1, #savedata.tiledata[y] do
+            serialized_data = serialized_data .. savedata.tiledata[y][x] .. ","
         end
-        screenFileData = screenFileData:sub(1, -1)
-        screenFileData = screenFileData .. "},\n"
+        serialized_data = serialized_data:sub(1, -1)
+        serialized_data = serialized_data .. "},\n"
     end
 
-    screenFileData = screenFileData .. "\t},\n"
-    screenFileData = screenFileData .. "}"
+    serialized_data = serialized_data .. "\t},\n"
+    serialized_data = serialized_data .. "}"
 
     -- Save file
-    screenFileHandle = io.open(screenFilePath, "w+")
-    if screenFileHandle then
-        screenFileHandle:write(screenFileData)
-        screenFileHandle:close()
+    file_handle = io.open(file_path, "w+")
+    if file_handle then
+        file_handle:write(serialized_data)
+        file_handle:close()
     end
 end
 
 
 function Level:getSaveData()
-    local tileData = generateTileData(self)
+    local tiledata = generateTileData(self)
     return {
         id        = self.id,
-        tileSize  = self.tileSize,
-        tileData  = tileData, }
+        tilesize  = self.tilesize,
+        tiledata  = tiledata, }
 end
 
 
@@ -195,21 +191,21 @@ end
 
 function Level:setTile(x, y, tile)
     if self.tiles[y] then
-        local currentTile = self.tiles[y][x]
-        if currentTile == tile then return end
+        local current_tile = self.tiles[y][x]
+        if current_tile == tile then return end
 
-        if (currentTile.type == "animatedTile") then
-            self.animatedTiles:remove(currentTile)
+        if (current_tile.type == "animatedTile") then
+            self.animated_tiles:remove(current_tile)
         end
 
-        currentTile:removeCollider()
-        currentTile = tile
+        current_tile:removeCollider()
+        current_tile = tile
 
-        if (currentTile.type == "animatedTile") then
-            self.animatedTiles:add(currentTile)
+        if (current_tile.type == "animatedTile") then
+            self.animated_tiles:add(current_tile)
         end
 
-        self.tiles[y][x] = currentTile
+        self.tiles[y][x] = current_tile
         self:renderCanvas()
     end
 end
@@ -221,8 +217,8 @@ end
 
 
 function Level:iterateTiles(f)
-    for y = 1, Game.height / self.tileSize do
-        for x = 1, Game.width / self.tileSize do
+    for y = 1, Game.height / self.tilesize do
+        for x = 1, Game.width / self.tilesize do
             f(self.tiles[y][x], x, y)
         end
     end
@@ -255,14 +251,14 @@ end
 ----------------------------
 
 function Level:update(dt)
-    self.animatedTiles:update(dt)
+    self.animated_tiles:update(dt)
     self.objects:update(dt)
 end
 
 
 function Level:draw()
     love.graphics.draw(self.canvas)
-    self.animatedTiles:draw()
+    self.animated_tiles:draw()
     self.objects:draw()
     if self.overlay and Game.scene.name == "Ingame" then
         love.graphics.draw(self.overlay)

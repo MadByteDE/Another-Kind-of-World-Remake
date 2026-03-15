@@ -41,12 +41,12 @@ function Bug:logic(dt)
     local x = self.pos.x + self.vel.x * dt
     local y = self.pos.y + self.vel.y * dt
     if self.dir.x > 0 then
-        local right = self.collisionWorld:queryPoint(x+self.dim.w+1, y+(self.dim.h/2), self.filter)
-        local downRight  = self.collisionWorld:queryRect(x+self.dim.w, y+self.dim.h, 2, 2, self.filter)
+        local right = self.collision_world:queryPoint(x+self.dim.w+1, y+(self.dim.h/2), self.filter)
+        local downRight  = self.collision_world:queryRect(x+self.dim.w, y+self.dim.h, 2, 2, self.filter)
         if #downRight==0 or #right > 0 then self.dir.x = -1 end
     elseif self.dir.x < 0 then
-        local left  = self.collisionWorld:queryPoint(x-1, y+(self.dim.h/2), self.filter)
-        local downLeft  = self.collisionWorld:queryRect(x-3, y+self.dim.h, 2, 2, self.filter)
+        local left  = self.collision_world:queryPoint(x-1, y+(self.dim.h/2), self.filter)
+        local downLeft  = self.collision_world:queryRect(x-3, y+self.dim.h, 2, 2, self.filter)
         if #downLeft==0 or #left > 0 then self.dir.x = 1 end
     end
 end

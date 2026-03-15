@@ -59,7 +59,7 @@ function Bomb:onDead()
     local radius = 24
     local x = self.pos.x+self.dim.w/2-radius/2
     local y = self.pos.y+self.dim.h/2-radius/2
-    local cols = self.level.collisionWorld:queryRect(x, y, radius, radius)
+    local cols = self.level.collision_world:queryRect(x, y, radius, radius)
     for i=1, #cols do
         local other = cols[i]
         if other.type == "bomb" then

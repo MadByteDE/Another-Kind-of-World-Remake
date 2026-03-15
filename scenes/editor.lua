@@ -13,10 +13,10 @@ function Editor:init(level_id)
     self.name = "Editor"
 
     -- Pre-selected tile when entering editor mode
-    self.currentTile = Game:getTile("wall")
+    self.current_tile = Game:getTile("wall")
 
     Game.level:init(level_id)
-    tw = Game.level.tileSize
+    tw = Game.level.tilesize
 
     -- Add tile panel
     self.panel = Game.gui:add("tilepanel", 220, 50)
@@ -26,7 +26,7 @@ function Editor:init(level_id)
         dim = {w=72,h=8},
         action = function(textbox)
             if textbox.text ~= "" then
-                self.newLevelId = textbox.text
+                self.level_id = textbox.text
             end
         end, }
     self.titlebox = Game.gui:add("textbox", Game.width/2-36, 2, data)
@@ -54,9 +54,9 @@ function Editor:logic(dt)
     local mouse = Game.gui:getMouse()
     local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
     if mouse.button == 1 then
-        Game.level:setTile(tx, ty, Tile(Game.level, tx*tw-tw, ty*tw-tw, self.currentTile))
+        Game.level:setTile(tx, ty, Tile(Game.level, tx*tw-tw, ty*tw-tw, self.current_tile))
     elseif mouse.button == 2 then
-        self.currentTile = Game.assets.data.tiles[Game.level:getTile(tx, ty).name]
+        self.current_tile = Game.assets.data.tiles[Game.level:getTile(tx, ty).name]
     end
 end
 
@@ -66,8 +66,8 @@ function Editor:render()
     local mouse = Game.gui:getMouse()
     local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
     love.graphics.setColor(1, 1, 1, .3)
-    if self.currentTile then
-        love.graphics.draw(Game.assets.tile[self.currentTile.name], tx*tw-tw, ty*tw-tw)
+    if self.current_tile then
+        love.graphics.draw(Game.assets.tile[self.current_tile.name], tx*tw-tw, ty*tw-tw)
     end
     Game:print("TAB - Switch to game\nLMB/RMB - Place/Pick tile\nSpace - Play level", 3, 2, {rgba={1, 1, 1, .075}, width=100})
 end
@@ -81,9 +81,9 @@ function Editor:keypressed(key)
         Game:transition(function()
             Game:switchScene("Ingame")
         end, 1.5)
-    elseif key == "space" and not Game.gui.selectedElement then
+    elseif key == "space" and not Game.gui.selected_element then
         Game:transition(function()
-            Game.level:save(self.newLevelId)
+            Game.level:save(self.level_id)
             Game:switchScene("Ingame", Game.level.id, true)
         end, 1)
     end

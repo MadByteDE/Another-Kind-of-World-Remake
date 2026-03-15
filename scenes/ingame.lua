@@ -6,15 +6,15 @@ local Ingame = Class()
 Ingame:include(Scene)
 
 
-function Ingame:init(id, editorLevel)
+function Ingame:init(id, editor_level)
     self.name = "Ingame"
     Game.level:init(id)
-    self.editorLevel = editorLevel or false
+    self.editor_level = editor_level or false
     self.players = Game.level:getObject("player")
     self.player = self.players[1]
     if Game.debug then
-        Log:debug("Col Obj: "..Game.level.collisionWorld:countItems())
-        Log:debug("Anim Obj: "..#Game.level.animatedTiles:get())
+        Log:debug("Col Obj: "..Game.level.collision_world:countItems())
+        Log:debug("Anim Obj: "..#Game.level.animated_tiles:get())
         Log:debug("Ent Obj: "..#Game.level.objects:get())
     end
 end
@@ -23,7 +23,7 @@ end
 function Ingame:success()
     Game:playSound("success", .7)
     Game:transition(function()
-        if self.editorLevel then Game:switchScene("Editor")
+        if self.editor_level then Game:switchScene("Editor")
         else self:init(Game.level.id+1) end
     end, 1)
 end

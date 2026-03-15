@@ -37,7 +37,7 @@ function Tilepanel:createButtons()
         button.tile = Game.assets.data.tiles[i]
         button.action = function(button, pressed)
             if pressed == 1 then
-                Game.scene.currentTile = button.tile
+                Game.scene.current_tile = button.tile
             end
         end
         table.insert(self.buttons, Game.gui:add("button", x, y, button))
@@ -54,7 +54,7 @@ function Tilepanel:createButtons()
     local button = {image = Game.assets.gui.button.save, parent = self}
     button.action = function(button, pressed)
         if pressed == 1 then
-            Game.level:save(Game.scene.newLevelId)
+            Game.level:save(Game.scene.level_id)
             print("Successfully saved level")
         end
     end
