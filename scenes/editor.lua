@@ -56,7 +56,8 @@ function Editor:logic(dt)
     if mouse.button == 1 then
         Game.level:setTile(tx, ty, Tile(Game.level, tx*tw-tw, ty*tw-tw, self.current_tile))
     elseif mouse.button == 2 then
-        self.current_tile = Game.assets.data.tiles[Game.level:getTile(tx, ty).name]
+        local tile = Game.level:getTile(tx, ty)
+        if tile then self.current_tile = Game:getTile(tile.name) end
     end
 end
 

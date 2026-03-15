@@ -24,8 +24,8 @@ local function generateTileData(self)
         tiledata[y] = {}
         for x = 1, Game.width / self.tilesize do
             local tile = self:getTile(x, y)
-            for k, tiledata in ipairs(Game.assets.data.tiles) do
-                if (tile.name == tiledata.name) then tiledata[y][x] = k end
+            for k, data in ipairs(Game.assets.data.tiles) do
+                if (tile.name == data.name) then tiledata[y][x] = k end
             end
         end
     end
