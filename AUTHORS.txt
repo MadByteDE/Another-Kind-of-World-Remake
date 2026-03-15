@@ -21,9 +21,6 @@ See license text below for more details.
 
 AKOW includes the following third-party assets or software:
 
-  Tempesta Seven font by Yusuke Kamiyamane,
-  https://p.yusukekamiyamane.com/fonts/
-
   anim8 by Enrique García Cota,
   Copyright (c) 2011 Enrique García Cota
   Licensed under the MIT licence
