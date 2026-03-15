@@ -117,12 +117,13 @@ end
 
 
 function Game:playSound(name, vol, loop)
-    local snd = self.assets.sound[string.lower(name)]
+    local snd = self.assets.sound[string.lower(name)]:clone()
     local vol = vol or 1
     if vol then snd:setVolume(vol) end
     if snd:isPlaying() then snd:stop() end
     snd:play()
     if loop ~= nil then snd:setLooping(loop) end
+    return snd
 end
 
 

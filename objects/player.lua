@@ -86,7 +86,10 @@ end
 
 function Player:keypressed(key)
     if key == "w" or key == "up" or key == "space" then
-        if not self.in_air then Game:playSound("jump", .7) end
+        if not self.in_air then
+            local pitch = math.random(75, 125)/100
+            Game:playSound("jump", .7):setPitch(pitch)
+        end
         self:jump()
     end
 end

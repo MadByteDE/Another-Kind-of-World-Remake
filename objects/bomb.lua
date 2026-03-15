@@ -37,7 +37,7 @@ end
 
 function Bomb:onCollision(other)
     if other.name == "lava" then
-        self:destroy()
+        self:onDead()
     end
     if other.type == "player" then return end
     -- Reduce velocity with every collision
@@ -47,7 +47,8 @@ end
 
 
 function Bomb:onDead()
-    Game:playSound("boom")
+    local pitch = math.random(75, 125)/100
+    Game:playSound("boom"):setPitch(pitch)
     Game:shake()
     local sprites = {
         Game.assets.particle.smoke,
@@ -77,7 +78,8 @@ function Bomb:onDead()
         end
 
         if other.can_die then
-            Game:playSound("splat")
+            local pitch = math.random(75, 125)/100
+            Game:playSound("splat"):setPitch(pitch)
             other:onDead(self)
         end
     end
