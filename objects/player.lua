@@ -12,9 +12,9 @@ function Player:init(level, x, y)
     self.type   = "player"
     self.dim    = {w=6, h=7}
     self.trans  = {r=0, sx=1, sy=1, ox=1, oy=1}
-    self.acc    = {x=35,y=110}
-    self.vel    = {x=0,y=0,lx=70,ly=150}
-    self.damp   = {x=30,y=0}
+    self.acc    = {x=35, y=110}
+    self.vel    = {x=0, y=0, lx=70, ly=150}
+    self.damp   = {x=30, y=0}
     self.gravity = 33
     self.max_bombs = 3
     if Game.debug then self.max_bombs = 99 end

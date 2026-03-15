@@ -122,7 +122,6 @@ function Level:load(id)
         end
         if not self.overlay then
             local path = (v .. id .. "over.png")
-            print(path)
             if love.filesystem.getInfo(path) then self.overlay = love.graphics.newImage(path) end
         end
     end

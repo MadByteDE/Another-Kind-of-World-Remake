@@ -15,7 +15,6 @@ function Exit:init(level, x, y, tile)
     -- Additional
     self:newSprite(self.name, Game.assets.tile.exit)
     self:setSprite(self.name)
-    Log:debug("Exit pos: %s, %s", self.pos.x, self.pos.y)
 end
 
 
