@@ -90,7 +90,7 @@ end
 
 
 function Object:destroy()
-    self.removed = true -- Conta lib removal
+    self.removed = true
     self:removeCollider()
 end
 
