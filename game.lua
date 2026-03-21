@@ -11,10 +11,7 @@ love.graphics.setLineWidth(.1)
 
 -- Dependencies
 require("utils")
-Conta   = require("lib.conta")
-Class   = require("lib.class")
-Bump    = require("lib.bump")
-Anim8   = require("lib.anim8")
+Class       = require("lib.class")
 local Gui   = require("gui")
 local Level = require("level")
 
@@ -57,7 +54,7 @@ love.keyboard.setKeyRepeat(true)
 function Game:load()
     Log:message("Logs will be saved in: %s", join( love.filesystem.getSaveDirectory(), "logs" ))
     -- Level
-    self.level = Level(0)
+    self.level = Level(99)
     -- Screen
     self:setMode(self.width*4, self.height*4, {usedpiscale=false})
     -- GUI

@@ -1,7 +1,10 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
-local Tile = require("objects.tile")
+local Bump  = require("lib.bump")
+local Conta = require("lib.conta")
+local Tile  = require("objects.tile")
+
 local Level = Class()
 
 local entities = {

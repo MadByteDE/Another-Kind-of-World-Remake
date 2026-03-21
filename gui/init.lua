@@ -1,6 +1,8 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Conta = require("lib.conta")
+
 local Gui = Class()
 
 local elements  = {

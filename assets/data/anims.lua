@@ -1,6 +1,8 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Anim8 = require("lib.anim8")
+
 local newAnimation = function(image, data)
     if not image then error("Animation image not set") end
     if not data then error("Animation data not set") end
