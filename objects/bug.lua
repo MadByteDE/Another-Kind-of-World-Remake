@@ -6,7 +6,7 @@ local Bug = Class()
 Bug:include(Actor)
 
 
-function Bug:init(level, x, y)
+function Bug:init(x, y)
     -- Core
     self.type   = "bug"
     self.dim    = {w=8, h=6}
@@ -19,7 +19,7 @@ function Bug:init(level, x, y)
         else return end
     end
     -- Init
-    Actor.init(self, level, x, y, {collide=true, can_die=true, deadly=true})
+    Actor.init(self, x, y, {collide=true, can_die=true, deadly=true})
     -- Additional
     -- Random movement direction when spawning
     local dir = love.math.random(1, 2)
@@ -44,7 +44,7 @@ function Bug:onDead(other)
             if not other.solid then return "cross"
             else return end
         end
-        self.level:spawn("particle", self.pos.x, self.pos.y, data)
+        Game.level:spawn("particle", self.pos.x, self.pos.y, data)
     end
     local pitch = math.random(75, 125)/100
     Game:playSound("splat"):setPitch(pitch)
@@ -60,12 +60,12 @@ function Bug:logic(dt)
     local x = self.pos.x + self.vel.x * dt
     local y = self.pos.y + self.vel.y * dt
     if self.dir.x > 0 then
-        local right = self.collision_world:queryPoint(x+self.dim.w+1, y+(self.dim.h/2), self.filter)
-        local downRight  = self.collision_world:queryRect(x+self.dim.w, y+self.dim.h, 2, 2, self.filter)
+        local right = Game.level.collision_world:queryPoint(x+self.dim.w+1, y+(self.dim.h/2), self.filter)
+        local downRight  = Game.level.collision_world:queryRect(x+self.dim.w, y+self.dim.h, 2, 2, self.filter)
         if #downRight==0 or #right > 0 then self.dir.x = -1 end
     elseif self.dir.x < 0 then
-        local left  = self.collision_world:queryPoint(x-1, y+(self.dim.h/2), self.filter)
-        local downLeft  = self.collision_world:queryRect(x-3, y+self.dim.h, 2, 2, self.filter)
+        local left  = Game.level.collision_world:queryPoint(x-1, y+(self.dim.h/2), self.filter)
+        local downLeft  = Game.level.collision_world:queryRect(x-3, y+self.dim.h, 2, 2, self.filter)
         if #downLeft==0 or #left > 0 then self.dir.x = 1 end
     end
 end

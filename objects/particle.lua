@@ -6,9 +6,9 @@ local Particle = Class()
 Particle:include(Actor)
 
 
-function Particle:init(level, x, y, data)
+function Particle:init(x, y, data)
     -- Init
-    Actor.init(self, level, x, y, data)
+    Actor.init(self, x, y, data)
     self.pos.x  = self.pos.x + self.dim.w/2
     self.pos.y  = self.pos.y + self.dim.h/2
     self.trans  = data.trans or {r=math.random(-24, 24), sx=1, sy=1, ox=4, oy=4}

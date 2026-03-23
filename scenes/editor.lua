@@ -15,7 +15,7 @@ function Editor:init(level_id)
     -- Pre-selected tile when entering editor mode
     self.current_tile = Game.assets.data.tiles["wall"]
 
-    Game.level:init(level_id)
+    Game.level:load(level_id or Game.level.id)
     tw = Game.level.tilesize
 
     -- Add tile panel
@@ -54,7 +54,7 @@ function Editor:logic(dt)
     local mouse = Game.gui:getMouse()
     local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
     if mouse.button == 1 then
-        Game.level:setTile(tx, ty, Tile(Game.level, tx*tw-tw, ty*tw-tw, self.current_tile))
+        Game.level:setTile(tx, ty, Tile(tx*tw-tw, ty*tw-tw, self.current_tile))
     elseif mouse.button == 2 then
         local tile = Game.level:getTile(tx, ty)
         if tile then self.current_tile = Game.assets.data.tiles[tile.name] end
@@ -82,7 +82,7 @@ function Editor:keypressed(key)
         Game:transition(function()
             Game:switchScene("Ingame")
         end, 1.5)
-    elseif key == "space" and not Game.gui.selected_element then
+    elseif key == "space" then
         Game:transition(function()
             Game.level:save(self.level_id)
             Game:switchScene("Ingame", Game.level.id, true)

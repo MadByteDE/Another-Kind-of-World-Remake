@@ -48,7 +48,7 @@ local function createLevel(self)
         for x = 1, Game.width / self.tilesize do
             local tx = x * self.tilesize - self.tilesize
             local ty = y * self.tilesize - self.tilesize
-            self.tiles[y][x] = Tile(self, tx, ty, Game.assets.data.tiles["back"])
+            self.tiles[y][x] = Tile(tx, ty, Game.assets.data.tiles["back"])
         end
 
     end
@@ -66,12 +66,12 @@ local function createLevel(self)
                 -- Set each tile based on the given tile id
                 for name, tiledata in pairs(Game.assets.data.tiles) do
                     if (tileId == tiledata.id) then
-                        local tile = Tile(self, tx, ty, tiledata)
+                        local tile = Tile(tx, ty, tiledata)
                         self:setTile(x, y, tile)
 
                         -- Tile represents an entity - set background tile and spawn the entity
                         if (tiledata.type == "entity" and Game.scene.name == "Ingame") then
-                            self:setTile(x, y, Tile(self, tx, ty, Game.assets.data.tiles["back"]))
+                            self:setTile(x, y, Tile(tx, ty, Game.assets.data.tiles["back"]))
                             self:spawn(name, tx, ty, tiledata)
                         end
                     end
@@ -86,22 +86,7 @@ end
 -- Constructor --
 ----------------------------
 
-function Level:init(id)
-    -- init levelData data
-    self.id = id or self.id or "New level"
-    for k,v in pairs(self:load(self.id) or {}) do self[k] = v end
-    self.tilesize = self.tilesize or 8
-
-    -- init data containers
-    self.canvas = love.graphics.newCanvas(Game.width, Game.height)
-    self.objects = Conta()
-    self.animated_tiles = Conta()
-    self.collision_world = Bump.newWorld(24)
-
-    -- Create level from tiledata & pre-render it to a canvas
-    createLevel(self)
-    self:renderCanvas()
-end
+function Level:init() end
 
 
 ----------------------------
@@ -131,7 +116,15 @@ function Level:load(id)
 
     -- Yey, file exists! Return it's content
     if self.level_path then
-        return love.filesystem.load(self.level_path)()
+        for k,v in pairs(love.filesystem.load(self.level_path)()) do self[k] = v end
+        self.id = id or "New level"
+        self.tilesize = self.tilesize or 8
+        self.canvas = love.graphics.newCanvas(Game.width, Game.height)
+        self.objects = Conta()
+        self.animated_tiles = Conta()
+        self.collision_world = Bump.newWorld(24)
+        createLevel(self)
+        self:renderCanvas()
     end
 end
 
@@ -239,7 +232,8 @@ end
 ----------------------------
 
 function Level:spawn(type, x, y, data)
-    return self.objects:add(entities[type](self, x, y, data))
+    local entity = entities[type](x, y, data)
+    return self.objects:add(entity)
 end
 
 

@@ -6,11 +6,10 @@ local Exit = Class()
 Exit:include(Object)
 
 
-function Exit:init(level, x, y, tile)
+function Exit:init(x, y, tile)
     -- Init
     Object.init(self, x, y, tile)
     self.type   = "exit"
-    self.level  = level
     self.visible = false
     -- Additional
     self:newSprite(self.name, Game.assets.tile.exit)
@@ -19,10 +18,10 @@ end
 
 
 function Exit:logic(dt)
-    if not self.visible and #self.level.objects:get("bug") == 0 then
+    if not self.visible and #Game.level.objects:get("bug") == 0 then
         self.visible = true
         self.collide = true
-        self:addCollider(self.level.collision_world)
+        self:addCollider()
     end
 end
 

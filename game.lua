@@ -54,7 +54,7 @@ love.keyboard.setKeyRepeat(true)
 function Game:load()
     Log:message("Logs will be saved in: %s", join( love.filesystem.getSaveDirectory(), "logs" ))
     -- Level
-    self.level = Level(0)
+    Game.level = Level()
     -- Screen
     self:setMode(self.width*4, self.height*4, {usedpiscale=false})
     -- GUI
@@ -69,7 +69,7 @@ function Game:load()
     -- Start-up
     love.graphics.setFont(self.assets.font.tinypixels(8))
     self:playSound("music", .275, true)
-    Game:switchScene("Ingame")
+    Game:switchScene("Ingame", 0)
 end
 
 

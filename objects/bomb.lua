@@ -6,7 +6,7 @@ local Bomb = Class()
 Bomb:include(Actor)
 
 
-function Bomb:init(level, x, y, data)
+function Bomb:init(x, y, data)
     -- init
     self.type   = "bomb"
     self.dim    = {w=5, h=5}
@@ -18,7 +18,7 @@ function Bomb:init(level, x, y, data)
     self.speed = {x=150, y=150}
     local x = x - self.dim.w/2 - self.trans.ox/2
     local y = y - self.dim.h/2 - self.trans.oy/2
-    Actor.init(self, level, x, y, {collide=true})
+    Actor.init(self, x, y, {collide=true})
     local vel_x = (self.speed.x + math.abs(data.parent.vel.x)) * (data.dx or 0)
     local vel_y = (self.speed.y + math.abs(math.min(data.parent.vel.y, 0))) * (data.dy or 0)
     self.vel = {x=vel_x or 0,y=vel_y or 0,lx=400,ly=400}
@@ -60,12 +60,12 @@ function Bomb:onDead()
         data.vel = {x=math.random(-40, 40), y=-love.math.random(40, 120), lx=100, ly=100}
         data.gravity = 25
         data.lifetime = .75
-        self.level:spawn("particle", self.pos.x, self.pos.y, data)
+        Game.level:spawn("particle", self.pos.x, self.pos.y, data)
     end
     local radius = 24
     local x = self.pos.x+self.dim.w/2-radius/2
     local y = self.pos.y+self.dim.h/2-radius/2
-    local cols = self.level.collision_world:queryRect(x, y, radius, radius)
+    local cols = Game.level.collision_world:queryRect(x, y, radius, radius)
     for i=1, #cols do
         local other = cols[i]
         if other.type == "bomb" then

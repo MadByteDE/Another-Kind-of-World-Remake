@@ -8,10 +8,10 @@ Ingame:include(Scene)
 
 function Ingame:init(id, editor_level)
     self.name = "Ingame"
-    Game.level:init(id)
+    Game.level:load(id or Game.level.id)
     self.editor_level = editor_level or false
     self.players = Game.level:getObject("player")
-    self.player = self.players[1]
+    if #self.players > 0 then self.player = self.players[1] end
     if Game.debug then
         Log:debug("Col Obj: "..Game.level.collision_world:countItems())
         Log:debug("Anim Obj: "..#Game.level.animated_tiles:get())

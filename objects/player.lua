@@ -6,9 +6,9 @@ local Player  = Class()
 Player:include(Actor)
 
 
-function Player:init(level, x, y)
+function Player:init(x, y)
     -- Init
-    Actor.init(self, level, x, y, {collide=true, solid=true, can_die=true})
+    Actor.init(self, x, y, {collide=true, solid=true, can_die=true})
     self.type   = "player"
     self.dim    = {w=6, h=7}
     self.trans  = {r=0, sx=1, sy=1, ox=1, oy=1}
@@ -37,7 +37,7 @@ function Player:onDead(v)
             if not other.solid then return "cross"
             else return end
         end
-        self.level:spawn("particle", self.pos.x, self.pos.y, data)
+        Game.level:spawn("particle", self.pos.x, self.pos.y, data)
     end
     local pitch = math.random(75, 125)/100
     Game:playSound("splat"):setPitch(pitch)
@@ -56,7 +56,7 @@ end
 
 function Player:throw(name, data)
     local name = name or "bomb"
-    if #self.level:getObject(name) < self.max_bombs then
+    if #Game.level:getObject(name) < self.max_bombs then
         local mouse = Game.gui:getMouse()
         local dist_x = mouse.pos.x-self.pos.x+self.dim.w/2
         local dist_y = mouse.pos.y-self.pos.y+self.dim.h/2
@@ -65,7 +65,7 @@ function Player:throw(name, data)
         data.parent = self
         data.dx     = (mouse.pos.x-self.pos.x)/angle
         data.dy     = (mouse.pos.y-self.pos.y)/angle
-        self.level:spawn(name, self.pos.x+self.dim.w/2, self.pos.y+2, data)
+        Game.level:spawn(name, self.pos.x+self.dim.w/2, self.pos.y+2, data)
         Game:playSound("toss")
         -- Pushback
         self.vel.x = self.vel.x + (random_range(70, 10) * -data.dx)
