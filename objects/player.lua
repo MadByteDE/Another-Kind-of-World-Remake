@@ -19,8 +19,9 @@ function Player:init(level, x, y)
     self.max_bombs = 3
     if Game.debug then self.max_bombs = 99 end
     -- Additional
-    self:newSprite(self.type, Game.assets.anim.player, Game.assets.data.anims.player:clone())
-    self:setSprite(self.type)
+    self:newAnimation("idle", Game.assets.anim.player_idle, '1-2', 1, .3)
+    self:newAnimation("run", Game.assets.anim.player_run, '1-4', 1, .15)
+    self:setSprite("idle")
 end
 
 
@@ -79,6 +80,8 @@ function Player:logic(dt)
     -- always reset direction
     self.dir.x = 0
     self.dir.y = 0
+    -- Set default sprite
+    self:setSprite("idle")
     -- Look towards the cursor
     if mouse.pos.x > self.pos.x+self.dim.w/2 then
     self.sprite.flippedH = false
@@ -87,10 +90,12 @@ function Player:logic(dt)
     if self.vel.y > 50 then self.in_air = true end
     -- Key movement
     if keyDown("a") or keyDown("left")  then
+        self:setSprite("run")
         self.sprite.flippedH = true
         self.dir.x = -1
     end
     if keyDown("d") or keyDown("right") then
+        self:setSprite("run")
         self.sprite.flippedH = false
         self.dir.x = 1
     end
