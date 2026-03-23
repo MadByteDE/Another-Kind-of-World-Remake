@@ -27,8 +27,8 @@ local function generateTileData(self)
         tiledata[y] = {}
         for x = 1, Game.width / self.tilesize do
             local tile = self:getTile(x, y)
-            for k, data in ipairs(Game.assets.data.tiles) do
-                if (tile.name == data.name) then tiledata[y][x] = k end
+            for name, data in pairs(Game.assets.data.tiles) do
+                if (tile.name == name) then tiledata[y][x] = data.id end
             end
         end
     end
@@ -48,7 +48,7 @@ local function createLevel(self)
         for x = 1, Game.width / self.tilesize do
             local tx = x * self.tilesize - self.tilesize
             local ty = y * self.tilesize - self.tilesize
-            self.tiles[y][x] = Tile(self, tx, ty, Game:getTile("back"))
+            self.tiles[y][x] = Tile(self, tx, ty, Game.assets.data.tiles["back"])
         end
 
     end
@@ -64,15 +64,15 @@ local function createLevel(self)
                 local ty = y * self.tilesize - self.tilesize
 
                 -- Set each tile based on the given tile id
-                for k, tiledata in ipairs(Game.assets.data.tiles) do
-                    if (tileId == k) then
+                for name, tiledata in pairs(Game.assets.data.tiles) do
+                    if (tileId == tiledata.id) then
                         local tile = Tile(self, tx, ty, tiledata)
                         self:setTile(x, y, tile)
 
                         -- Tile represents an entity - set background tile and spawn the entity
                         if (tiledata.type == "entity" and Game.scene.name == "Ingame") then
-                            self:setTile(x, y, Tile(self, tx, ty, Game:getTile("back")))
-                            self:spawn(tiledata.name, tx, ty, tiledata)
+                            self:setTile(x, y, Tile(self, tx, ty, Game.assets.data.tiles["back"]))
+                            self:spawn(name, tx, ty, tiledata)
                         end
                     end
                 end

@@ -13,7 +13,7 @@ function Editor:init(level_id)
     self.name = "Editor"
 
     -- Pre-selected tile when entering editor mode
-    self.current_tile = Game:getTile("wall")
+    self.current_tile = Game.assets.data.tiles["wall"]
 
     Game.level:init(level_id)
     tw = Game.level.tilesize
@@ -57,7 +57,7 @@ function Editor:logic(dt)
         Game.level:setTile(tx, ty, Tile(Game.level, tx*tw-tw, ty*tw-tw, self.current_tile))
     elseif mouse.button == 2 then
         local tile = Game.level:getTile(tx, ty)
-        if tile then self.current_tile = Game:getTile(tile.name) end
+        if tile then self.current_tile = Game.assets.data.tiles[tile.name] end
     end
 end
 

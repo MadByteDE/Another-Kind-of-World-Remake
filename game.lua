@@ -124,13 +124,6 @@ function Game:playSound(name, vol, loop)
 end
 
 
-function Game:getTile(name)
-    for k, tile in ipairs(self.assets.data.tiles) do
-        if tile.name == string.lower(name) then return tile end
-    end
-end
-
-
 function Game:transition(onTransition, duration, color)
     self.fade.duration = duration or 2
     self.fade.timer = self.fade.duration

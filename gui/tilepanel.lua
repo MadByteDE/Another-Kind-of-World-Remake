@@ -24,21 +24,21 @@ function Tilepanel:createButtons()
     -- Buttons for individual tiles
     self.buttons = {}
     local tw = 8
-    for i=1, #Game.assets.data.tiles do
+    local index = 0
+    for name, tiledata in pairs(Game.assets.data.tiles) do
+        index = index + 1
         local rowsize = 3
         local spacing = 1
-        local row     = math.floor((i-1)/rowsize)
-        local column  = (i-1)%rowsize
+        local row     = math.floor((index-1)/rowsize)
+        local column  = (index-1)%rowsize
         local x       = self.pos.x+2+column*tw+spacing*column
         local y       = self.pos.y+4+row*tw+spacing*row
         -- Clear button
-        local button = {image = Game.assets.tile[Game.assets.data.tiles[i].name], parent = self}
+        local button = {image = Game.assets.tile[name], parent = self}
         button.dim = {w=tw, h=tw}
-        button.tile = Game.assets.data.tiles[i]
+        button.tile = tiledata
         button.action = function(button, pressed)
-            if pressed == 1 then
-                Game.scene.current_tile = button.tile
-            end
+            if pressed == 1 then Game.scene.current_tile = button.tile end
         end
         table.insert(self.buttons, Game.gui:add("button", x, y, button))
     end
