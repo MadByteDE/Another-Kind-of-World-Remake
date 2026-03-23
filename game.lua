@@ -173,7 +173,7 @@ function Game:update(dt)
     else self.fade.timer = 0 end
     local step = self.fade.duration/2
     if self.fade.timer <= step and not self.fade.triggered then
-    self.fade.triggered = true
+        self.fade.triggered = true
         self.fade.onTransition()
     end
     local elapsed = self.fade.duration-self.fade.timer

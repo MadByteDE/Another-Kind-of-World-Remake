@@ -1,6 +1,8 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Anim8 = require("lib.anim8")
+
 local Object = Class()
 
 
@@ -24,18 +26,21 @@ function Object:init(x, y, t)
 end
 
 
-function Object:newSprite(name, image, data)
-    local sprite = data or {}
-    sprite.name = name or "Sprite"
-    sprite.image = image
-    if not sprite.update then sprite.update = _NULL end
-    if not sprite.draw then
-        sprite.draw = function(self, image, ...)
-            love.graphics.draw(image or self.image, ...)
-        end
-    end
-    self.sprites[name] = sprite
-    return sprite
+function Object:newSprite(name, image)
+    self.sprites[name] = {
+        image   = image,
+        update  = _NULL,
+        draw    = function(self, image, ...) love.graphics.draw(image or self.image, ...) end
+    }
+    return self.sprites[name]
+end
+
+
+function Object:newAnimation(name, image, frames, row, duration, onLoop)
+    local g = Anim8.newGrid(8, 8, image:getWidth(), image:getHeight())
+    self.sprites[name] = Anim8.newAnimation(g(frames, row), duration, onLoop)
+    self.sprites[name].image = image
+    return self.sprites[name]
 end
 
 

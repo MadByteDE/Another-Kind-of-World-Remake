@@ -26,7 +26,7 @@ function Bug:init(level, x, y)
     if dir == 1 then self.dir.x  = -1
     else self.dir.x = 1 end
     -- Add sprite
-    self:newSprite(self.type, Game.assets.anim.bug, Game.assets.data.anims.bug:clone())
+    self:newAnimation(self.type, Game.assets.anim.bug, '1-6', 1, .15)
     self:setSprite(self.type)
     self.sprite:gotoFrame(math.random(1, #self.sprite.frames))
     return self

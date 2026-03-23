@@ -21,7 +21,7 @@ function Tile:init(level, x, y, tile)
     if level and self.collide then self:addCollider(level.collision_world) end
     -- Add sprite
     if self.type == "animatedTile" then
-        self:newSprite(self.name, Game.assets.anim[self.name], Game.assets.data.anims[self.name]:clone())
+        self:newAnimation(self.name, Game.assets.anim[self.name], unpack(self.animdata))
         self:setSprite(self.name)
         if self.randomFrame then
             self.sprite:gotoFrame(love.math.random(1, #self.sprite.frames))
