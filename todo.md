@@ -29,6 +29,7 @@
 ## Tiles
 - Breakable tiles
 - One way tiles / platforms
+- Add one tile height variants for wall tiles (shadows)
 
 
 
