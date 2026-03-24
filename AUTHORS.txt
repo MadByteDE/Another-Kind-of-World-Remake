@@ -36,6 +36,14 @@ AKOW includes the following third-party assets or software:
   conta by Lars Lönneker,
   Copyright (c) 2020-2026 Lars Lönneker
   Licensed under the MIT licence
+
+  cargo by Bjorn Swenson,
+  Copyright (c) 2019 Bjorn Swenson
+  Licensed under the MIT licence
+
+  tween by Enrique García Cota, Yuichi Tateno, Emmanuel Oga
+  Copyright (c) 2014 Enrique García Cota, Yuichi Tateno, Emmanuel Oga
+  Licensed under the MIT licence
   
 
 ============================================================================
