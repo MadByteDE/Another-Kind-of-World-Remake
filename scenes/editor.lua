@@ -13,7 +13,7 @@ function Editor:init(level_id)
     self.name = "Editor"
 
     -- Pre-selected tile when entering editor mode
-    self.current_tile = Game.assets.data.tiles["wall"]
+    self.current_tile = Game.assets.data.tiles[2]  -- wall
 
     Game.level:load(level_id or Game.level.id)
     tw = Game.level.tilesize

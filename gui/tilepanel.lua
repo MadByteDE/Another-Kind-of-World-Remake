@@ -24,9 +24,8 @@ function Tilepanel:createButtons()
     -- Buttons for individual tiles
     self.buttons = {}
     local tw = 8
-    local index = 0
-    for name, tiledata in pairs(Game.assets.data.tiles) do
-        index = index + 1
+    for index = 1, #Game.assets.data.tiles do
+        local tiledata = Game.assets.data.tiles[index]
         local rowsize = 3
         local spacing = 1
         local row     = math.floor((index-1)/rowsize)
@@ -34,7 +33,7 @@ function Tilepanel:createButtons()
         local x       = self.pos.x+2+column*tw+spacing*column
         local y       = self.pos.y+4+row*tw+spacing*row
         -- Clear button
-        local button = {image = Game.assets.tile[name], parent = self}
+        local button = {image=Game.assets.tile[tiledata.name], parent=self}
         button.dim = {w=tw, h=tw}
         button.tile = tiledata
         button.action = function(button, pressed)

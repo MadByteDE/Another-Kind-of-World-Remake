@@ -27,8 +27,8 @@ local function generateTileData(self)
         tiledata[y] = {}
         for x = 1, Game.width / self.tilesize do
             local tile = self:getTile(x, y)
-            for name, data in pairs(Game.assets.data.tiles) do
-                if (tile.name == name) then tiledata[y][x] = data.id end
+            for key, data in ipairs(Game.assets.data.tiles) do
+                if (tile.name == data.name) then tiledata[y][x] = key end
             end
         end
     end
@@ -48,7 +48,7 @@ local function createLevel(self)
         for x = 1, Game.width / self.tilesize do
             local tx = x * self.tilesize - self.tilesize
             local ty = y * self.tilesize - self.tilesize
-            self.tiles[y][x] = Tile(tx, ty, Game.assets.data.tiles["back"])
+            self.tiles[y][x] = Tile(tx, ty, Game.assets.data.tiles[1]) -- background
         end
 
     end
@@ -59,20 +59,20 @@ local function createLevel(self)
         -- Loop through it's content
         for y = 1, Game.height / self.tilesize do
             for x = 1, Game.width / self.tilesize do
-                local tileId = self.tiledata[y][x]
+                local id = self.tiledata[y][x]
                 local tx = x * self.tilesize - self.tilesize
                 local ty = y * self.tilesize - self.tilesize
 
                 -- Set each tile based on the given tile id
-                for name, tiledata in pairs(Game.assets.data.tiles) do
-                    if (tileId == tiledata.id) then
-                        local tile = Tile(tx, ty, tiledata)
-                        self:setTile(x, y, tile)
+                for index, tiledata in ipairs(Game.assets.data.tiles) do
+                    if (id == index) then
+                        tiledata.id = index
+                        self:setTile(x, y, Tile(tx, ty, tiledata))
 
                         -- Tile represents an entity - set background tile and spawn the entity
                         if (tiledata.type == "entity" and Game.scene.name == "Ingame") then
-                            self:setTile(x, y, Tile(tx, ty, Game.assets.data.tiles["back"]))
-                            self:spawn(name, tx, ty, tiledata)
+                            self:setTile(x, y, Tile(tx, ty, Game.assets.data.tiles[1])) -- background
+                            self:spawn(tiledata.name, tx, ty, tiledata)
                         end
                     end
                 end
@@ -97,7 +97,7 @@ function Level:load(id)
     local id = tostring(id) or ""
     local paths = {
         "/level/",          -- appdata directory
-        "assets/level/", } -- game directory
+        "assets/level/",}   -- game directory
 
     self.level_path = nil
     self.overlay = nil
@@ -172,11 +172,7 @@ end
 
 
 function Level:getSaveData()
-    local tiledata = generateTileData(self)
-    return {
-        id        = self.id,
-        tilesize  = self.tilesize,
-        tiledata  = tiledata, }
+    return {id=self.id, tilesize=self.tilesize, tiledata=generateTileData(self)}
 end
 
 
