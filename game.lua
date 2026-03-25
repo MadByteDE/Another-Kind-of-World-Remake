@@ -17,27 +17,14 @@ local Level = require("level")
 
 local Game = {
     title   = "Another Kind of World",
-    version = "1.3",
+    version = "1.3.0",
     debug   = (arg[2] == "debug") or false,
-    width   = 256, height = 160,
+    width   = 256,
+    height  = 160,
     assets  = require("lib.cargo").init('assets'),
-    scene   = {
-        init=_NULL, leave=_NULL,
-        update=_NULL, draw=_NULL,
-        keypressed=_NULL, keyreleased=_NULL,
-        mousepressed=_NULL, mousereleased=_NULL,
-        textinput = _NULL,
-    },
-    _shake = {
-        x=0, y=0,
-        last_x=0, last_y=0,
-        timer = 0, intensity = 1,
-    },
-    fade = {
-        duration = 2, timer = 1,
-        color = { .05, .05, .05 }, alpha = 1,
-        triggered = false, onTransition = _NULL,
-    },
+    _shake  = {x=0, y=0, last_x=0, last_y=0, timer=0, intensity=1},
+    fade    = {duration=2, timer=1, color={.05, .05, .05}, alpha=1,
+                triggered=false, onTransition=_NULL},
 }
 
 local scenes = {
@@ -68,7 +55,7 @@ function Game:load()
     end})
     -- Start-up
     love.graphics.setFont(self.assets.font.tinypixels(8))
-    self:playSound("music", .275, true)
+    if not Game.debug then self:playSound("music", .275, true) end
     Game:switchScene("Ingame", 0)
 end
 
@@ -102,7 +89,6 @@ function Game:printf(text, x, y, width, align, color, ...)
     love.graphics.setColor(color or {1, 1, 1, 1})
     love.graphics.printf(text, x, y, width, align, ...)
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.setFont(previousFont)
 end
 
 
@@ -112,12 +98,13 @@ function Game:playSound(name, vol, loop)
     if vol then snd:setVolume(vol) end
     if snd:isPlaying() then snd:stop() end
     snd:play()
-    if loop ~= nil then snd:setLooping(loop) end
+    if loop then snd:setLooping(loop) end
     return snd
 end
 
 
 function Game:transition(onTransition, duration, color)
+    if self.fade.timer > 0 then return end
     self.fade.duration = duration or 2
     self.fade.timer = self.fade.duration
     self.fade.color = color or {.05, .05, .05}

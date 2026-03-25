@@ -23,12 +23,12 @@ function Editor:init(level_id)
     self.panel:createButtons()
     local data = {
         text = Game.level.id,
-        dim = {w=72,h=8},
+        dim = {w=72, h=8},
         action = function(textbox)
             if textbox.text ~= "" then
                 self.level_id = textbox.text
             end
-        end, }
+        end,}
     self.titlebox = Game.gui:add("textbox", Game.width/2-36, 2, data)
 end
 
@@ -57,7 +57,7 @@ function Editor:logic(dt)
         Game.level:setTile(tx, ty, Tile(tx*tw-tw, ty*tw-tw, self.current_tile))
     elseif mouse.button == 2 then
         local tile = Game.level:getTile(tx, ty)
-        if tile then self.current_tile = Game.assets.data.tiles[tile.name] end
+        if tile then self.current_tile = Game.assets.data.tiles[tile.id] end
     end
 end
 

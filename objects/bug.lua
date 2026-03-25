@@ -36,7 +36,7 @@ end
 function Bug:onDead(other)
     for i=1, math.random(10, 15) do
         local data = {}
-        data.images = { Game.assets.particle.blood }
+        data.images = {Game.assets.particle.blood}
         data.lifetime = .5
         data.gravity = 25
         data.vel = {x=math.random(-25, 25), y=-love.math.random(40, 80), lx=100, ly=200}
