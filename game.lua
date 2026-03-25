@@ -91,23 +91,16 @@ function Game:setMode(w, h, flags)
 end
 
 
-function Game:print(text, x, y, data)
-    if not data then data = {} end
-    local rgba = data.rgba or {1, 1, 1, 1}
-    local previousFont = love.graphics.getFont()
-    local font = data.font or love.graphics.getFont()
-    local w = data.width or font:getWidth(text)
-    local x = x or 0
-    local y = y or 0
-    local mode = data.mode or "left"
-    if (mode == "center") then
-        local fontHeight = font:getHeight()
-        y = y - fontHeight / 2
-    end
-    love.graphics.setFont(font)
-    love.graphics.setColor(rgba)
-    if w or mode then love.graphics.printf(text, x, y, w, mode)
-    else love.graphics.print(text, x, y) end
+function Game:print(text, x, y, color, ...)
+    love.graphics.setColor(color or {1, 1, 1, 1})
+    love.graphics.print(text, x, y, ...)
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
+
+function Game:printf(text, x, y, width, align, color, ...)
+    love.graphics.setColor(color or {1, 1, 1, 1})
+    love.graphics.printf(text, x, y, width, align, ...)
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setFont(previousFont)
 end

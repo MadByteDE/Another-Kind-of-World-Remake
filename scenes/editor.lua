@@ -70,7 +70,9 @@ function Editor:render()
     if self.current_tile then
         love.graphics.draw(Game.assets.tile[self.current_tile.name], tx*tw-tw, ty*tw-tw)
     end
-    Game:print("TAB - Switch to game\nLMB/RMB - Place/Pick tile\nSpace - Play level", 3, 2, {rgba={1, 1, 1, .075}, width=100})
+    Game:print("TAB - Switch to game", 5, 5, {1, 1, 1, .075})
+    Game:print("LMB/RMB - Place/Pick tile", 5, 15, {1, 1, 1, .075})
+    Game:print("Space - Play level", 5, 25, {1, 1, 1, .075})
 end
 
 

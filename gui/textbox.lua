@@ -13,7 +13,7 @@ function Textbox:init(x, y, t)
     self.text = self.text or ""
     self.action = self.action or function() end
     self.selectable = true
-    self.textColor = {1, 1, 1, .75}
+    self.text_color = {1, 1, 1, .75}
     self.rgba = {.05, .05, .05, .5}
     Game.gui:select(self)
     self:setTimeout(4)
@@ -44,7 +44,7 @@ function Textbox:onDeselect()
     self:action()
     self.visible = false
     self.rgba = {.05, .05, .05, .5}
-    self.textColor = {1, 1, 1, .75}
+    self.text_color = {1, 1, 1, .75}
     love.keyboard.setTextInput(false)
 end
 
@@ -87,9 +87,7 @@ end
 
 function Textbox:render()
     self:drawRectangle("fill")
-    local x = self.pos.x
-    local y = self.pos.y+self.dim.h/2+.5
-    Game:print(self.text, x, y, {rgba=self.textColor, width=self.dim.w, mode="center"})
+    Game:printf(self.text, self.pos.x, self.pos.y-.5, self.dim.w, "center", self.text_color)
 end
 
 return Textbox
