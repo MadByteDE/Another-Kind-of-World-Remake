@@ -50,17 +50,9 @@ function Bomb:onDead()
     local pitch = math.random(75, 125)/100
     Game:playSound("boom"):setPitch(pitch)
     Game:shake()
-    local sprites = {
-        Game.assets.particle.smoke,
-        Game.assets.particle.fire,
-    }
     for i=1, math.random(25,35) do
-        local data = {}
-        data.images = {Game.assets.particle.smoke, Game.assets.particle.fire}
-        data.vel = {x=math.random(-40, 40), y=-love.math.random(40, 120), lx=100, ly=100}
-        data.gravity = 25
-        data.lifetime = .75
-        Game.level:spawn("particle", self.pos.x, self.pos.y, data)
+        local x, y = self.pos.x + self.dim.w/2, self.pos.y + self.dim.h/2
+        Game.level:spawn("particle", x, y, Game.assets.data.particles.explosion)
     end
     local radius = 24
     local x = self.pos.x+self.dim.w/2-radius/2

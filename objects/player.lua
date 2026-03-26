@@ -28,16 +28,8 @@ end
 function Player:onDead(v)
     Actor.onDead(self)
     for i=1, math.random(10, 15) do
-        local data = {}
-        data.images = {Game.assets.particle.blood}
-        data.lifetime = .5
-        data.gravity = 25
-        data.vel = {x=math.random(-25, 25), y=-love.math.random(40, 80), lx=100, ly=200}
-        data.filter = function(other)
-            if not other.solid then return "cross"
-            else return end
-        end
-        Game.level:spawn("particle", self.pos.x, self.pos.y, data)
+        local x, y = self.pos.x, self.pos.y
+        Game.level:spawn("particle", x, y, Game.assets.data.particles.blood)
     end
     local pitch = math.random(75, 125)/100
     Game:playSound("splat"):setPitch(pitch)

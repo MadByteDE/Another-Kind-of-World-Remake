@@ -9,7 +9,7 @@ Exit:include(Object)
 function Exit:init(x, y, tile)
     -- Init
     Object.init(self, x, y, tile)
-    self.type   = "exit"
+    self.type = "exit"
     self.visible = false
     -- Additional
     self:newSprite(self.name, Game.assets.tile.exit)
@@ -21,7 +21,12 @@ function Exit:logic(dt)
     if not self.visible and #Game.level.objects:get("bug") == 0 then
         self.visible = true
         self.collide = true
+        self.solid = false
         self:addCollider()
+        for i=1, math.random(10, 15) do
+            local x, y = self.pos.x, self.pos.y
+            Game.level:spawn("particle", x, y, Game.assets.data.particles.glitter)
+        end
     end
 end
 
