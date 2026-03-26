@@ -34,14 +34,13 @@ function Bug:init(x, y)
 end
 
 
-function Bug:onDead(other)
+function Bug:onDamage(amount, other)
     for i=1, math.random(10, 15) do
         local x, y = self.pos.x, self.pos.y
         Game.level:spawn("particle", x, y, Game.assets.data.particles.blood)
     end
     local pitch = math.random(75, 125)/100
     Game:playSound("splat"):setPitch(pitch)
-    self:destroy()
 end
 
 

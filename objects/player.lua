@@ -26,14 +26,18 @@ function Player:init(x, y)
 end
 
 
-function Player:onDead(v)
-    Actor.onDead(self)
-    for i=1, math.random(10, 15) do
+function Player:onDamage(amount, other)
+    for i=1, math.random(5, 10) do
         local x, y = self.pos.x, self.pos.y
         Game.level:spawn("particle", x, y, Game.assets.data.particles.blood)
     end
     local pitch = math.random(75, 125)/100
     Game:playSound("splat"):setPitch(pitch)
+end
+
+
+function Player:onDead(other)
+    self:destroy()
     Game.scene:fail()
 end
 
