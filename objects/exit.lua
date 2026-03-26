@@ -1,14 +1,14 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
-local Object = require("objects.object")
+local Actor = require("objects.actor")
 local Exit = Class()
-Exit:include(Object)
+Exit:include(Actor)
 
 
 function Exit:init(x, y, tile)
     -- Init
-    Object.init(self, x, y, tile)
+    Actor.init(self, x, y, tile)
     self.type = "exit"
     self.visible = false
     -- Additional
