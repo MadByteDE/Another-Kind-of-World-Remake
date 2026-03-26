@@ -36,9 +36,7 @@ end
 
 
 function Bomb:onCollision(other)
-    if other.name == "lava" then
-        self:onDead()
-    end
+    if other.name == "lava" then self:onDead() end
     if other.type == "player" then return end
     -- Reduce velocity with every collision
     self.vel.x = self.vel.x * .98

@@ -14,11 +14,11 @@ end
 function Actor:init(x, y, t)
     Object.init(self, x, y, t)
     -- Movement component
-    self.vel      = self.vel or {x=0, y=0, lx=150, ly=150}
-    self.acc      = self.acc or {x=50, y=50}
-    self.gravity  = self.gravity or 0
-    self.damp     = self.damp or {x=0, y=0}
-    self.dir      = self.dir or {x=0, y=0}
+    self.vel        = self.vel or {x=0, y=0, lx=150, ly=150}
+    self.acc        = self.acc or {x=50, y=50}
+    self.gravity    = self.gravity or 0
+    self.damp       = self.damp or {x=0, y=0}
+    self.dir        = self.dir or {x=0, y=0}
     -- Properties
     self.damage_cooldown = 0
     self.health     = self.health or 0
@@ -26,7 +26,7 @@ function Actor:init(x, y, t)
     self.wrap       = self.wrap or true
     self.lifetime   = clamp(self.lifetime, 0, 999)
     self._lifetime  = self.lifetime
-    self.in_air      = self.in_air or false
+    self.in_air     = self.in_air or false
     self.bounciness = self.bounciness or 0
 end
 

@@ -24,8 +24,7 @@ function Tilepanel:createButtons()
     -- Buttons for individual tiles
     self.buttons = {}
     local tw = 8
-    for index = 1, #Game.assets.data.tiles do
-        local tiledata = Game.assets.data.tiles[index]
+    for index, tiledata in ipairs(Game.assets.data.tiles) do
         local rowsize = 3
         local spacing = 1
         local row     = math.floor((index-1)/rowsize)

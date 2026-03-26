@@ -184,18 +184,10 @@ function Level:setTile(x, y, tile)
     if self.tiles[y] then
         local current_tile = self.tiles[y][x]
         if current_tile == tile then return end
-
-        if (current_tile.type == "animatedTile") then
-            self.animated_tiles:remove(current_tile)
-        end
-
+        if current_tile.animdata then self.animated_tiles:remove(current_tile) end
         current_tile:removeCollider()
         current_tile = tile
-
-        if (current_tile.type == "animatedTile") then
-            self.animated_tiles:add(current_tile)
-        end
-
+        if current_tile.animdata then self.animated_tiles:add(current_tile) end
         self.tiles[y][x] = current_tile
         self:renderCanvas()
     end

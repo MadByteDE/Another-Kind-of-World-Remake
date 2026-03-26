@@ -18,7 +18,7 @@ function Tile:init(x, y, tile)
         self.solid = false
     end
     -- Add sprite
-    if self.type == "animatedTile" then
+    if self.animdata then
         self:newAnimation(self.name, Game.assets.anim[self.name], unpack(self.animdata))
         self:setSprite(self.name)
         if self.randomFrame then

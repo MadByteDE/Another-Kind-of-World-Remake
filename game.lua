@@ -22,7 +22,7 @@ local Game = {
     width   = 256,
     height  = 160,
     assets  = require("lib.cargo").init('assets'),
-    _shake  = {x=0, y=0, last_x=0, last_y=0, timer=0, intensity=1},
+    _shake  = {x=0, y=0, timer=0, intensity=1},
     fade    = {duration=2, timer=1, color={.05, .05, .05}, alpha=1,
                 triggered=false, onTransition=_NULL},
 }
