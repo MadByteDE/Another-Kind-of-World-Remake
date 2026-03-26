@@ -5,9 +5,11 @@ return {
         collide=true, bounciness=.3, damp={x=2, y=0},
         lifetime=1.5, range={x={-60, 60}, y={-50, -80}},
         filter=function(self, other)
+            -- TODO: Simplify cross behaviour (if entity then cross!)
             if other.type == "player" then return "cross"
             elseif other.type == "particle" then return "cross"
             elseif other.type == "exit" then return "cross"
+            elseif other.type == "bomb" then return "cross"
             else return "bounce" end
         end
     },
