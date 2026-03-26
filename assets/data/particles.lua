@@ -10,6 +10,7 @@ return {
             elseif other.type == "particle" then return "cross"
             elseif other.type == "exit" then return "cross"
             elseif other.type == "bomb" then return "cross"
+            elseif other.type == "bug" then return "cross"
             else return "bounce" end
         end
     },
@@ -28,5 +29,20 @@ return {
         images={Game.assets.particle.smoke, Game.assets.particle.fire},
         dim={w=4, h=4}, trans={r=0, sx=1, sy=1, ox=2, oy=2},
         lifetime=.75, wrap=false, range={x={-40, 40}, y={-50, -110}},
+    },
+
+    ["dust"] = {
+        images={Game.assets.particle.dust},
+        collide=true, bounciness=.5, damp={x=2, y=0},
+        dim={w=1, h=1}, lifetime=1, wrap=false, range={x={-35, 35}, y={-40, -60}},
+        filter=function(self, other)
+            -- TODO: Simplify cross behaviour (if entity then cross!)
+            if other.type == "player" then return "cross"
+            elseif other.type == "particle" then return "cross"
+            elseif other.type == "exit" then return "cross"
+            elseif other.type == "bomb" then return "cross"
+            elseif other.type == "bug" then return "cross"
+            else return "bounce" end
+        end
     },
 }
