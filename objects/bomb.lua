@@ -69,7 +69,7 @@ function Bomb:onDead()
             else other.vel.y = y_speed/2 end
         end
 
-        if other.can_die then other:onDead(self) end
+        if other.can_die then other:damage(50, self) end
     end
     self:destroy()
 end

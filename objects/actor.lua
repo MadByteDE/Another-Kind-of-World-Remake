@@ -20,6 +20,9 @@ function Actor:init(x, y, t)
     self.damp     = self.damp or {x=0, y=0}
     self.dir      = self.dir or {x=0, y=0}
     -- Properties
+    self.damage_cooldown = 0
+    self.health     = self.health or 0
+    self.max_health = self.max_health or 999
     self.wrap       = self.wrap or true
     self.lifetime   = clamp(self.lifetime, 0, 999)
     self._lifetime  = self.lifetime
@@ -63,6 +66,22 @@ function Actor:applyGravity(dt)
 end
 
 
+function Actor:heal(amount)
+    if type(amount) ~= "number" then error(("Amount is not a number (is '%s')"):format(type(amount))) end
+    self.health = math.min(self.max_health, self.health + amount)
+end
+
+
+function Actor:damage(amount, other)
+    if type(amount) ~= "number" then error(("Amount is not a number (is '%s')"):format(type(amount))) end
+    if self.damage_cooldown > 0 then return end
+    self.damage_cooldown = 2
+    self.health = math.max(0, self.health - amount)
+    if self.onDamage then self:onDamage(amount, other) end
+    if self.health <= 0 then self:onDead(other) end
+end
+
+
 function Actor:jump(vel)
     if not self.in_air then
         self.in_air = true
@@ -103,6 +122,12 @@ function Actor:update(dt)
         if self._lifetime <= 0 then
             self:onDead()
         end
+    end
+    -- Update damage cooldown
+    if self.damage_cooldown > 0 then
+        self.damage_cooldown = self.damage_cooldown - dt
+    else
+        self.damage_cooldown = 0
     end
     -- Add gravity
     self:applyGravity(dt)

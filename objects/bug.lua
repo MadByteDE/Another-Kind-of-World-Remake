@@ -14,6 +14,7 @@ function Bug:init(x, y)
     self.acc    = {x=3, y=0}
     self.vel    = {x=0, y=0, lx=10, ly=0}
     self.damp   = {x=0, y=0}
+    self.health = 50
     self.filter = function(other)
         if other.solid then return "slide"
         else return end

@@ -18,6 +18,7 @@ function Player:init(x, y)
     self.gravity = 33
     self.max_bombs = 3
     if Game.debug then self.max_bombs = 99 end
+    self.health = 100
     -- Additional
     self:newAnimation("idle", Game.assets.anim.player_idle, '1-2', 1, .3)
     self:newAnimation("run", Game.assets.anim.player_run, '1-4', 1, .15)
