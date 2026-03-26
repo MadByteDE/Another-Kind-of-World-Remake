@@ -12,6 +12,7 @@ function Particle:init(x, y, data)
     self.type = "particle"
     self.lifetime = data.lifetime or .75
     self.gravity = data.gravity or 25
+    self.wrap = data.wrap or false
     self.vel = {
         x=math.random(data.range.x[1], data.range.x[2]),
         y=math.random(data.range.y[1], data.range.y[2]),
