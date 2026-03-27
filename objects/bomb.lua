@@ -22,7 +22,7 @@ function Bomb:init(x, y, data)
     local vel_x = (self.speed.x + math.abs(data.parent.vel.x)) * (data.dx or 0)
     local vel_y = (self.speed.y + math.abs(math.min(data.parent.vel.y, 0))) * (data.dy or 0)
     self.vel = {x=vel_x or 0,y=vel_y or 0}
-    self.max_vel = {x=250, y=250}
+    self.max_vel = {x=275, y=275}
     -- Additional
     self:newAnimation(self.type, Game.assets.anim.bomb, '1-4', 1, .1)
     self:setSprite(self.type)
