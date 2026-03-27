@@ -19,8 +19,8 @@ function Particle:init(x, y, data)
     self.vel = {
         x=math.random(data.range.x[1], data.range.x[2]),
         y=math.random(data.range.y[1], data.range.y[2]),
-        lx=150, ly=150,
     }
+    self.max_vel = {x=150, y=150}
     self.rgba[4] = .75
     -- Additional
     self:newSprite(self.type, sprite)

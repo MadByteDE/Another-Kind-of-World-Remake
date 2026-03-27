@@ -12,7 +12,8 @@ function Bug:init(x, y)
     self:setDimensions(8, 6)
     self.offset = {x=0, y=2}
     self.acc    = {x=3, y=0}
-    self.vel    = {x=0, y=0, lx=10, ly=0}
+    self.vel    = {x=0, y=0}
+    self.max_vel= {x=10, y=0}
     self.damp   = {x=0, y=0}
     self.health = 50
     self.filter = function(other)

@@ -14,7 +14,8 @@ end
 function Actor:init(x, y, t)
     Object.init(self, x, y, t)
     -- Movement component
-    self.vel        = self.vel or {x=0, y=0, lx=150, ly=150}
+    self.vel        = self.vel or {x=0, y=0}
+    self.max_vel    = self.max_vel or {x=150, y=150}
     self.acc        = self.acc or {x=50, y=50}
     self.gravity    = self.gravity or 0
     self.damp       = self.damp or {x=0, y=0}
@@ -154,8 +155,8 @@ function Actor:update(dt)
     -- Add gravity
     self:applyGravity(dt)
     -- clamp speed to set limits
-    self.vel.x = clamp(self.vel.x, -self.vel.lx, self.vel.lx)
-    self.vel.y = clamp(self.vel.y, -self.vel.ly, self.vel.ly)
+    self.vel.x = clamp(self.vel.x, -self.max_vel.x, self.max_vel.x)
+    self.vel.y = clamp(self.vel.y, -self.max_vel.y, self.max_vel.y)
     -- calculate position
     local x = self.x + self.vel.x * dt
     local y = self.y + self.vel.y * dt

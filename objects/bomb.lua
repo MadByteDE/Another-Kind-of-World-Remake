@@ -9,19 +9,20 @@ Bomb:include(Actor)
 function Bomb:init(x, y, data)
     -- init
     self.type   = "bomb"
-    self:setDimensions(5, 5)
     self.offset = {x=1, y=3}
     self.damp   = {x=1.5, y=1.5}
+    self.speed  = {x=150, y=150}
     self.gravity = 33
     self.lifetime = math.random(3, 4)
     self.bounciness = .8
-    self.speed = {x=150, y=150}
+    self:setDimensions(5, 5)
     local x = x - self.width/2 - self.offset.x/2
     local y = y - self.height/2 - self.offset.y/2
     Actor.init(self, x, y, {collide=true})
     local vel_x = (self.speed.x + math.abs(data.parent.vel.x)) * (data.dx or 0)
     local vel_y = (self.speed.y + math.abs(math.min(data.parent.vel.y, 0))) * (data.dy or 0)
-    self.vel = {x=vel_x or 0,y=vel_y or 0,lx=400,ly=400}
+    self.vel = {x=vel_x or 0,y=vel_y or 0}
+    self.max_vel = {x=250, y=250}
     -- Additional
     self:newAnimation(self.type, Game.assets.anim.bomb, '1-4', 1, .1)
     self:setSprite(self.type)
@@ -29,7 +30,7 @@ end
 
 
 function Bomb:filter(other)
-    if other.type == "player" then return "cross"
+    if other.type == "player" then return
     elseif not other.solid then return
     else return "bounce" end
 end
@@ -45,13 +46,16 @@ end
 
 
 function Bomb:onDead()
+    -- Effects
     local pitch = math.random(75, 125)/100
     Game:playSound("boom"):setPitch(pitch)
     Game:shake()
+    -- Explosion particles
     for i=1, math.random(25,35) do
         local x, y = self.x + self.width/2, self.y + self.height/2
         Game.level:spawn("particle", x, y, Game.assets.data.particles.explosion)
     end
+    -- Apply explosion damage
     local radius = 24
     local x = self.x+self.width/2-radius/2
     local y = self.y+self.height/2-radius/2
@@ -66,9 +70,9 @@ function Bomb:onDead()
             if self.y >= other.y then other.vel.y = -y_speed
             else other.vel.y = y_speed/2 end
         end
-
         if other.can_die then other:damage(50, self) end
     end
+    -- Remove bomb
     self:destroy()
 end
 
@@ -76,10 +80,5 @@ end
 function Bomb:logic(dt)
     self:accelerate(dt)
 end
-
-
--- function Bomb:render()
---     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
--- end
 
 return Bomb

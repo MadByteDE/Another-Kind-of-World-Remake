@@ -13,7 +13,8 @@ function Player:init(x, y)
     self:setDimensions(6, 7)
     self.offset = {x=1, y=1}
     self.acc    = {x=35, y=110}
-    self.vel    = {x=0, y=0, lx=70, ly=150}
+    self.vel    = {x=0, y=0}
+    self.max_vel= {x=70, y=150}
     self.damp   = {x=30, y=0}
     self.gravity = 33
     self.max_bombs = 3
