@@ -9,10 +9,12 @@ Particle:include(Actor)
 function Particle:init(x, y, data)
     -- Init
     Actor.init(self, x, y, data)
+    local sprite = data.images[math.random(1, #data.images)]
     self.type = "particle"
     self.lifetime = data.lifetime or .75
     self.gravity = data.gravity or 25
     self.wrap = data.wrap or false
+    self:setDimensions(sprite:getDimensions())
     self:setPosition(x-self.width/2, y-self.height/2)
     self.vel = {
         x=math.random(data.range.x[1], data.range.x[2]),
@@ -21,7 +23,7 @@ function Particle:init(x, y, data)
     }
     self.rgba[4] = .75
     -- Additional
-    self:newSprite(self.type, data.images[math.random(1, #data.images)])
+    self:newSprite(self.type, sprite)
     self:setSprite(self.type)
 end
 
