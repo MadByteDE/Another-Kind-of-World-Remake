@@ -1,10 +1,12 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Tween = require("lib.tween")
 local Actor = require("objects.actor")
 local Particle = Class()
 Particle:include(Actor)
 
+local fadeout_time = .3
 
 function Particle:init(x, y, data)
     -- Init
@@ -21,7 +23,8 @@ function Particle:init(x, y, data)
         y=math.random(data.range.y[1], data.range.y[2]),
     }
     self.max_vel = {x=150, y=150}
-    self.rgba[4] = .75
+    self.rgba[4] = .65
+    self.alpha_tween = Tween.new(fadeout_time, self.rgba, {[4]=0})
     -- Additional
     self:newSprite(self.type, sprite)
     self:setSprite(self.type)
@@ -29,7 +32,11 @@ end
 
 
 function Particle:logic(dt)
-    if self._lifetime <= self.lifetime/4 then self.rgba[4] = self.rgba[4] - (5 * dt) end
+    -- Fade out
+    if self.lifetime <= fadeout_time then
+        self.alpha_tween:update(dt)
+    end
+    -- Apply velocities
     self:accelerate(dt)
 end
 
