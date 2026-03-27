@@ -118,7 +118,7 @@ end
 
 
 function Actor:onCollision(other)
-    if other.deadly and self.can_die then self:onDead(other) end
+    if other.deadly and self.can_die then self:damage(999, other) end
 end
 
 
