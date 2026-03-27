@@ -18,9 +18,7 @@
 
 ## Entities
 - Something that can defend itself, hmm
-- Add health / HP system
 - Hurt effect when hit
-- Improve particles, need to be more flexible for things other then explosions (sprites + movement)
 
 
 ## Levels
@@ -32,6 +30,5 @@
 - Add one tile height variants for wall tiles (shadows)
 
 
-
-- Revamp particle system
+## Other
 - Revamp GUI system (no mouse element, tooltips, etc)
