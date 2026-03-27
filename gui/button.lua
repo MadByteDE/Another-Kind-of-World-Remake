@@ -15,7 +15,7 @@ function Button:init(x, y, t)
         self:newSprite(self.type, self.image)
         self:setSprite(self.type)
         local w, h = self.sprite.image:getDimensions()
-        self.dim = {w=w, h=h}
+        self:setDimensions(w, h)
     end
     self.action = self.action or function() end
 end

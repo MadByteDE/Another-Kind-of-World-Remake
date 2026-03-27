@@ -9,15 +9,15 @@ Bomb:include(Actor)
 function Bomb:init(x, y, data)
     -- init
     self.type   = "bomb"
-    self.dim    = {w=5, h=5}
-    self.trans  = {r=0, sx=1, sy=1, ox=1, oy=3}
+    self:setDimensions(5, 5)
+    self.offset = {x=1, y=3}
     self.damp   = {x=1.5, y=1.5}
     self.gravity = 33
     self.lifetime = math.random(3, 4)
     self.bounciness = .8
     self.speed = {x=150, y=150}
-    local x = x - self.dim.w/2 - self.trans.ox/2
-    local y = y - self.dim.h/2 - self.trans.oy/2
+    local x = x - self.width/2 - self.offset.x/2
+    local y = y - self.height/2 - self.offset.y/2
     Actor.init(self, x, y, {collide=true})
     local vel_x = (self.speed.x + math.abs(data.parent.vel.x)) * (data.dx or 0)
     local vel_y = (self.speed.y + math.abs(math.min(data.parent.vel.y, 0))) * (data.dy or 0)
@@ -49,21 +49,21 @@ function Bomb:onDead()
     Game:playSound("boom"):setPitch(pitch)
     Game:shake()
     for i=1, math.random(25,35) do
-        local x, y = self.pos.x + self.dim.w/2, self.pos.y + self.dim.h/2
+        local x, y = self.x + self.width/2, self.y + self.height/2
         Game.level:spawn("particle", x, y, Game.assets.data.particles.explosion)
     end
     local radius = 24
-    local x = self.pos.x+self.dim.w/2-radius/2
-    local y = self.pos.y+self.dim.h/2-radius/2
+    local x = self.x+self.width/2-radius/2
+    local y = self.y+self.height/2-radius/2
     local cols = Game.level.collision_world:queryRect(x, y, radius, radius)
     for i=1, #cols do
         local other = cols[i]
         if other.type == "bomb" then
             local x_speed = math.random(30, 100)
             local y_speed = math.random(40, 200)
-            if self.pos.x >= other.pos.x then other.vel.x = -x_speed
+            if self.x >= other.x then other.vel.x = -x_speed
             else other.vel.x = x_speed end
-            if self.pos.y >= other.pos.y then other.vel.y = -y_speed
+            if self.y >= other.y then other.vel.y = -y_speed
             else other.vel.y = y_speed/2 end
         end
 
@@ -79,7 +79,7 @@ end
 
 
 -- function Bomb:render()
---     love.graphics.rectangle("line", self.pos.x, self.pos.y, self.dim.w, self.dim.h)
+--     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
 -- end
 
 return Bomb

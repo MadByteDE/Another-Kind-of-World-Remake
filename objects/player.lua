@@ -10,8 +10,8 @@ function Player:init(x, y)
     -- Init
     Actor.init(self, x, y, {collide=true, solid=true, can_die=true})
     self.type   = "player"
-    self.dim    = {w=6, h=7}
-    self.trans  = {r=0, sx=1, sy=1, ox=1, oy=1}
+    self:setDimensions(6, 7)
+    self.offset = {x=1, y=1}
     self.acc    = {x=35, y=110}
     self.vel    = {x=0, y=0, lx=70, ly=150}
     self.damp   = {x=30, y=0}
@@ -55,14 +55,14 @@ function Player:throw(name, data)
     local name = name or "bomb"
     if #Game.level:getObject(name) < self.max_bombs then
         local mouse = Game.gui:getMouse()
-        local dist_x = mouse.pos.x-self.pos.x+self.dim.w/2
-        local dist_y = mouse.pos.y-self.pos.y+self.dim.h/2
+        local dist_x = mouse.x-self.x+self.width/2
+        local dist_y = mouse.y-self.y+self.height/2
         local angle = math.sqrt(dist_x*dist_x + dist_y*dist_y)
         local data  = data or {}
         data.parent = self
-        data.dx     = (mouse.pos.x-self.pos.x)/angle
-        data.dy     = (mouse.pos.y-self.pos.y)/angle
-        Game.level:spawn(name, self.pos.x+self.dim.w/2, self.pos.y+2, data)
+        data.dx     = (mouse.x-self.x)/angle
+        data.dy     = (mouse.y-self.y)/angle
+        Game.level:spawn(name, self.x+self.width/2, self.y+2, data)
         Game:playSound("toss")
         -- Pushback
         self.vel.x = self.vel.x + (random_range(70, 10) * -data.dx)
@@ -80,7 +80,7 @@ function Player:logic(dt)
     -- Set default sprite
     self:setSprite("idle")
     -- Look towards the cursor
-    if mouse.pos.x > self.pos.x+self.dim.w/2 then
+    if mouse.x > self.x+self.width/2 then
     self.sprite.flippedH = false
     else self.sprite.flippedH = true end
     -- Prevent jumping while in air

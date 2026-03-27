@@ -7,24 +7,19 @@ Mouse:include(Element)
 
 
 function Mouse:init(x, y, t)
-    local mx, my = self:getPosition(x, y)
-    Element.init(self, mx, my, t)
+    love.mouse.setPosition(x*Game.scale.x, y*Game.scale.y)
+    Element.init(self, x, y, t)
     self.type   = "mouse"
-    self.dim    = {w=1, h=1}
+    self:setDimensions(1, 1)
     self:newSprite(self.type, Game.assets.gui.cursor)
     self:setSprite(self.type)
     local w, h = self.sprite.image:getDimensions()
-    self.trans.ox = w/2
-    self.trans.oy = h/2
+    self.offset.x = w/2
+    self.offset.y = h/2
     self.hover_timer = 0
     self.tooltip_timeout = 1.5
     self.button = 0
     self.scroll = {x=0, y=0}
-end
-
-
-function Mouse:setPosition(x, y)
-    love.mouse.setPosition(x*Game.scale.x, y*Game.scale.y)
 end
 
 
@@ -35,7 +30,7 @@ end
 
 
 function Mouse:logic(dt)
-  self.pos.x, self.pos.y = self:getPosition()
+    self:setPosition(self:getPosition())
     if not love.mouse.isDown(self.button) then self.button = 0 end
     if self.child and self.child.hasTooltip then
         self.hover_timer = self.hover_timer + dt

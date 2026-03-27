@@ -14,13 +14,13 @@ function Tilepanel:init(x, y, t)
     self:newSprite(self.type, Game.assets.gui.tilepanel)
     self:setSprite(self.type)
     local w, h = self.sprite.image:getDimensions()
-    self.dim = {w=w, h=h}
+    self:setDimensions(w, h)
     self.buttons = {}
 end
 
 
 function Tilepanel:createButtons()
-  local x, y, w, h = self.pos.x, self.pos.y, self.dim.w, self.dim.h
+  local x, y, w, h = self.x, self.y, self.width, self.height
     -- Buttons for individual tiles
     self.buttons = {}
     local tw = 8
@@ -29,11 +29,12 @@ function Tilepanel:createButtons()
         local spacing = 1
         local row     = math.floor((index-1)/rowsize)
         local column  = (index-1)%rowsize
-        local x       = self.pos.x+2+column*tw+spacing*column
-        local y       = self.pos.y+4+row*tw+spacing*row
+        local x       = self.x+2+column*tw+spacing*column
+        local y       = self.y+4+row*tw+spacing*row
         -- Clear button
         local button = {image=Game.assets.tile[tiledata.name], parent=self}
-        button.dim = {w=tw, h=tw}
+        button.width = tw
+        button.height = tw
         button.tile = tiledata
         button.action = function(button, pressed)
             if pressed == 1 then Game.scene.current_tile = button.tile end

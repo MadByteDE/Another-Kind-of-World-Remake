@@ -10,7 +10,7 @@ function Tile:init(x, y, tile)
     for k,v in pairs(tile or {}) do self[k] = v end
     -- Init
     local tw = Game.level.tilesize
-    Object.init(self, x, y, {dim=tile.dim or {w=tw, h=tw}})
+    Object.init(self, x, y, {width=tw, height=tw})
     -- Additional
     -- Remove properties used for the entity
     if self.type == "entity" then

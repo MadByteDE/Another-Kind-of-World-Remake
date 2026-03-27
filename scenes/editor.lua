@@ -23,7 +23,7 @@ function Editor:init(level_id)
     self.panel:createButtons()
     local data = {
         text = Game.level.id,
-        dim = {w=72, h=8},
+        width = 72, height = 8,
         action = function(textbox)
             if textbox.text ~= "" then
                 self.level_id = textbox.text
@@ -52,7 +52,7 @@ end
 function Editor:logic(dt)
     Game.level:update(dt)
     local mouse = Game.gui:getMouse()
-    local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
+    local tx, ty = self:toTileCoords(mouse.x, mouse.y)
     if mouse.button == 1 then
         Game.level:setTile(tx, ty, Tile(tx*tw-tw, ty*tw-tw, self.current_tile))
     elseif mouse.button == 2 then
@@ -65,7 +65,7 @@ end
 function Editor:render()
     Game.level:draw()
     local mouse = Game.gui:getMouse()
-    local tx, ty = self:toTileCoords(mouse.pos.x, mouse.pos.y)
+    local tx, ty = self:toTileCoords(mouse.x, mouse.y)
     love.graphics.setColor(1, 1, 1, .3)
     if self.current_tile then
         love.graphics.draw(Game.assets.tile[self.current_tile.name], tx*tw-tw, ty*tw-tw)

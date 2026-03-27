@@ -75,7 +75,7 @@ end
 
 function Textbox:onTextInput(text)
     local font = love.graphics.getFont()
-    if font:getWidth(self.text) > self.dim.w-5 then return end
+    if font:getWidth(self.text) > self.width-5 then return end
     self:setTimeout(0)
     self.text = self.text .. text:gsub('[%p%c%s]', '') -- remove symbols etc.
 end
@@ -87,7 +87,7 @@ end
 
 function Textbox:render()
     self:drawRectangle("fill")
-    Game:printf(self.text, self.pos.x, self.pos.y-.5, self.dim.w, "center", self.text_color)
+    Game:printf(self.text, self.x, self.y-.5, self.width, "center", self.text_color)
 end
 
 return Textbox

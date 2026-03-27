@@ -9,8 +9,8 @@ Bug:include(Actor)
 function Bug:init(x, y)
     -- Core
     self.type   = "bug"
-    self.dim    = {w=8, h=6}
-    self.trans  = {r=0, sx=1, sy=1, ox=0, oy=2}
+    self:setDimensions(8, 6)
+    self.offset = {x=0, y=2}
     self.acc    = {x=3, y=0}
     self.vel    = {x=0, y=0, lx=10, ly=0}
     self.damp   = {x=0, y=0}
@@ -49,22 +49,22 @@ function Bug:logic(dt)
     else self.sprite.flippedH = false end
     self:accelerate(dt)
     -- AI movement on platform
-    local x = self.pos.x + self.vel.x * dt
-    local y = self.pos.y + self.vel.y * dt
+    local x = self.x + self.vel.x * dt
+    local y = self.y + self.vel.y * dt
     if self.dir.x > 0 then
-        local right = Game.level.collision_world:queryPoint(x+self.dim.w+1, y+(self.dim.h/2), self.filter)
-        local downRight  = Game.level.collision_world:queryRect(x+self.dim.w, y+self.dim.h, 2, 2, self.filter)
+        local right = Game.level.collision_world:queryPoint(x+self.width+1, y+(self.height/2), self.filter)
+        local downRight  = Game.level.collision_world:queryRect(x+self.width, y+self.height, 2, 2, self.filter)
         if #downRight==0 or #right > 0 then self.dir.x = -1 end
     elseif self.dir.x < 0 then
-        local left  = Game.level.collision_world:queryPoint(x-1, y+(self.dim.h/2), self.filter)
-        local downLeft  = Game.level.collision_world:queryRect(x-3, y+self.dim.h, 2, 2, self.filter)
+        local left  = Game.level.collision_world:queryPoint(x-1, y+(self.height/2), self.filter)
+        local downLeft  = Game.level.collision_world:queryRect(x-3, y+self.height, 2, 2, self.filter)
         if #downLeft==0 or #left > 0 then self.dir.x = 1 end
     end
 end
 
 
 -- function Bug:render()
---     love.graphics.rectangle("line", self.pos.x, self.pos.y, self.dim.w, self.dim.h)
+--     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
 -- end
 
 return Bug

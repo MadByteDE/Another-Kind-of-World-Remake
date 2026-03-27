@@ -33,7 +33,7 @@ end
 function Element:onClick(button, x, y)
     if self.draggable and button == 1 then
         self.dragged = true
-    self.diff = {x=x-self.pos.x, y=y-self.pos.y}
+    self.diff = {x=x-self.x, y=y-self.y}
     end
 end
 
@@ -71,7 +71,7 @@ function Element:update(dt)
     if self.parent then
         if self.parent.dragged and not self.dragged then
             self.dragged = true
-      self.diff = {x=mouse.pos.x-self.pos.x, y=mouse.pos.y-self.pos.y}
+      self.diff = {x=mouse.x-self.x, y=mouse.y-self.y}
         elseif not self.parent.dragged and self.dragged then
             self.dragged = false
             self.diff = {x=0, y=0}
@@ -79,8 +79,8 @@ function Element:update(dt)
     end
 
     if self.dragged then
-    self.pos.x = mouse.pos.x-self.diff.x
-    self.pos.y = mouse.pos.y-self.diff.y
+    self.x = mouse.x-self.diff.x
+    self.y = mouse.y-self.diff.y
     end
 
     if self.timeout > 0 then

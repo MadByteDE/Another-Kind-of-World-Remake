@@ -9,19 +9,21 @@ local Object = Class()
 function Object:init(x, y, t)
     for k,v in pairs(t or {}) do self[k] = v end
     -- Core
-    self.type     = self.type or "object"
-    self.trans    = self.trans or {r=0, sx=1, sy=1, ox=0, oy=0}
-    self.dim      = self.dim or {w=8, h=8}
-    self.pos      = {x = (x + self.trans.ox) or 0, y = (y + self.trans.oy) or 0}
-    self.rgba     = self.rgba or {1, 1, 1, 1}
+    self.type   = self.type or "object"
+    self.rot    = self.rot or 0
+    self.scale  = self.scale or {x=1, y=1}
+    self.offset = self.offset or {x=0, y=0}
+    self:setDimensions(self.width or 8, self.height or 8)
+    self:setPosition(x+self.offset.x, y+self.offset.y)
+    self.rgba   = self.rgba or {1, 1, 1, 1}
     -- Properties
-    self.visible  = self.visible or true
-    self.deadly   = self.deadly or false
-    self.solid    = self.solid or false
-    self.collide  = self.collide or false
-    self.sprites  = self.sprites or {}
+    self.visible = self.visible or true
+    self.deadly = self.deadly or false
+    self.solid  = self.solid or false
+    self.collide = self.collide or false
+    self.sprites = self.sprites or {}
     -- Undeclared
-    self.sprite   = self.sprite or nil
+    self.sprite = self.sprite or nil
     self.collider = self.collider or nil
     -- Additional   
     if self.collide then self:addCollider() end
@@ -79,23 +81,45 @@ function Object:updateCollider()
 end
 
 
+function Object:setPosition(x, y)
+    self.x = x or self.x or 0
+    self.y = y or self.y or 0
+end
+
+
+function Object:setDimensions(w, h)
+    self.width = w or self.width or 8
+    self.height = h or self.height or 8
+end
+
+
+function Object:getPosition()
+    return self.x, self.y
+end
+
+
+function Object:getDimensions()
+    return self.width, self.height
+end
+
+
 function Object:getRect(x, y, w, h)
-    local x, y = x or self.pos.x, y or self.pos.y
-    local w, h = w or self.dim.w, h or self.dim.h
+    local x, y = x or self.x, y or self.y
+    local w, h = w or self.width, h or self.height
     return x, y, w, h
 end
 
 
 function Object:getCenter(ox, oy)
-    local x = self.pos.x+(ox or 0)+self.dim.w/2
-    local y = self.pos.y+(oy or 0)+self.dim.h/2
+    local x = self.x+(ox or 0)+self.width/2
+    local y = self.y+(oy or 0)+self.height/2
     return x, y
 end
 
 
 function Object:drawRectangle(mode)
     love.graphics.setColor(self.rgba)
-    love.graphics.rectangle(mode or "fill", self.pos.x, self.pos.y, self.dim.w, self.dim.h)
+    love.graphics.rectangle(mode or "fill", self.x, self.y, self.width, self.height)
     love.graphics.setColor(1, 1, 1, 1)
 end
 
@@ -125,10 +149,10 @@ function Object:draw()
     if self.visible then
 
         if self.sprite then
-            local r = self.trans.r
-            local x, y = self:getRect()
-            local sx, sy = self.trans.sx, self.trans.sy
-            local ox, oy = self.trans.ox, self.trans.oy
+            local r = self.rot
+            local x, y = self:getPosition()
+            local sx, sy = self.scale.x, self.scale.y
+            local ox, oy = self.offset.x, self.offset.y
             love.graphics.setColor(self.rgba)
             self.sprite:draw(self.sprite.image, x, y, r, sx, sy, ox, oy)
             love.graphics.setColor(1, 1, 1, 1)

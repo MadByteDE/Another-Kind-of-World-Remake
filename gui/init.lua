@@ -14,15 +14,15 @@ local elements  = {
 
 
 local function aabb(a, b)
-    return a.pos.x + a.dim.w > b.pos.x and a.pos.x < b.pos.x + b.dim.w and
-    a.pos.y + a.dim.h > b.pos.y and a.pos.y < b.pos.y + b.dim.h
+    return a.x + a.width > b.x and a.x < b.x + b.width and
+    a.y + a.height > b.y and a.y < b.y + b.height
 end
 
 
 function Gui:init()
     self.elements = Conta()
     self.elements_lookup = {}
-    self.mouse = elements.mouse(nil, nil, {gui=self})
+    self.mouse = elements.mouse(Game.width/2, Game.height/2, {gui=self})
 end
 
 

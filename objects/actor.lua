@@ -108,14 +108,14 @@ function Actor:update(dt)
     Object.update(self, dt)
     -- wrap object around the screen
     if self.wrap then
-        if self.pos.x > Game.width then
-            self.pos.x = -self.dim.w+2
-        elseif self.pos.x < -self.dim.w then
-            self.pos.x = Game.width-2
-        elseif self.pos.y > Game.height then
-            self.pos.y = -self.dim.h+2
-        elseif self.pos.y < -self.dim.h then
-            self.pos.y = Game.height-2
+        if self.x > Game.width then
+            self.x = -self.width+2
+        elseif self.x < -self.width then
+            self.x = Game.width-2
+        elseif self.y > Game.height then
+            self.y = -self.height+2
+        elseif self.y < -self.height then
+            self.y = Game.height-2
         end
     end
     -- Update collsion rect
@@ -139,8 +139,8 @@ function Actor:update(dt)
     self.vel.x = clamp(self.vel.x, -self.vel.lx, self.vel.lx)
     self.vel.y = clamp(self.vel.y, -self.vel.ly, self.vel.ly)
     -- calculate position
-    local x = self.pos.x + self.vel.x * dt
-    local y = self.pos.y + self.vel.y * dt
+    local x = self.x + self.vel.x * dt
+    local y = self.y + self.vel.y * dt
     -- Resolve collisions & update position
     if self.collider then
         local cols
@@ -148,10 +148,10 @@ function Actor:update(dt)
         for k,col in ipairs(cols) do
             -- Reset velocities
             if col.type == "slide" then
-                if col.other.pos.y == self.pos.y + self.dim.h then
+                if col.other.y == self.y + self.height then
                     self.vel.y = 0
                     self.in_air = false
-                elseif col.other.pos.y + col.other.dim.h == self.pos.y then
+                elseif col.other.y + col.other.height == self.y then
                     self.vel.y = 0
                 end
                 if col.normal.x ~= 0 then
@@ -172,7 +172,7 @@ function Actor:update(dt)
             if self.onCollision then self:onCollision(col.other) end
         end
     end
-    self.pos.x, self.pos.y = x, y
+    self.x, self.y = x, y
 end
 
 return Actor
