@@ -86,6 +86,13 @@ function Object:getRect(x, y, w, h)
 end
 
 
+function Object:getCenter(ox, oy)
+    local x = self.pos.x+(ox or 0)+self.dim.w/2
+    local y = self.pos.y+(oy or 0)+self.dim.h/2
+    return x, y
+end
+
+
 function Object:drawRectangle(mode)
     love.graphics.setColor(self.rgba)
     love.graphics.rectangle(mode or "fill", self.pos.x, self.pos.y, self.dim.w, self.dim.h)

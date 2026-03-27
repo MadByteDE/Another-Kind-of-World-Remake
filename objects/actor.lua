@@ -86,8 +86,8 @@ function Actor:jump(vel)
     if not self.in_air then
         self.in_air = true
         self.vel.y = vel or -self.acc.y
-        for i=1, math.random(3, 4) do
-            local x, y = self.pos.x + self.dim.w/2, self.pos.y + self.dim.h-1
+        for i=1, math.random(2, 3) do
+            local x, y = self:getCenter(0, 3)
             Game.level:spawn("particle", x, y, Game.assets.data.particles.dust)
         end
     end

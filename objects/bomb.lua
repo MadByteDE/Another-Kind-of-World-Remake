@@ -38,12 +38,6 @@ end
 function Bomb:onCollision(other)
     if other.name == "lava" then self:onDead() end
     if other.type == "player" then return end
-    if math.abs(self.vel.y) > 60 then
-        for i=1, math.random(2, 3) do
-            local x, y = self.pos.x + self.dim.w/2, self.pos.y + self.dim.h-1
-            Game.level:spawn("particle", x, y, Game.assets.data.particles.dust)
-        end
-    end
     -- Reduce velocity with every collision
     self.vel.x = self.vel.x * .98
     self.vel.y = self.vel.y * .98

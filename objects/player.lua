@@ -28,7 +28,7 @@ end
 
 function Player:onDamage(amount, other)
     for i=1, math.random(5, 10) do
-        local x, y = self.pos.x, self.pos.y
+        local x, y = self:getCenter()
         Game.level:spawn("particle", x, y, Game.assets.data.particles.blood)
     end
     local pitch = math.random(75, 125)/100

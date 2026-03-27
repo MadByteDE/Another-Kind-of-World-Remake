@@ -10,6 +10,7 @@ function Particle:init(x, y, data)
     -- Init
     Actor.init(self, x, y, data)
     self.type = "particle"
+    self.pos.x, self.pos.y = x-self.dim.w/2, y-self.dim.h/2
     self.lifetime = data.lifetime or .75
     self.gravity = data.gravity or 25
     self.wrap = data.wrap or false
