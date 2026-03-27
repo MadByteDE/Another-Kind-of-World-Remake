@@ -66,12 +66,13 @@ function Element:onTextInput(text)
 end
 
 function Element:update(dt)
-    local mouse = Game.gui:getMouse()
-
     if self.parent then
         if self.parent.dragged and not self.dragged then
             self.dragged = true
-      self.diff = {x=mouse.x-self.x, y=mouse.y-self.y}
+            self.diff = {
+                x=Game.gui.mouse.x-self.x,
+                y=Game.gui.mouse.y-self.y
+            }
         elseif not self.parent.dragged and self.dragged then
             self.dragged = false
             self.diff = {x=0, y=0}
@@ -79,8 +80,8 @@ function Element:update(dt)
     end
 
     if self.dragged then
-    self.x = mouse.x-self.diff.x
-    self.y = mouse.y-self.diff.y
+    self.x = Game.gui.mouse.x-self.diff.x
+    self.y = Game.gui.mouse.y-self.diff.y
     end
 
     if self.timeout > 0 then

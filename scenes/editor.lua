@@ -51,11 +51,10 @@ end
 
 function Editor:logic(dt)
     Game.level:update(dt)
-    local mouse = Game.gui:getMouse()
-    local tx, ty = self:toTileCoords(mouse.x, mouse.y)
-    if mouse.button == 1 then
+    local tx, ty = self:toTileCoords(Game.gui.mouse.x, Game.gui.mouse.y)
+    if Game.gui.mouse.button == 1 then
         Game.level:setTile(tx, ty, Tile(tx*tw-tw, ty*tw-tw, self.current_tile))
-    elseif mouse.button == 2 then
+    elseif Game.gui.mouse.button == 2 then
         local tile = Game.level:getTile(tx, ty)
         if tile then self.current_tile = Game.assets.data.tiles[tile.id] end
     end
@@ -64,8 +63,7 @@ end
 
 function Editor:render()
     Game.level:draw()
-    local mouse = Game.gui:getMouse()
-    local tx, ty = self:toTileCoords(mouse.x, mouse.y)
+    local tx, ty = self:toTileCoords(Game.gui.mouse.x, Game.gui.mouse.y)
     love.graphics.setColor(1, 1, 1, .3)
     if self.current_tile then
         love.graphics.draw(Game.assets.tile[self.current_tile.name], tx*tw-tw, ty*tw-tw)

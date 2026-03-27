@@ -51,28 +51,7 @@ function Player:onCollision(other)
 end
 
 
-function Player:throw(name, data)
-    local name = name or "bomb"
-    if #Game.level:getObject(name) < self.max_bombs then
-        local mouse = Game.gui:getMouse()
-        local dist_x = mouse.x-self.x+self.width/2
-        local dist_y = mouse.y-self.y+self.height/2
-        local angle = math.sqrt(dist_x*dist_x + dist_y*dist_y)
-        local data  = data or {}
-        data.parent = self
-        data.dx     = (mouse.x-self.x)/angle
-        data.dy     = (mouse.y-self.y)/angle
-        Game.level:spawn(name, self.x+self.width/2, self.y+2, data)
-        Game:playSound("toss")
-        -- Pushback
-        self.vel.x = self.vel.x + (random_range(70, 10) * -data.dx)
-        self.vel.y = self.vel.y + (random_range(50, 15) * -data.dy)
-    end
-end
-
-
 function Player:logic(dt)
-    local mouse = Game.gui:getMouse()
     local keyDown = love.keyboard.isDown
     -- always reset direction
     self.dir.x = 0
@@ -80,7 +59,7 @@ function Player:logic(dt)
     -- Set default sprite
     self:setSprite("idle")
     -- Look towards the cursor
-    if mouse.x > self.x+self.width/2 then
+    if Game.gui.mouse.x > self.x+self.width/2 then
     self.sprite.flippedH = false
     else self.sprite.flippedH = true end
     -- Prevent jumping while in air
@@ -119,7 +98,9 @@ end
 
 
 function Player:mousereleased(x, y, button)
-    if button == 1 then self:throw() end
+    if button == 1 and #Game.level:getObject("bomb") < self.max_bombs then
+        self:throw("bomb")
+    end
 end
 
 return Player

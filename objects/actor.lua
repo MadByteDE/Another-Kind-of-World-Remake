@@ -94,6 +94,24 @@ function Actor:jump(vel)
 end
 
 
+function Actor:throw(name, data)
+    if not name then error("Class name must be declared!") end
+    local cx, cy = self:getCenter()
+    local dist_x = Game.gui.mouse.x-(cx)
+    local dist_y = Game.gui.mouse.y-(cy)
+    local angle = math.sqrt(dist_x*dist_x + dist_y*dist_y)
+    local data  = data or {}
+    data.parent = self
+    data.dx     = (Game.gui.mouse.x-self.x)/angle
+    data.dy     = (Game.gui.mouse.y-self.y)/angle
+    Game.level:spawn(name, cx, cy-1, data)
+    Game:playSound("toss")
+    -- Pushback
+    self.vel.x = self.vel.x + (random_range(70, 10) * -data.dx)
+    self.vel.y = self.vel.y + (random_range(50, 15) * -data.dy)
+end
+
+
 function Actor:onDead()
     self:destroy()
 end

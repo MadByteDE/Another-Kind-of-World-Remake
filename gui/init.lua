@@ -62,11 +62,6 @@ function Gui:deselect()
 end
 
 
-function Gui:getMouse()
-    return self.mouse
-end
-
-
 function Gui:update(dt)
     self.mouse:update(dt)
     self.elements:update(dt)
