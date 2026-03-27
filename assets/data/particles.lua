@@ -1,7 +1,7 @@
 return {
     ["glitter"] = {
         images={Game.assets.particle.glitter},
-        collide=true, wrap=true, bounciness=.3, damp={x=2, y=0},
+        collide=true, wrap=true, bounciness=.4, damp={x=2, y=0},
         lifetime=1.5, range={x={-60, 60}, y={-50, -80}},
         filter=function(self, other)
             -- TODO: Simplify cross behaviour (if entity then cross!)
@@ -30,8 +30,8 @@ return {
 
     ["dust"] = {
         images={Game.assets.particle.dust},
-        collide=true, bounciness=.5, damp={x=2, y=0},
-        lifetime=1, wrap=true, range={x={-35, 35}, y={-40, -60}},
+        collide=true, wrap=true, bounciness=.5, damp={x=2, y=0},
+        lifetime=1.5, range={x={-35, 35}, y={-40, -60}},
         filter=function(self, other)
             -- TODO: Simplify cross behaviour (if entity then cross!)
             if other.type == "player" then return "cross"

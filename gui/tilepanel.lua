@@ -20,7 +20,7 @@ end
 
 
 function Tilepanel:createButtons()
-  local x, y, w, h = self.x, self.y, self.width, self.height
+    local x, y, w, h = self.x, self.y, self.width, self.height
     -- Buttons for individual tiles
     self.buttons = {}
     local tw = 8

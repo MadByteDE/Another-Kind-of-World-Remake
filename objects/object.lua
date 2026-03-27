@@ -93,16 +93,6 @@ function Object:setDimensions(w, h)
 end
 
 
-function Object:getPosition()
-    return self.x, self.y
-end
-
-
-function Object:getDimensions()
-    return self.width, self.height
-end
-
-
 function Object:getRect(x, y, w, h)
     local x, y = x or self.x, y or self.y
     local w, h = w or self.width, h or self.height
@@ -150,7 +140,7 @@ function Object:draw()
 
         if self.sprite then
             local r = self.rot
-            local x, y = self:getPosition()
+            local x, y = self.x, self.y
             local sx, sy = self.scale.x, self.scale.y
             local ox, oy = self.offset.x, self.offset.y
             love.graphics.setColor(self.rgba)

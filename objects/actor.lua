@@ -26,7 +26,6 @@ function Actor:init(x, y, t)
     self.max_health = self.max_health or 999
     self.wrap       = self.wrap or true
     self.lifetime   = clamp(self.lifetime, 0, 999)
-    self._lifetime  = self.lifetime
     self.in_air     = self.in_air or false
     self.bounciness = self.bounciness or 0
 end
@@ -127,24 +126,18 @@ function Actor:update(dt)
     Object.update(self, dt)
     -- wrap object around the screen
     if self.wrap then
-        if self.x > Game.width then
-            self.x = -self.width+2
-        elseif self.x < -self.width then
-            self.x = Game.width-2
-        elseif self.y > Game.height then
-            self.y = -self.height+2
-        elseif self.y < -self.height then
-            self.y = Game.height-2
+        if self.x > Game.width then self.x = -self.width+2
+        elseif self.x < -self.width then self.x = Game.width-2
+        elseif self.y > Game.height then self.y = -self.height+2
+        elseif self.y < -self.height then self.y = Game.height-2
         end
     end
     -- Update collsion rect
     self:updateCollider()
     -- Update lifetime
-    if self._lifetime then
-        self._lifetime = self._lifetime-dt
-        if self._lifetime <= 0 then
-            self:onDead()
-        end
+    if self.lifetime then
+        self.lifetime = self.lifetime-dt
+        if self.lifetime <= 0 then self:onDead() end
     end
     -- Update damage cooldown
     if self.damage_cooldown > 0 then
