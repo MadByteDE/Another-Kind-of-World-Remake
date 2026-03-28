@@ -23,7 +23,7 @@ function Tilepanel:createButtons()
     local x, y, w, h = self.x, self.y, self.width, self.height
     -- Buttons for individual tiles
     self.buttons = {}
-    local tw = 8
+    local tw = Game.level.tilesize
     for index, tiledata in ipairs(Game.assets.data.tiles) do
         local rowsize = 3
         local spacing = 1
@@ -73,9 +73,7 @@ end
 
 
 function Tilepanel:destroy()
-    for k,v in ipairs(self.buttons) do
-        v:destroy()
-    end
+    for k,v in ipairs(self.buttons) do v:destroy() end
     Element.destroy(self)
 end
 

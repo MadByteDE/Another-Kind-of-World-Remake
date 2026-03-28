@@ -22,7 +22,6 @@ local entities = {
 -- Fill a table with tile id's instead of tile objects
 local function generateTileData(self)
     local tiledata = {}
-
     for y = 1, Game.height / self.tilesize do
         tiledata[y] = {}
         for x = 1, Game.width / self.tilesize do
@@ -32,19 +31,15 @@ local function generateTileData(self)
             end
         end
     end
-
     return tiledata
 end
 
 
 local function createLevel(self)
     self.tiles = {}
-
     -- Load in an empty level
     for y = 1, Game.height / self.tilesize do
-
         self.tiles[y] = {}
-
         for x = 1, Game.width / self.tilesize do
             local tx = x * self.tilesize - self.tilesize
             local ty = y * self.tilesize - self.tilesize
@@ -52,28 +47,23 @@ local function createLevel(self)
         end
 
     end
-
     -- Load from existing tile data
-    if self.tiledata then
-
-        -- Loop through it's content
-        for y = 1, Game.height / self.tilesize do
-            for x = 1, Game.width / self.tilesize do
-                local id = self.tiledata[y][x]
-                local tx = x * self.tilesize - self.tilesize
-                local ty = y * self.tilesize - self.tilesize
-
-                -- Set each tile based on the given tile id
-                for index, tiledata in ipairs(Game.assets.data.tiles) do
-                    if (id == index) then
-                        tiledata.id = index
-                        self:setTile(x, y, Tile(tx, ty, tiledata))
-
-                        -- Tile represents an entity - set background tile and spawn the entity
-                        if (tiledata.type == "entity" and Game.scene.name == "Ingame") then
-                            self:setTile(x, y, Tile(tx, ty, Game.assets.data.tiles[1])) -- background
-                            self:spawn(tiledata.name, tx, ty, tiledata)
-                        end
+    if not self.tiledata then return end
+    -- Loop through it's content
+    for y = 1, Game.height / self.tilesize do
+        for x = 1, Game.width / self.tilesize do
+            local id = self.tiledata[y][x]
+            local tx = x * self.tilesize - self.tilesize
+            local ty = y * self.tilesize - self.tilesize
+            -- Set each tile based on the given tile id
+            for index, tiledata in ipairs(Game.assets.data.tiles) do
+                if id == index then
+                    tiledata.id = index
+                    self:setTile(x, y, Tile(tx, ty, tiledata))
+                    -- Tile represents an entity - set background tile and spawn the entity
+                    if tiledata.type == "entity" and Game.scene.name == "Ingame" then
+                        self:setTile(x, y, Tile(tx, ty, Game.assets.data.tiles[1])) -- background
+                        self:spawn(tiledata.name, tx, ty, tiledata)
                     end
                 end
             end
@@ -97,11 +87,10 @@ function Level:load(id)
     local id = tostring(id) or ""
     local paths = {
         "/level/",          -- appdata directory
-        "assets/level/",}   -- game directory
-
+        "assets/level/"     -- game directory
+    }
     self.level_path = nil
     self.overlay = nil
-
     -- loop over each path
     for k,v in ipairs(paths) do
         if not self.level_path then
@@ -113,8 +102,7 @@ function Level:load(id)
             if love.filesystem.getInfo(path) then self.overlay = love.graphics.newImage(path) end
         end
     end
-
-    -- Yey, file exists! Return it's content
+    -- Found level file -> Initialize
     if self.level_path then
         for k,v in pairs(love.filesystem.load(self.level_path)()) do self[k] = v end
         self.id = id or "New level"
@@ -132,24 +120,20 @@ end
 function Level:save(id)
     -- Replace the level id with a new one if provided
     self.id = id or self.id
-
     -- Create level directory in save directory if not already created
     if not love.filesystem.getInfo("/level/") then
         love.filesystem.createDirectory("/level/")
     end
-
     -- Set output
     local file_path = love.filesystem.getSaveDirectory() .. "/level/" .. self.id .. ".akwlvl"
     local file_handle
     local serialized_data = ""
-
     -- Get save data and write it to the file
     local savedata = self:getSaveData()
     serialized_data = serialized_data .. "return {\n"
     serialized_data = serialized_data .. "\tid = '".. self.id .."',\n"
     serialized_data = serialized_data .. "\ttilesize = ".. savedata.tilesize ..",\n"
     serialized_data = serialized_data .. "\ttiledata = {\n"
-
     for y=1, #savedata.tiledata do
         serialized_data = serialized_data .. "\t\t{"
         for x=1, #savedata.tiledata[y] do
@@ -158,10 +142,8 @@ function Level:save(id)
         serialized_data = serialized_data:sub(1, -1)
         serialized_data = serialized_data .. "},\n"
     end
-
     serialized_data = serialized_data .. "\t},\n"
     serialized_data = serialized_data .. "}"
-
     -- Save file
     file_handle = io.open(file_path, "w+")
     if file_handle then
@@ -196,6 +178,16 @@ end
 
 function Level:getTile(x, y)
     return self.tiles[y][x]
+end
+
+
+function Level:toTileCoords(x, y)
+    return math.floor(x/self.tilesize)+1, math.floor(y/self.tilesize)+1
+end
+
+
+function Level:toScreenCoords(x, y)
+    return x*self.tilesize-self.tilesize, y*self.tilesize-self.tilesize
 end
 
 
