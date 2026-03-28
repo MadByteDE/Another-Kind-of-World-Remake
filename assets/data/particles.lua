@@ -1,15 +1,15 @@
+-- Copyright © 2020-2026 AKOW Developers
+-- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
+
+local Actor = require("objects.actor")
+
 return {
     ["glitter"] = {
         images={Game.assets.particle.glitter},
         collide=true, wrap=true, bounciness=.4, damp={x=2, y=0},
         lifetime=1.5, range={x={-60, 60}, y={-50, -80}},
         filter=function(self, other)
-            -- TODO: Simplify cross behaviour (if entity then cross!)
-            if other.type == "player" then return "cross"
-            elseif other.type == "particle" then return "cross"
-            elseif other.type == "exit" then return "cross"
-            elseif other.type == "bomb" then return "cross"
-            elseif other.type == "bug" then return "cross"
+            if other:instanceOf(Actor) then return "cross"
             else return "bounce" end
         end
     },
@@ -17,10 +17,6 @@ return {
     ["blood"] = {
         images={Game.assets.particle.blood},
         lifetime=.5, wrap=false, range={x={-25, 25}, y={-40, -80}},
-        filter=function(self, other)
-            if not other.solid then return "cross"
-            else return end
-        end,
     },
 
     ["explosion"] = {
@@ -33,12 +29,7 @@ return {
         collide=true, wrap=true, bounciness=.5, damp={x=2, y=0},
         lifetime=1.5, range={x={-35, 35}, y={-40, -60}},
         filter=function(self, other)
-            -- TODO: Simplify cross behaviour (if entity then cross!)
-            if other.type == "player" then return "cross"
-            elseif other.type == "particle" then return "cross"
-            elseif other.type == "exit" then return "cross"
-            elseif other.type == "bomb" then return "cross"
-            elseif other.type == "bug" then return "cross"
+            if other:instanceOf(Actor) then return "cross"
             else return "bounce" end
         end
     },
