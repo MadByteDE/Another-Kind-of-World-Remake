@@ -2,8 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Actor = require("objects.actor")
-local Exit = Class()
-Exit:include(Actor)
+local Exit = Actor:extend()
 
 
 function Exit:init(x, y, tile)

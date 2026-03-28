@@ -1,6 +1,7 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Class = require("lib.30log")
 local Bump  = require("lib.bump")
 local Conta = require("lib.conta")
 local Tile  = require("objects.tile")

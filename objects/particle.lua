@@ -3,8 +3,7 @@
 
 local Tween = require("lib.tween")
 local Actor = require("objects.actor")
-local Particle = Class()
-Particle:include(Actor)
+local Particle = Actor:extend()
 
 local fadeout_time = .3
 

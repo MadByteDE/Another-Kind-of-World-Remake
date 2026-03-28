@@ -2,8 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Object = require("objects.object")
-local Actor = Class()
-Actor:include(Object)
+local Actor = Object:extend()
 
 local function clamp(val, min, max)
     if not val then return end

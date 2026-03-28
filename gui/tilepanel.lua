@@ -2,8 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Element = require("gui.element")
-local Tilepanel = Class()
-Tilepanel:include(Element)
+local Tilepanel = Element:extend()
 
 
 function Tilepanel:init(x, y, t)

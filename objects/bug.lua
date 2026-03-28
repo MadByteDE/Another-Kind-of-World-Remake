@@ -2,8 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Actor = require("objects.actor")
-local Bug = Class()
-Bug:include(Actor)
+local Bug = Actor:extend()
 
 
 function Bug:init(x, y)

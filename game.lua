@@ -11,7 +11,6 @@ love.graphics.setLineWidth(.1)
 
 -- Dependencies
 require("utils")
-Class       = require("lib.class")
 local Gui   = require("gui")
 local Level = require("level")
 

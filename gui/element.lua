@@ -2,8 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Object = require("objects.object")
-local Element = Class()
-Element:include(Object)
+local Element = Object:extend()
 
 
 function Element:init(x, y, t)

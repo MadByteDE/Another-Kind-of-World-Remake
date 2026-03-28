@@ -2,8 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Actor = require("objects.actor")
-local Player  = Class()
-Player:include(Actor)
+local Player  = Actor:extend()
 
 
 function Player:init(x, y)

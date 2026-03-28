@@ -2,8 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Object = require("objects.object")
-local Tile = Class()
-Tile:include(Object)
+local Tile = Object:extend()
 
 
 function Tile:init(x, y, tile)

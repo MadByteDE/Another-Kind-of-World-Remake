@@ -2,8 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Scene = require("scenes.scene")
-local Ingame = Class()
-Ingame:include(Scene)
+local Ingame = Scene:extend()
 
 
 function Ingame:init(id, editor_level)

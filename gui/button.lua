@@ -2,8 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Element = require("gui.element")
-local Button = Class()
-Button:include(Element)
+local Button = Element:extend()
 
 
 function Button:init(x, y, t)
