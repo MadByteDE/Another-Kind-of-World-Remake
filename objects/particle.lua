@@ -31,6 +31,11 @@ function Particle:init(x, y, data)
 end
 
 
+function Particle:onCollision(other)
+    if other.name == "lava" then self:onDead() end
+end
+
+
 function Particle:logic(dt)
     -- Fade out
     if self.lifetime <= fadeout_time then
