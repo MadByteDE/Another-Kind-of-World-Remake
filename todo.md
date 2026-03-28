@@ -28,6 +28,7 @@
 - Breakable tiles
 - One way tiles / platforms
 - Add one tile height variants for wall tiles (shadows)
+- Optimize collision boxes (merge multiple tiles)
 
 
 ## Other
