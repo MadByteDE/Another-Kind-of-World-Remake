@@ -1,4 +1,5 @@
-![Preview](media/3.png)
+
+<img src="media/3.png" alt="drawing" height="300"/>
 
 # Another Kind of World (Remake)
 
