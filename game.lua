@@ -23,7 +23,7 @@ local Game = {
     height  = 160,
     assets  = require("lib.cargo").init('assets'),
     _shake  = {x=0, y=0, timer=0, intensity=1},
-    fade    = {duration=2, timer=1, color={.05, .05, .05}, alpha=1,
+    fade    = {duration=2, timer=1, color={.05, .05, .05, 1},
                 triggered=false, onTransition=_NULL},
 }
 
@@ -48,11 +48,12 @@ function Game:load()
     self.gui = Gui()
     self.quit_button = self.gui:add("button", self.width-13, 3, {
         image   = self.assets.gui.button.back,
-        action  = function(e, button)
+        action  = function(_, button)
             if button == 1 then
                 self:transition(function() love.event.quit() end, 3)
             end
-    end})
+        end
+    })
     -- Start-up
     love.graphics.setFont(self.assets.font.tinypixels(8))
     if not Game.debug then self:playSound("music", .275, true) end
@@ -107,7 +108,7 @@ function Game:transition(onTransition, duration, color)
     if self.fade.timer > 0 then return end
     self.fade.duration = duration or 2
     self.fade.timer = self.fade.duration
-    self.fade.color = color or {.05, .05, .05}
+    self.fade.color = color or {.05, .05, .05, 0}
     self.fade.triggered = false
     self.fade.onTransition = onTransition or function()end
 end
@@ -150,7 +151,7 @@ function Game:update(dt)
         self.fade.onTransition()
     end
     local elapsed = self.fade.duration-self.fade.timer
-    self.fade.alpha = elapsed/step * self.fade.timer/step
+    self.fade.color[4] = elapsed/step * self.fade.timer/step
     -- Update current scene
     self.scene:update(dt)
     self.gui:update(dt)
@@ -163,8 +164,7 @@ function Game:draw()
     love.graphics.scale(self.scale.x, self.scale.y)
     self.scene:draw()
     self.gui:draw()
-    local r, g, b = self.fade.color[1], self.fade.color[2], self.fade.color[3]
-    love.graphics.setColor(r, g, b, self.fade.alpha)
+    love.graphics.setColor(self.fade.color)
     love.graphics.rectangle("fill", 0, 0, self.width, self.height)
     love.graphics.setColor(1, 1, 1, .45)
     love.graphics.draw(self.assets.image.dirtcover)

@@ -41,8 +41,7 @@ local function createLevel(self)
     for y = 1, Game.height / self.tilesize do
         self.tiles[y] = {}
         for x = 1, Game.width / self.tilesize do
-            local tx = x * self.tilesize - self.tilesize
-            local ty = y * self.tilesize - self.tilesize
+            local tx, ty = self:toScreenCoords(x, y)
             self.tiles[y][x] = Tile(tx, ty, Game.assets.data.tiles[1]) -- background
         end
 
@@ -53,8 +52,7 @@ local function createLevel(self)
     for y = 1, Game.height / self.tilesize do
         for x = 1, Game.width / self.tilesize do
             local id = self.tiledata[y][x]
-            local tx = x * self.tilesize - self.tilesize
-            local ty = y * self.tilesize - self.tilesize
+            local tx, ty = self:toScreenCoords(x, y)
             -- Set each tile based on the given tile id
             for index, tiledata in ipairs(Game.assets.data.tiles) do
                 if id == index then
