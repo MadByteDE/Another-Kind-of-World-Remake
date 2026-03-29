@@ -5,14 +5,15 @@ local Tween = require("lib.tween")
 local Actor = require("objects.actor")
 local Particle = Actor:extend("Particle")
 
-local fadeout_time = .3
+local fadeout_time = .125
 
 function Particle:init(x, y, data)
     -- Init
     Actor.init(self, x, y, data)
     local sprite = data.images[math.random(1, #data.images)]
     self.type = "particle"
-    self.lifetime = data.lifetime or .75
+    self.lifetime = (data.lifetime or .75)
+    self.lifetime = self.lifetime + (math.random(-10, 10)/50)
     self.gravity = data.gravity or 25
     self.wrap = data.wrap or false
     self:setDimensions(sprite:getDimensions())

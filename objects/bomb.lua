@@ -21,7 +21,7 @@ function Bomb:init(x, y, data)
     local vel_x = (self.speed.x + math.abs(data.parent.vel.x)) * (data.dx or 0)
     local vel_y = (self.speed.y + math.abs(math.min(data.parent.vel.y, 0))) * (data.dy or 0)
     self.vel = {x=vel_x or 0,y=vel_y or 0}
-    self.max_vel = {x=325, y=325}
+    self.max_vel = {x=175, y=200}
     -- Additional
     self:newAnimation(self.type, Game.assets.anim.bomb, '1-4', 1, .1)
     self:setSprite(self.type)
@@ -50,7 +50,7 @@ function Bomb:onDead()
     Game:playSound("boom"):setPitch(pitch)
     Game:shake()
     -- Explosion particles
-    for i=1, math.random(25,35) do
+    for i=1, math.random(30, 40) do
         local x, y = self.x + self.width/2, self.y + self.height/2
         Game.level:spawn("particle", x, y, Game.assets.data.particles.explosion)
     end

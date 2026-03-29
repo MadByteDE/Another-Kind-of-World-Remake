@@ -21,13 +21,13 @@ return {
 
     ["explosion"] = {
         images={Game.assets.particle.smoke, Game.assets.particle.fire},
-        lifetime=.75, wrap=false, range={x={-40, 40}, y={-50, -110}},
+        lifetime=.8, wrap=false, range={x={-25, 25}, y={-50, -100}},
     },
 
     ["dust"] = {
         images={Game.assets.particle.dust},
         collide=true, wrap=true, bounciness=.5, damp={x=2, y=0},
-        lifetime=1.5, range={x={-35, 35}, y={-40, -60}},
+        lifetime=1.5, range={x={-25, 25}, y={-30, -50}}, gravity=20,
         filter=function(self, other)
             if other:instanceOf(Actor) then return "cross"
             else return "bounce" end

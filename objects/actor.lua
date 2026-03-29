@@ -74,7 +74,7 @@ end
 function Actor:damage(amount, other)
     if type(amount) ~= "number" then error(("Amount is not a number (is '%s')"):format(type(amount))) end
     if self.damage_cooldown > 0 then return end
-    self.damage_cooldown = 2
+    self.damage_cooldown = 1
     self.health = math.max(0, self.health - amount)
     if self.onDamage then self:onDamage(amount, other) end
     if self.health <= 0 then self:onDead(other) end
