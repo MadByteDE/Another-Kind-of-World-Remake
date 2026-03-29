@@ -26,7 +26,7 @@ function Object:init(x, y, t)
     -- Undeclared
     self.sprite = self.sprite or nil
     self.collider = self.collider or nil
-    -- Additional   
+    -- Additional
     if self.collide then self:addCollider() end
 end
 
