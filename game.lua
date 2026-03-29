@@ -21,9 +21,9 @@ local Game = {
     width   = 256,
     height  = 160,
     assets  = require("lib.cargo").init('assets'),
-    _shake  = {x=0, y=0, timer=0, intensity=1},
-    fade    = {duration=2, timer=1, color={.05, .05, .05, 1},
-                triggered=false, onTransition=_NULL},
+    _shake  = { x=0, y=0, timer=0, intensity=1 },
+    fade    = { duration=2, timer=1, color={.05, .05, .05, 1},
+                triggered=false, onTransition=_NULL },
 }
 
 local scenes = {
@@ -110,7 +110,6 @@ end
 
 
 function Game:transition(onTransition, duration, color)
-    if self.fade.timer > 0 then return end
     self.fade.duration = duration or 2
     self.fade.timer = self.fade.duration
     self.fade.color = color or {.05, .05, .05, 0}

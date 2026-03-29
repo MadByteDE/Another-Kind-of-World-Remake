@@ -4,7 +4,7 @@
 local Class = require("lib.30log")
 local Anim8 = require("lib.anim8")
 
-local Object = Class()
+local Object = Class("Object")
 
 
 function Object:init(x, y, t)

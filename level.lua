@@ -6,7 +6,7 @@ local Bump  = require("lib.bump")
 local Conta = require("lib.conta")
 local Tile  = require("objects.tile")
 
-local Level = Class()
+local Level = Class("Level")
 
 local entities = {
     player   = require("objects.player"),
