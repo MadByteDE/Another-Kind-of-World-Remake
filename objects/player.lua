@@ -59,7 +59,8 @@ function Player:logic(dt)
     -- Set default sprite
     self:setSprite("idle")
     -- Look towards the cursor
-    if Game.gui.mouse.x > self.x+self.width/2 then
+    local mx, my = Game:getMousePosition()
+    if mx > self.x+self.width/2 then
     self.sprite.flippedH = false
     else self.sprite.flippedH = true end
     -- Prevent jumping while in air

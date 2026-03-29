@@ -28,38 +28,39 @@ function Tilepanel:createButtons()
         local spacing = 1
         local row     = math.floor((index-1)/rowsize)
         local column  = (index-1)%rowsize
-        local x       = self.x+2+column*tw+spacing*column
-        local y       = self.y+4+row*tw+spacing*row
+        local x       = 2+column*tw+spacing*column
+        local y       = 4+row*tw+spacing*row
         -- Clear button
         local button = {image=Game.assets.tile[tiledata.name], parent=self}
         button.width = tw
         button.height = tw
         button.tile = tiledata
-        button.action = function(button, pressed)
+        button.tooltip = {text=tiledata.name}
+        button.action = function(b, pressed)
             if pressed == 1 then Game.scene.current_tile = button.tile end
         end
         table.insert(self.buttons, Game.gui:add("button", x, y, button))
     end
     -- Clear button
     local button = {image = Game.assets.gui.button.clear, parent = self}
-    button.action = function(button, pressed)
+    button.action = function(b, pressed)
         if pressed == 1 then
             Game:transition(function() Game.scene:init() end, .5)
         end
     end
-    table.insert(self.buttons, Game.gui:add("button", x, y+h+1, button))
+    table.insert(self.buttons, Game.gui:add("button", 0, self.height+1, button))
     -- Save button
     local button = {image = Game.assets.gui.button.save, parent = self}
-    button.action = function(button, pressed)
+    button.action = function(b, pressed)
         if pressed == 1 then
             Game.level:save(Game.scene.level_id)
             print("Successfully saved level")
         end
     end
-    table.insert(self.buttons, Game.gui:add("button", x+11, y+h+1, button))
+    table.insert(self.buttons, Game.gui:add("button", 11, self.height+1, button))
     -- Play button
     local button = {image = Game.assets.gui.button.play, parent = self}
-    button.action = function(button, pressed)
+    button.action = function(b, pressed)
         if pressed == 1 then
             Game:transition(function()
                 Game.level:save()
@@ -67,7 +68,7 @@ function Tilepanel:createButtons()
             end)
         end
     end
-    table.insert(self.buttons, Game.gui:add("button", x+22, y+h+1, button))
+    table.insert(self.buttons, Game.gui:add("button", 22, self.height+1, button))
 end
 
 
@@ -100,14 +101,6 @@ end
 
 
 function Tilepanel:onScroll(x, y)
-end
-
-
-function Tilepanel:logic(dt)
-end
-
-
-function Tilepanel:render()
 end
 
 return Tilepanel

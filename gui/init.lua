@@ -7,23 +7,16 @@ local Conta = require("lib.conta")
 local Gui = Class()
 
 local elements  = {
-    mouse      = require("gui.mouse"),
     button     = require("gui.button"),
     textbox    = require("gui.textbox"),
     tilepanel  = require("gui.tilepanel")
 }
 
 
-local function aabb(a, b)
-    return a.x + a.width > b.x and a.x < b.x + b.width and
-    a.y + a.height > b.y and a.y < b.y + b.height
-end
-
-
 function Gui:init()
     self.elements = Conta()
     self.elements_lookup = {}
-    self.mouse = elements.mouse(Game.width/2, Game.height/2, {gui=self})
+    self.hovered_obj = nil
 end
 
 
@@ -50,73 +43,74 @@ function Gui:get(element)
 end
 
 
-function Gui:select(element)
-    if self.selected_element and self.selected_element == element then return end
-    if self.selected_element then self:deselect(self.selected_element) end
-    self.selected_element = element
-    element:onSelect()
-end
-
-
-function Gui:deselect()
-    self.selected_element = nil
-end
-
-
 function Gui:update(dt)
-    self.mouse:update(dt)
     self.elements:update(dt)
-    self.elements:iterate(function(k, other)
-        if not other.collide then return end
-        local mouse = self.mouse
-        local col = aabb(mouse, other)
-        if col then
-            if mouse.child == other.parent or not mouse.child then
-                mouse.child = other
-                mouse.child:onEnter(mouse)
-            end
-            elseif not col and other == mouse.child then
-            mouse.child:onExit(mouse)
-            mouse.hover_timer = 0
-            mouse.child = nil
-        end
-    end)
 end
 
 
 function Gui:draw()
     self.elements:draw()
-    self.mouse:draw()
 end
 
 
 function Gui:keypressed(...)
-    if self.selected_element then self.selected_element:keypressed(...) end
+    if self.hovered_obj then self.hovered_obj:keypressed(...) end
 end
 
 
 function Gui:keyreleased(...)
-    if self.selected_element then self.selected_element:keyreleased(...) end
+    if self.hovered_obj then self.hovered_obj:keyreleased(...) end
+end
+
+
+function Gui:mousemoved(x, y)
+    local mx, my = Game:getMousePosition()
+    local mouse = {x=mx, y=my, width=1, height=1}
+    self.elements:iterate(function(k, other)
+        if not other.collide then return end
+        local col = rectCollision(mouse, other)
+        if col then
+            if self.hovered_obj == other.parent or not self.hovered_obj then
+                self.hovered_obj = other
+                self.hovered_obj:onEnter(mouse)
+            end
+        elseif not col and other == self.hovered_obj then
+            self.hovered_obj:onExit(mouse)
+            self.hovered_obj = nil
+        end
+    end)
 end
 
 
 function Gui:mousepressed(x, y, button)
-    self.mouse:mousepressed(x, y, button)
+    if self.hovered_obj then
+        local mx, my = Game:getMousePosition()
+        self.hovered_obj:onClick(button, mx, my)
+    end
 end
 
 
 function Gui:mousereleased(x, y, button)
-    self.mouse:mousereleased(x, y, button)
+    if self.hovered_obj then
+        local mx, my = Game:getMousePosition()
+        self.hovered_obj:onRelease(button, mx, my)
+    end
 end
 
 
 function Gui:wheelmoved(x, y)
-    self.mouse:wheelmoved(x, y)
+    if self.hovered_obj then
+        self.hovered_obj:onScroll(x, y)
+    else
+        self.scroll.x = x
+        self.scroll.y = y
+    end
 end
 
 
 function Gui:textinput(...)
-    if self.selected_element then self.selected_element:onTextInput(...) end
+    if self.hovered_obj then self.hovered_obj:onTextInput(...) end
 end
+
 
 return Gui

@@ -10,11 +10,14 @@ function Scene:leave()end
 
 
 function Scene:update(dt)
+    Game.level:update(dt)
+    if Game.gui.hovered_obj then return end
     self:logic(dt)
 end
 
 
 function Scene:draw()
+    Game.level:draw()
     self:render()
 end
 
@@ -22,6 +25,7 @@ function Scene:logic(dt) end
 function Scene:render() end
 function Scene:mousepressed(...) end
 function Scene:mousereleased(...) end
+function Scene:mousemoved(...) end
 function Scene:wheelmoved(...) end
 function Scene:keypressed(...)end
 function Scene:keyreleased(...)end

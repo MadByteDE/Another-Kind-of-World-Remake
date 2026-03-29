@@ -61,7 +61,13 @@ end
 
 
 function Game:getWindowSize()
-    return self.width * self.scale.x, self.height * self.scale.y
+    return self.width*self.scale.x, self.height*self.scale.y
+end
+
+
+function Game:getMousePosition()
+    local mx, my = love.mouse.getPosition()
+    return mx/self.scale.x, my/self.scale.y
 end
 
 
@@ -163,46 +169,58 @@ function Game:draw()
     love.graphics.scale(self.scale.x, self.scale.y)
     self.scene:draw()
     self.gui:draw()
+    -- Draw fade overlay
     love.graphics.setColor(self.fade.color)
     love.graphics.rectangle("fill", 0, 0, self.width, self.height)
     love.graphics.setColor(1, 1, 1, .45)
+    -- Draw dirtcover
     love.graphics.draw(self.assets.image.dirtcover)
     love.graphics.setColor(1, 1, 1, 1)
+    -- Draw cursor
+    local mx, my = self:getMousePosition()
+    local ox, oy = Game.assets.gui.cursor:getDimensions()
+    love.graphics.draw(Game.assets.gui.cursor, mx, my, 0, 1, 1, ox/2, oy/2)
     love.graphics.pop()
 end
 
 
 function Game:keypressed(key, ...)
-    self.scene:keypressed(key, ...)
+    if not Game.gui.hovered_obj then self.scene:keypressed(key, ...) end
     self.gui:keypressed(key, ...)
 end
 
 
 function Game:keyreleased(...)
-    self.scene:keyreleased(...)
+    if not Game.gui.hovered_obj then self.scene:keyreleased(...) end
     self.gui:keyreleased(...)
 end
 
 
 function Game:mousepressed(...)
-    self.scene:mousepressed(...)
+    if not Game.gui.hovered_obj then self.scene:mousepressed(...) end
     self.gui:mousepressed(...)
 end
 
 
 function Game:mousereleased(...)
-    self.scene:mousereleased(...)
+    if not Game.gui.hovered_obj then self.scene:mousereleased(...) end
     self.gui:mousereleased(...)
 end
 
 
+function Game:mousemoved(...)
+    if not Game.gui.hovered_obj then self.scene:mousemoved(...) end
+    self.gui:mousemoved(...)
+end
+
+
 function Game:wheelmoved(...)
-    self.scene:wheelmoved(...)
+    if not Game.gui.hovered_obj then self.scene:wheelmoved(...) end
     self.gui:wheelmoved(...)
 end
 
 function Game:textinput(...)
-    self.scene:textinput(...)
+    if not Game.gui.hovered_obj then self.scene:textinput(...) end
     self.gui:textinput(...)
 end
 

@@ -37,13 +37,10 @@ function Ingame:fail()
 end
 
 
-function Ingame:logic(dt)
-    Game.level:update(dt)
-end
+function Ingame:logic(dt) end
 
 
 function Ingame:render()
-    Game.level:draw()
     Game:print("'TAB' - Switch to editor", 5, 5, {1, 1, 1, .075})
     if Game.debug then
         Game:print(("FPS: %d"):format(love.timer.getFPS()), 5, 15)

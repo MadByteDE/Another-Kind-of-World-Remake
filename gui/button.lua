@@ -9,7 +9,8 @@ function Button:init(x, y, t)
     Element.init(self, x, y, t)
     self.type = "button"
     self.rgba = {.8, .8, .8, .75}
-    self.selected = false
+    self.hovered = false
+    self.visible = true
     if self.image then
         self:newSprite(self.type, self.image)
         self:setSprite(self.type)
@@ -33,17 +34,15 @@ end
 
 
 function Button:onClick(button, x, y)
+    Element.onClick(self, button, x, y)
     self.rgba = {.45, .45, .45, 1}
-    self.action(self, button)
 end
 
 
 function Button:onRelease(button, x, y)
+    Element.onRelease(self, button, x, y)
     self.rgba = {1, 1, 1, 1}
-end
-
-
-function Button:logic(dt)
+    self.action(self, button)
 end
 
 return Button

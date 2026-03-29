@@ -95,14 +95,15 @@ end
 
 function Actor:throw(name, data)
     if not name then error("Class name must be declared!") end
+    local mx, my = Game:getMousePosition()
     local cx, cy = self:getCenter()
-    local dist_x = Game.gui.mouse.x-(cx)
-    local dist_y = Game.gui.mouse.y-(cy)
+    local dist_x = mx-(cx)
+    local dist_y = my-(cy)
     local angle = math.sqrt(dist_x*dist_x + dist_y*dist_y)
     local data  = data or {}
     data.parent = self
-    data.dx     = (Game.gui.mouse.x-self.x)/angle
-    data.dy     = (Game.gui.mouse.y-self.y)/angle
+    data.dx     = (mx-cx)/angle
+    data.dy     = (my-cy)/angle
     Game.level:spawn(name, cx, cy-1, data)
     Game:playSound("toss")
     -- Pushback

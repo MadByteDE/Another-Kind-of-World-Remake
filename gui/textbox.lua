@@ -11,45 +11,28 @@ function Textbox:init(x, y, t)
     self.type = "Textbox"
     self.text = self.text or ""
     self.action = self.action or function() end
+    self.visible = true
+    self.hovered = false
     self.selectable = true
     self.text_color = {1, 1, 1, .75}
     self.rgba = {.05, .05, .05, .5}
-    Game.gui:select(self)
-    self:setTimeout(4)
 end
 
 
 function Textbox:onEnter(mouse)
     Element.onEnter(self, mouse)
-    Game.gui:select(self)
+    self.rgba = {.05, .05, .05, .5}
+    self.text_color = {1, 1, 1, 1}
+    love.keyboard.setTextInput(true)
 end
 
 
 function Textbox:onExit(mouse)
     Element.onExit(self, mouse)
-    self:setTimeout(10)
-end
-
-
-function Textbox:onSelect()
-    Element.onSelect(self)
-    self.visible = true
-    love.keyboard.setTextInput(true)
-end
-
-
-function Textbox:onDeselect()
-    Element.onDeselect(self)
     self:action()
-    self.visible = false
-    self.rgba = {.05, .05, .05, .5}
-    self.text_color = {1, 1, 1, .75}
+    self.rgba = {.05, .05, .05, .3}
+    self.text_color = {1, 1, 1, .5}
     love.keyboard.setTextInput(false)
-end
-
-
-function Textbox:onTimeout()
-    Game.gui:deselect(self)
 end
 
 
@@ -63,7 +46,6 @@ end
 
 function Textbox:keypressed(key)
     if key == "backspace" then
-        self:setTimeout(0)
         local byteoffset = utf8.offset(self.text, -1)
         if byteoffset then
             self.text = string.sub(self.text, 1, byteoffset-1)
@@ -75,7 +57,6 @@ end
 function Textbox:onTextInput(text)
     local font = love.graphics.getFont()
     if font:getWidth(self.text) > self.width-5 then return end
-    self:setTimeout(0)
     self.text = self.text .. text:gsub('[%p%c%s]', '') -- remove symbols etc.
 end
 

@@ -33,14 +33,14 @@ end
 
 
 function Editor:logic(dt)
-    Game.level:update(dt)
     -- Place tile
-    local tx, ty = Game.level:toTileCoords(Game.gui.mouse.x, Game.gui.mouse.y)
+    local mx, my = Game:getMousePosition()
+    local tx, ty = Game.level:toTileCoords(mx, my)
     local x, y = Game.level:toScreenCoords(tx, ty)
-    if Game.gui.mouse.button == 1 then
+    if love.mouse.isDown(1) then
         Game.level:setTile(tx, ty, Tile(x, y, self.current_tile))
     -- Get tile
-    elseif Game.gui.mouse.button == 2 then
+    elseif love.mouse.isDown(2) then
         local tile = Game.level:getTile(tx, ty)
         if tile then self.current_tile = Game.assets.data.tiles[tile.id] end
     end
@@ -48,9 +48,9 @@ end
 
 
 function Editor:render()
-    Game.level:draw()
     -- Draw tile preview
-    local tx, ty = Game.level:toTileCoords(Game.gui.mouse.x, Game.gui.mouse.y)
+    local mx, my = Game:getMousePosition()
+    local tx, ty = Game.level:toTileCoords(mx, my)
     local x, y = Game.level:toScreenCoords(tx, ty)
     love.graphics.setColor(1, 1, 1, .3)
     local sprite = Game.assets.tile[self.current_tile.name]
@@ -63,7 +63,6 @@ end
 
 
 function Editor:keypressed(key)
-    Game.gui:keypressed(key)
     -- Quit
     if key == "escape" then
         Game:transition(function() love.event.quit() end, 3)
