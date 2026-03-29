@@ -2,7 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Actor = require("objects.actor")
-local Bomb = Actor:extend()
+local Bomb = Actor:extend("Bomb")
 
 
 function Bomb:init(x, y, data)

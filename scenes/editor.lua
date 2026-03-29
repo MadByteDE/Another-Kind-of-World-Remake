@@ -3,7 +3,7 @@
 
 local Scene = require("scenes.scene")
 local Tile  = require("objects.tile")
-local Editor = Scene:extend()
+local Editor = Scene:extend("Editor")
 
 
 function Editor:init(level_id)

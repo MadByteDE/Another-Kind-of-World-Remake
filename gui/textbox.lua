@@ -3,7 +3,7 @@
 
 local Element = require("gui.element")
 local utf8 = require("utf8")
-local Textbox = Element:extend()
+local Textbox = Element:extend("Textbox")
 
 
 function Textbox:init(x, y, t)
