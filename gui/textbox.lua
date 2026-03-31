@@ -10,10 +10,6 @@ function Textbox:init(x, y, t)
     Element.init(self, x, y, t)
     self.type = "Textbox"
     self.text = self.text or ""
-    self.action = self.action or function() end
-    self.visible = true
-    self.hovered = false
-    self.selectable = true
     self.text_color = {1, 1, 1, .75}
     self.rgba = {.05, .05, .05, .5}
 end
@@ -29,19 +25,14 @@ end
 
 function Textbox:onExit(mouse)
     Element.onExit(self, mouse)
-    self:action()
     self.rgba = {.05, .05, .05, .3}
     self.text_color = {1, 1, 1, .5}
     love.keyboard.setTextInput(false)
 end
 
 
-function Textbox:onClick(Textbox, x, y)
-end
-
-
-function Textbox:onRelease(Textbox, x, y)
-end
+function Textbox:onClick(Textbox, x, y) end
+function Textbox:onRelease(Textbox, x, y) end
 
 
 function Textbox:keypressed(key)
@@ -61,8 +52,7 @@ function Textbox:onTextInput(text)
 end
 
 
-function Textbox:logic(dt)
-end
+function Textbox:logic(dt) end
 
 
 function Textbox:render()

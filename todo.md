@@ -1,13 +1,11 @@
 # Todo-List
 
-
 ## Bugs
 - Don't show exit if we are at the last available level
-- GUI UI can still break sometimes, find why and fix it
 
 
-## GUI general
-
+## GUI
+- Add grouping system to make it easier to remove all elements for a scene or parent element
 
 ## Editor
 - Automatically add tile shadows to tiles without other tiles below them
@@ -17,6 +15,7 @@
 
 
 ## Entities
+- Spikes!
 - Something that can defend itself, hmm
 - Hurt effect when hit
 
@@ -29,7 +28,3 @@
 - One way tiles / platforms
 - Add one tile height variants for wall tiles (shadows)
 - Optimize collision boxes (merge multiple tiles)
-
-
-## Other
-- Revamp GUI system (no mouse element, tooltips, etc)

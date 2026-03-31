@@ -37,20 +37,16 @@ function Ingame:fail()
 end
 
 
-function Ingame:logic(dt) end
+function Ingame:logic(dt)
+    Game.level:update(dt)
+end
 
 
 function Ingame:render()
-    Game:print("'TAB' - Switch to editor", 5, 5, {1, 1, 1, .075})
-    if Game.debug then
-        Game:print(("FPS: %d"):format(love.timer.getFPS()), 5, 15)
-        local count = collectgarbage("count")
-        Game:print(("MEM: %d.%d MB"):format(count/1024, math.fmod(count, 1024)), 5, 25)
-        if self.player then
-            local vx, vy = self.player.vel.x, self.player.vel.y
-            Game:print(("VX: %d   VY: %d"):format(vx, vy), 5, 35)
-        end
-    end
+    -- Draw level
+    Game.level:draw()
+    -- Debug info
+    Game:print("'TAB' - Switch to editor", 1, 10, {1, 1, 1, .1})
 end
 
 

@@ -20,12 +20,6 @@ function Gui:init()
 end
 
 
-function Gui:clear()
-    self.elements = Conta()
-    self.elements_lookup = {}
-end
-
-
 function Gui:add(name, x, y, data)
     local data = data or {}
     local element = elements[name](x, y, data)
@@ -40,6 +34,17 @@ function Gui:get(element)
     if _type == "string" then return self.elements_lookup[element]
     elseif _type == "table" then return self.elements:get(element)
     else error(("Unsupported element type: %s"):format(_type)) end
+end
+
+
+function Gui:getByParent(parent)
+    local elements = {}
+    self.elements:iterate(function(key, element)
+        if element.parent == parent then
+            elements[#elements+1] = element
+        end
+    end)
+    return elements
 end
 
 
@@ -99,12 +104,8 @@ end
 
 
 function Gui:wheelmoved(x, y)
-    if self.hovered_obj then
-        self.hovered_obj:onScroll(x, y)
-    else
-        self.scroll.x = x
-        self.scroll.y = y
-    end
+    if self.hovered_obj then self.hovered_obj:onScroll(x, y)
+    else self.scroll = {x=x, y=y} end
 end
 
 

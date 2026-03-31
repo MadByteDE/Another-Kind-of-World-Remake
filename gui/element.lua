@@ -11,7 +11,6 @@ function Element:init(x, y, t)
     self.text       = self.text or self.type
     self.collide    = self.collide or true
     self.draggable  = self.draggable or false
-    self.selectable = self.selectable or false
     self.hovered    = false
     self.dragged    = false
     self.centered   = false

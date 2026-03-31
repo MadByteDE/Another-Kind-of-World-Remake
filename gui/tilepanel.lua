@@ -14,65 +14,41 @@ function Tilepanel:init(x, y, t)
     self:setSprite(self.type)
     local w, h = self.sprite.image:getDimensions()
     self:setDimensions(w, h)
-    self.buttons = {}
 end
 
 
 function Tilepanel:createButtons()
-    -- Buttons for individual tiles
-    self.buttons = {}
+    -- Tile buttons
     local tw = Game.level.tilesize
+    local rows, spacing = 3, 1
     for index, tiledata in ipairs(Game.assets.data.tiles) do
-        local rowsize = 3
-        local spacing = 1
-        local row     = math.floor((index-1)/rowsize)
-        local column  = (index-1)%rowsize
-        local x       = 2+column*tw+spacing*column
-        local y       = 4+row*tw+spacing*row
-        -- Clear button
-        local button = {image=Game.assets.tile[tiledata.name], parent=self}
-        button.width = tw
-        button.height = tw
-        button.tile = tiledata
-        button.tooltip = {text=tiledata.name}
-        button.action = function(b, pressed)
-            if pressed == 1 then Game.scene.current_tile = button.tile end
-        end
-        table.insert(self.buttons, Game.gui:add("button", x, y, button))
+        local column = (index-1)%rows
+        local row = math.floor((index-1)/rows)
+        local x = 2+column*tw+spacing*column
+        local y = 4+row*tw+spacing*row
+        local button = {
+            parent=self, width=tw, height=tw,
+            image=Game.assets.tile[tiledata.name],
+            tooltip={text=tiledata.name},
+            tile=tiledata,
+            action=function(button, pressed)
+                if pressed == 1 then Game.scene.current_tile = button.tile end
+            end,
+        }
+        Game.gui:add("button", x, y, button)
     end
-    -- Clear button
-    local button = {image = Game.assets.gui.button.clear, parent = self}
-    button.action = function(b, pressed)
-        if pressed == 1 then
-            Game:transition(function() Game.scene:init() end, .5)
-        end
+    local buttons = {"clear", "save", "play"}
+    for index=1, #buttons do
+        local button = Game.assets.data.buttons[buttons[index]]
+        button.parent = self
+        local x, y = 11*(index-1), 1+self.height
+        Game.gui:add("button", x, y, button)
     end
-    table.insert(self.buttons, Game.gui:add("button", 0, self.height+1, button))
-    -- Save button
-    local button = {image = Game.assets.gui.button.save, parent = self}
-    button.action = function(b, pressed)
-        if pressed == 1 then
-            Game.level:save(Game.scene.level_id)
-            print("Successfully saved level")
-        end
-    end
-    table.insert(self.buttons, Game.gui:add("button", 11, self.height+1, button))
-    -- Play button
-    local button = {image = Game.assets.gui.button.play, parent = self}
-    button.action = function(b, pressed)
-        if pressed == 1 then
-            Game:transition(function()
-                Game.level:save()
-                Game:switchScene("Ingame", Game.level.id, true)
-            end)
-        end
-    end
-    table.insert(self.buttons, Game.gui:add("button", 22, self.height+1, button))
 end
 
 
 function Tilepanel:destroy()
-    for k,v in ipairs(self.buttons) do v:destroy() end
+    for k,v in ipairs(Game.gui:getByParent(self)) do v:destroy() end
     Element.destroy(self)
 end
 

@@ -4,11 +4,6 @@
 local Object = require("objects.object")
 local Actor = Object:extend("Actor")
 
-local function clamp(val, min, max)
-    if not val then return end
-    return math.min(math.max(val, min), max)
-end
-
 
 function Actor:init(x, y, t)
     Object.init(self, x, y, t)
@@ -21,12 +16,12 @@ function Actor:init(x, y, t)
     self.dir        = self.dir or {x=0, y=0}
     -- Properties
     self.damage_cooldown = 0
-    self.health     = self.health or 0
-    self.max_health = self.max_health or 999
-    self.wrap       = self.wrap or true
+    self.health     = clamp(self.health, 0, 999)
+    self.max_health = clamp(self.max_health, 0, 999)
     self.lifetime   = clamp(self.lifetime, 0, 999)
+    self.bounciness = clamp(self.bounciness, 0, 10)
     self.in_air     = self.in_air or false
-    self.bounciness = self.bounciness or 0
+    self.wrap       = self.wrap or true
 end
 
 

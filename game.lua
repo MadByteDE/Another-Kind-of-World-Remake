@@ -20,6 +20,8 @@ local Game = {
     debug   = (arg[2] == "debug") or false,
     width   = 256,
     height  = 160,
+    scale   = {x=4, y=4},
+    flags   = {vsync=true, usedpiscale=false},
     assets  = require("lib.cargo").init('assets'),
     _shake  = { x=0, y=0, timer=0, intensity=1 },
     fade    = { duration=2, timer=1, color={.05, .05, .05, 1},
@@ -42,17 +44,11 @@ function Game:load()
     -- Level
     Game.level = Level()
     -- Screen
-    self:setMode(self.width*4, self.height*4, {usedpiscale=false})
+    local w, h = Game:getWindowSize()
+    self:setMode(w, h, self.flags)
     -- GUI
     self.gui = Gui()
-    self.quit_button = self.gui:add("button", self.width-13, 3, {
-        image   = self.assets.gui.button.back,
-        action  = function(_, button)
-            if button == 1 then
-                self:transition(function() love.event.quit() end, 3)
-            end
-        end
-    })
+    self.gui:add("button", self.width-13, 3, Game.assets.data.buttons.quit)
     -- Start-up
     love.graphics.setFont(self.assets.font.tinypixels(8))
     if not Game.debug then self:playSound("music", .275, true) end
@@ -129,6 +125,7 @@ function Game:switchScene(name, ...)
         Log:error("Scene '%s' does not exist", name)
         return
     end
+    Game.gui.hovered_obj = nil
     if self.scene then self.scene:leave() end
     self.scene = scenes[name]
     self.scene:init(...)
@@ -168,6 +165,12 @@ function Game:draw()
     love.graphics.scale(self.scale.x, self.scale.y)
     self.scene:draw()
     self.gui:draw()
+    -- Draw debug info
+    if Game.debug then
+        local count = collectgarbage("count")
+        local fps, mb, kb = love.timer.getFPS(), count/1024, math.fmod(count, 1024)
+        Game:print(("FPS: %d    |   MEM: %d.%d MB"):format(fps, mb, kb), 1, 0)
+    end
     -- Draw fade overlay
     love.graphics.setColor(self.fade.color)
     love.graphics.rectangle("fill", 0, 0, self.width, self.height)

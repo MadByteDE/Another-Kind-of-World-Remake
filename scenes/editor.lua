@@ -14,15 +14,9 @@ function Editor:init(level_id)
     -- Add tile panel
     self.panel = Game.gui:add("tilepanel", 220, 50)
     self.panel:createButtons()
-    local data = {
-        text=Game.level.id, width=72, height=8,
-        action=function(textbox)
-            if textbox.text ~= "" then
-                self.level_id = textbox.text
-            end
-        end,}
     -- Add text box
-    self.titlebox = Game.gui:add("textbox", Game.width/2-36, 2, data)
+    local data = {text=Game.level.id, width=72, height=8}
+    self.titlebox = Game.gui:add("textbox", Game.width/2, 8, data):center()
 end
 
 
@@ -33,21 +27,22 @@ end
 
 
 function Editor:logic(dt)
-    -- Place tile
-    local mx, my = Game:getMousePosition()
-    local tx, ty = Game.level:toTileCoords(mx, my)
-    local x, y = Game.level:toScreenCoords(tx, ty)
+    -- Update level
+    Game.level:update(dt)
+    -- Place tiles
+    if Game.gui.hovered_obj then return end
     if love.mouse.isDown(1) then
+        local mx, my = Game:getMousePosition()
+        local tx, ty = Game.level:toTileCoords(mx, my)
+        local x, y = Game.level:toScreenCoords(tx, ty)
         Game.level:setTile(tx, ty, Tile(x, y, self.current_tile))
-    -- Get tile
-    elseif love.mouse.isDown(2) then
-        local tile = Game.level:getTile(tx, ty)
-        if tile then self.current_tile = Game.assets.data.tiles[tile.id] end
     end
 end
 
 
 function Editor:render()
+    -- Draw level
+    Game.level:draw()
     -- Draw tile preview
     local mx, my = Game:getMousePosition()
     local tx, ty = Game.level:toTileCoords(mx, my)
@@ -56,9 +51,9 @@ function Editor:render()
     local sprite = Game.assets.tile[self.current_tile.name]
     if self.current_tile then love.graphics.draw(sprite, x, y) end
     -- Draw usage info
-    Game:print("TAB - Switch to game", 5, 5, {1, 1, 1, .075})
-    Game:print("LMB/RMB - Place/Pick tile", 5, 15, {1, 1, 1, .075})
-    Game:print("Space - Play level", 5, 25, {1, 1, 1, .075})
+    Game:print("TAB - Switch to game", 1, 10, {1, 1, 1, .1})
+    Game:print("LMB/RMB - Place/Pick tile", 1, 20, {1, 1, 1, .1})
+    Game:print("Space - Play level", 1, 30, {1, 1, 1, .1})
 end
 
 
@@ -77,6 +72,21 @@ function Editor:keypressed(key)
         end, 1)
     end
 end
+
+
+function Editor:mousepressed(x, y, button)
+    local mx, my = Game:getMousePosition()
+    local tx, ty = Game.level:toTileCoords(mx, my)
+    if button == 2 then
+        -- Get tile
+        local tile = Game.level:getTile(tx, ty)
+        if tile then self.current_tile = Game.assets.data.tiles[tile.id] end
+    end
+end
+
+
+function Editor:mousereleased(x, y, button)end
+function Editor:wheelmoved(x, y)end
 
 
 return Editor

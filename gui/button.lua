@@ -9,15 +9,13 @@ function Button:init(x, y, t)
     Element.init(self, x, y, t)
     self.type = "button"
     self.rgba = {.8, .8, .8, .75}
-    self.hovered = false
-    self.visible = true
+    self.action = self.action or _NULL
     if self.image then
         self:newSprite(self.type, self.image)
         self:setSprite(self.type)
         local w, h = self.sprite.image:getDimensions()
         self:setDimensions(w, h)
     end
-    self.action = self.action or function() end
 end
 
 
