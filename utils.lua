@@ -5,6 +5,13 @@ function try(funct, ...)
 end
 
 
+local types = {"nil", "number", "string", "function", "boolean", "userdata", "table", "thread"}
+function checkType(v, name)
+    assert(types[name] == nil, ("Invalid argument: '%s' is not a valid data type"):format(name))
+    assert(type(v) == name, ("Invalid type '%s': Value must be of type '%s'"):format(type(v), name))
+end
+
+
 function join(...)
     return table.concat({...}, "/"):gsub("//+", "/")
 end
@@ -28,7 +35,6 @@ end
 
 function round(num, idp)
 	local mult = 10^(idp or 0)
-
     if num >= 0 then
 		return math.floor(num * mult + 0.5) / mult
     else

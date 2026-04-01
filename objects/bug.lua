@@ -14,9 +14,7 @@ function Bug:init(x, y)
     self.damp   = {x=0, y=0}
     self.health = 50
     self.move_filter = function(other)
-        if not other then return end
-        if other.type == "tile" and other.solid then return "cross"
-        else return end
+        if other.type == "tile" and other.solid then return "cross" end
     end
     -- Init
     Actor.init(self, x, y+3, {collide=true, can_die=true, deadly=true})
@@ -53,18 +51,17 @@ end
 function Bug:logic(dt)
     if self.dir.x < 0 then self.sprite.flippedH = true
     else self.sprite.flippedH = false end
-    self:accelerate(dt)
     -- AI movement on platform
     local x = self.x + self.vel.x * dt
     local y = self.y + self.vel.y * dt
     if self.in_air then return end
     if self.dir.x > 0 then
         local right = Game.level.collision_world:queryPoint(x+(self.width+1), y+(self.height/2), self.move_filter)
-        local downRight = Game.level.collision_world:queryPoint(x+self.width, y+(self.height+1), self.move_filter)
+        local downRight = Game.level.collision_world:queryPoint(x+(self.width+1), y+(self.height+1), self.move_filter)
         if #downRight==0 or #right > 0 then self.dir.x = -1 end
     elseif self.dir.x < 0 then
         local left = Game.level.collision_world:queryPoint(x-1, y+(self.height/2), self.move_filter)
-        local downLeft = Game.level.collision_world:queryPoint(x, y+(self.height+1), self.move_filter)
+        local downLeft = Game.level.collision_world:queryPoint(x-1, y+(self.height+1), self.move_filter)
         if #downLeft==0 or #left > 0 then self.dir.x = 1 end
     end
 end

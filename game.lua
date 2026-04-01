@@ -121,10 +121,7 @@ end
 
 
 function Game:switchScene(name, ...)
-    if not scenes[name] then
-        Log:error("Scene '%s' does not exist", name)
-        return
-    end
+    assert(scenes[name] ~= nil, ("Scene '%s' does not exist"):format(name))
     Game.gui.hovered_obj = nil
     if self.scene then self.scene:leave() end
     self.scene = scenes[name]

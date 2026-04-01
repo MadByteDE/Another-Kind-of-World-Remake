@@ -51,15 +51,12 @@ end
 function Player:logic(dt)
     local keyDown = love.keyboard.isDown
     -- always reset direction
-    self.dir.x = 0
-    self.dir.y = 0
+    self.dir = {x=0, y=0}
     -- Set default sprite
     self:setSprite("idle")
     -- Look towards the cursor
     local mx, my = Game:getMousePosition()
-    if mx > self.x+self.width/2 then
-    self.sprite.flippedH = false
-    else self.sprite.flippedH = true end
+    self.sprite.flippedH = (mx < self.x+self.width/2)
     -- Key movement
     if keyDown("a") or keyDown("left")  then
         self:setSprite("run")
@@ -71,16 +68,11 @@ function Player:logic(dt)
         self.sprite.flippedH = false
         self.dir.x = 1
     end
-    self:accelerate(dt) -- accelerate instead of moving at a constant speed
 end
 
 
 function Player:keypressed(key)
     if key == "w" or key == "up" or key == "space" then
-        if not self.in_air then
-            local pitch = math.random(75, 125)/100
-            Game:playSound("jump", .7):setPitch(pitch)
-        end
         self:jump()
     end
 end

@@ -17,14 +17,14 @@ function Object:init(x, y, t)
     self:setDimensions(self.width or 8, self.height or 8)
     self:setPosition(x+self.offset.x, y+self.offset.y)
     -- Properties
-    self.visible = self.visible or true
-    self.deadly = self.deadly or false
-    self.solid  = self.solid or false
-    self.collide = self.collide or false
+    if self.visible == nil then self.visible = true end
+    -- self.deadly = false
+    -- self.solid  = false
+    -- self.collide = false
     self.sprites = self.sprites or {}
     -- Undeclared
-    self.sprite = self.sprite or nil
-    self.collider = self.collider or nil
+    -- self.sprite = self.sprite or nil
+    -- self.collider = self.collider or nil
     -- Additional
     if self.collide then self:addCollider() end
 end

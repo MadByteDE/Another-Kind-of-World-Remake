@@ -3,7 +3,7 @@
 
 
 return {
-    ["clear"] = {
+    clear = {
         tooltip = {text="Undo unsaved changes"},
         image = Game.assets.gui.button.clear,
         action = function(element, button)
@@ -14,7 +14,7 @@ return {
             end
         end
     },
-    ["save"] = {
+    save = {
         tooltip = {text="Save the current level"},
         image = Game.assets.gui.button.save,
         action = function(element, button)
@@ -24,7 +24,7 @@ return {
             end
         end
     },
-    ["play"] = {
+    play = {
         tooltip = {text="play the current level"},
         image = Game.assets.gui.button.play,
         action = function(element, button)
@@ -36,7 +36,7 @@ return {
             end
         end
     },
-    ["quit"] = {
+    quit = {
         tooltip = {text="Quit game"},
         image   = Game.assets.gui.button.back,
         action  = function(_, button)

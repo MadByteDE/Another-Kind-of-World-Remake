@@ -7,18 +7,6 @@ local Tile  = require("objects.tile")
 local Class = require("lib.30log")
 local Level = Class("Level")
 
-local entities = {
-    player   = require("objects.player"),
-    bug      = require("objects.bug"),
-    exit     = require("objects.exit"),
-    lava     = require("objects.lava"),
-    bomb     = require("objects.bomb"),
-    particle = require("objects.particle")
-}
-
-----------------------------
--- Local functions --
-----------------------------
 
 -- Fill a table with tile id's instead of tile objects
 local function generateTileData(self)
@@ -71,10 +59,6 @@ local function createLevel(self)
 end
 
 
-----------------------------
--- Constructor --
-----------------------------
-
 function Level:init(id)
     self.tilesize = self.tilesize or 8
     self.canvas = love.graphics.newCanvas(Game.width, Game.height)
@@ -87,10 +71,6 @@ function Level:init(id)
     self:renderCanvas()
 end
 
-
-----------------------------
--- Load / Save --
-----------------------------
 
 function Level:load(id)
     local id = tostring(id) or ""
@@ -160,10 +140,6 @@ function Level:getSaveData()
 end
 
 
-----------------------------
--- Tile manipulation --
-----------------------------
-
 function Level:setTile(x, y, tile)
     if self.tiles[y] then
         local current_tile = self.tiles[y][x]
@@ -209,12 +185,8 @@ function Level:renderCanvas()
 end
 
 
-----------------------------
--- Object manipulation --
-----------------------------
-
 function Level:spawn(name, x, y, data)
-    local entity = entities[name](x, y, data)
+    local entity = Game.assets.data.entities[name](x, y, data)
     return self.objects:add(entity)
 end
 
@@ -223,10 +195,6 @@ function Level:getObject(val)
     return self.objects:get(val)
 end
 
-
-----------------------------
--- Main callbacks --
-----------------------------
 
 function Level:update(dt)
     self.animated_tiles:update(dt)

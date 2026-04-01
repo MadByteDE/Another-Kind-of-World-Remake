@@ -74,8 +74,7 @@ end
 
 
 function Editor:mousepressed(x, y, button)
-    local mx, my = Game:getMousePosition()
-    local tx, ty = Game.level:toTileCoords(mx, my)
+    local tx, ty = Game.level:toTileCoords(Game:getMousePosition())
     if button == 2 then
         -- Get tile
         local tile = Game.level:getTile(tx, ty)

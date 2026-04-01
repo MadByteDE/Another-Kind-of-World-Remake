@@ -48,11 +48,9 @@ function Bomb:onDead()
     end
     -- Apply explosion damage
     local radius = 24
-    local x = self.x+self.width/2-radius/2
-    local y = self.y+self.height/2-radius/2
+    local x, y = self:getCenter(-radius/2, -radius/2)
     local cols = Game.level.collision_world:queryRect(x, y, radius, radius)
-    for i=1, #cols do
-        local other = cols[i]
+    for k, other in ipairs(cols) do
         if other.name == "bomb" then
             local x_speed = math.random(30, 100)
             local y_speed = math.random(40, 200)
@@ -65,11 +63,6 @@ function Bomb:onDead()
     end
     -- Remove bomb
     self:destroy()
-end
-
-
-function Bomb:logic(dt)
-    self:accelerate(dt)
 end
 
 return Bomb

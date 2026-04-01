@@ -7,7 +7,6 @@ local Tile = Object:extend("tile")
 
 function Tile:init(x, y, tile)
     -- Init
-    if tile and tile.solid then print("solid tile: ".. tile.name) end
     Object.init(self, x, y, tile)
     -- Add sprite
     if self.animdata then

@@ -30,14 +30,13 @@ end
 function Ingame:fail()
     Game:playSound("fail", .7)
     Game:transition(function()
-        if tonumber(Game.level.id) == 12 then self:init(0)
+        if Game.level.id == 12 then self:init(0)
         else self:init() end
     end, .75, {.1, .05, .05})
 end
 
 
 function Ingame:render()
-    -- Debug info
     Game:print("'TAB' - Switch to editor", 1, 10, {1, 1, 1, .1})
 end
 

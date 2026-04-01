@@ -11,17 +11,11 @@ function Particle:init(x, y, data)
     -- Init
     Actor.init(self, x, y, data)
     local sprite = data.images[math.random(1, #data.images)]
-    self.lifetime = (data.lifetime or .75)
-    self.lifetime = self.lifetime + (math.random(-10, 10)/50)
-    self.gravity = data.gravity or 25
-    self.wrap = data.wrap or false
+    self.lifetime = (data.lifetime or .75) + (math.random(-10, 10)/50)
     self:setDimensions(sprite:getDimensions())
     self:setPosition(x-self.width/2, y-self.height/2)
-    self.vel = {
-        x=math.random(data.range.x[1], data.range.x[2]),
-        y=math.random(data.range.y[1], data.range.y[2]),
-    }
-    self.max_vel = {x=150, y=150}
+    self.vel.x = math.random(data.range.x[1], data.range.x[2])
+    self.vel.y = math.random(data.range.y[1], data.range.y[2])
     self.rgba[4] = .65
     self.alpha_tween = Tween.new(fadeout_time, self.rgba, {[4]=0})
     -- Additional
@@ -40,8 +34,6 @@ function Particle:logic(dt)
     if self.lifetime <= fadeout_time then
         self.alpha_tween:update(dt)
     end
-    -- Apply velocities
-    self:accelerate(dt)
 end
 
 return Particle

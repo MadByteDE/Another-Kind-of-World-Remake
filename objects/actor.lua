@@ -20,22 +20,20 @@ function Actor:init(x, y, t)
     self.max_health = clamp(self.max_health or 0, 0, 999)
     self.lifetime   = clamp(self.lifetime, 0, 999)
     self.bounciness = clamp(self.bounciness or 0, 0, 10)
-    self.in_air     = self.in_air or false
-    self.wrap       = self.wrap or true
+    if self.wrap == nil then self.wrap = true end
+    -- self.in_air = false
 end
 
 
 function Actor:filter(other)
-    if other.solid then
-        if self.bounciness > 0 then return "bounce"
-        else return "slide" end
-    end
-    return "cross"
+    if not other.solid then return "cross" end
+    if self.bounciness > 0 then return "bounce"
+    else return "slide" end
 end
 
 
 function Actor:move(dt)
-    local dx,dy = self.dir.x, self.dir.y
+    local dx, dy = self.dir.x, self.dir.y
     -- x-axis
     if dx ~= 0 then self.vel.x = (self.acc.x * dx * 10) * dt
     else if self.damp.x > 0 then
@@ -52,7 +50,7 @@ end
 
 
 function Actor:accelerate(dt)
-    local dx,dy = self.dir.x, self.dir.y
+    local dx, dy = self.dir.x, self.dir.y
     -- x-axis
     if dx ~= 0 then self.vel.x = self.vel.x + (self.acc.x * dx * 10) * dt
     else self.vel.x = self.vel.x / (1 + self.damp.x * dt) end
@@ -65,13 +63,13 @@ end
 
 
 function Actor:heal(amount)
-    if type(amount) ~= "number" then error(("Amount is not a number (is '%s')"):format(type(amount))) end
+    checkType(amount, "number")
     self.health = math.min(self.max_health, self.health + amount)
 end
 
 
 function Actor:damage(amount, other)
-    if type(amount) ~= "number" then error(("Amount is not a number (is '%s')"):format(type(amount))) end
+    checkType(amount, "number")
     if self.damage_cooldown > 0 then return end
     self.damage_cooldown = 1
     self.health = math.max(0, self.health - amount)
@@ -87,13 +85,15 @@ function Actor:jump(vel)
         for i=1, math.random(2, 3) do
             local x, y = self:getCenter(0, 3)
             Game.level:spawn("particle", x, y, Game.assets.data.particles.dust)
+            local pitch = math.random(75, 125)/100
+            Game:playSound("jump", .7):setPitch(pitch)
         end
     end
 end
 
 
 function Actor:throw(name, data)
-    if not name then error("Class name must be declared!") end
+    checkType(name, "string")
     local mx, my = Game:getMousePosition()
     local cx, cy = self:getCenter()
     local dist_x = mx-(cx)
@@ -123,6 +123,7 @@ end
 
 function Actor:update(dt)
     Object.update(self, dt)
+    self:accelerate(dt)
     -- wrap object around the screen
     if self.wrap then
         if self.x > Game.width then self.x = -self.width+2
