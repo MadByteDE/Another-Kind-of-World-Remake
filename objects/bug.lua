@@ -8,6 +8,8 @@ local Bug = Actor:extend("bug")
 function Bug:init(x, y)
     -- Core
     self:setDimensions(8, 5)
+    Actor.init(self, x, y+3, {collide=true, can_die=true, deadly=true})
+    -- Properties
     self.acc    = {x=3, y=3}
     self.vel    = {x=0, y=0}
     self.max_vel= {x=10, y=150}
@@ -16,14 +18,11 @@ function Bug:init(x, y)
     self.move_filter = function(other)
         if other.type == "tile" and other.solid then return "cross" end
     end
-    -- Init
-    Actor.init(self, x, y+3, {collide=true, can_die=true, deadly=true})
-    -- Additional
     -- Random movement direction when spawning
     local dir = love.math.random(1, 2)
     if dir == 1 then self.dir.x  = -1
     else self.dir.x = 1 end
-    -- Add sprite
+    -- Add sprite(s)
     self:newAnimation(self.name, Game.assets.anim.bug, '1-6', 1, .15)
     self:setSprite(self.name)
     self.sprite:gotoFrame(math.random(1, #self.sprite.frames))

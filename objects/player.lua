@@ -6,8 +6,10 @@ local Player = Actor:extend("player")
 
 
 function Player:init(x, y)
-    -- Init
+    -- Core
     self:setDimensions(6, 7)
+    Actor.init(self, x, y, {collide=true, can_die=true})
+    -- Properties
     self.acc    = {x=35, y=110}
     self.vel    = {x=0, y=0}
     self.max_vel= {x=70, y=150}
@@ -15,8 +17,7 @@ function Player:init(x, y)
     self.max_bombs = 3
     if Game.debug then self.max_bombs = 99 end
     self.health = 100
-    Actor.init(self, x, y, {collide=true, can_die=true})
-    -- Additional
+    -- Add sprite(s)
     self:newAnimation("idle", Game.assets.anim.player_idle, '1-2', 1, .3)
     self:newAnimation("run", Game.assets.anim.player_run, '1-4', 1, .15)
     self:setSprite("idle")

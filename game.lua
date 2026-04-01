@@ -20,8 +20,8 @@ local Game = {
     debug   = (arg[2] == "debug") or false,
     width   = 256,
     height  = 160,
-    scale   = {x=4, y=4},
-    flags   = {vsync=true, usedpiscale=false},
+    scale   = { x=4, y=4 },
+    flags   = { vsync=true, usedpiscale=false },
     assets  = require("lib.cargo").init('assets'),
     _shake  = { x=0, y=0, timer=0, intensity=1 },
     fade    = { duration=2, timer=1, color={.05, .05, .05, 1},
@@ -40,7 +40,7 @@ love.keyboard.setKeyRepeat(true)
 
 
 function Game:load()
-    Log:message("Logs will be saved in: %s", join( love.filesystem.getSaveDirectory(), "logs" ))
+    Log:message("Logs will be saved in: %s", join(love.filesystem.getSaveDirectory(), "logs"))
     -- Screen
     local w, h = Game:getWindowSize()
     self:setMode(w, h, self.flags)

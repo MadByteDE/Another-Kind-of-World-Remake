@@ -6,22 +6,22 @@ local Bomb = Actor:extend("bomb")
 
 
 function Bomb:init(x, y, data)
-    -- init
+    -- Core
     self:setDimensions(5, 5)
     self.offset = {x=-1, y=0}
-    self.damp   = {x=1.5, y=1.5}
-    self.speed  = {x=150, y=150}
-    self.lifetime = math.random(3, 4)
-    self.bounciness = .8
-    self:setDimensions(5, 5)
     local x = x - self.width/2 - self.offset.x/2
     local y = y - self.height/2 - self.offset.y/2
     Actor.init(self, x, y, {collide=true})
+    -- Properties
+    self.damp   = {x=1.5, y=1.5}
+    self.speed  = {x=150, y=150}
     local vel_x = (self.speed.x + math.abs(data.parent.vel.x)) * (data.dx or 0)
     local vel_y = (self.speed.y + math.abs(math.min(data.parent.vel.y, 0))) * (data.dy or 0)
     self.vel = {x=vel_x or 0,y=vel_y or 0}
     self.max_vel = {x=175, y=200}
-    -- Additional
+    self.lifetime = math.random(3, 4)
+    self.bounciness = .8
+    -- Add sprite(s)
     self:newAnimation(self.name, Game.assets.anim.bomb, '1-4', 1, .1)
     self:setSprite(self.name)
 end

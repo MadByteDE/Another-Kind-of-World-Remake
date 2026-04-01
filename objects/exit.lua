@@ -6,10 +6,11 @@ local Exit = Object:extend("exit")
 
 
 function Exit:init(x, y, tile)
-    -- Init
+    -- Core
     Object.init(self, x, y)
+    -- Properties
     self.visible = false
-    -- Additional
+    -- Add sprite(s)
     self:newSprite(self.name, Game.assets.tile.exit)
     self:setSprite(self.name)
 end

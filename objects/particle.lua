@@ -8,17 +8,17 @@ local Particle = Actor:extend("particle")
 local fadeout_time = .125
 
 function Particle:init(x, y, data)
-    -- Init
-    Actor.init(self, x, y, data)
+    -- Core
     local sprite = data.images[math.random(1, #data.images)]
-    self.lifetime = (data.lifetime or .75) + (math.random(-10, 10)/50)
     self:setDimensions(sprite:getDimensions())
-    self:setPosition(x-self.width/2, y-self.height/2)
+    Actor.init(self, x-self.width/2, y-self.height/2, data)
+    -- Properties
+    self.lifetime = (data.lifetime or .75) + (math.random(-10, 10)/50)
     self.vel.x = math.random(data.range.x[1], data.range.x[2])
     self.vel.y = math.random(data.range.y[1], data.range.y[2])
     self.rgba[4] = .65
     self.alpha_tween = Tween.new(fadeout_time, self.rgba, {[4]=0})
-    -- Additional
+    -- Add sprite(s)
     self:newSprite(self.name, sprite)
     self:setSprite(self.name)
 end
