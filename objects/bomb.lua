@@ -2,16 +2,15 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Actor = require("objects.actor")
-local Bomb = Actor:extend("Bomb")
+local Bomb = Actor:extend("bomb")
 
 
 function Bomb:init(x, y, data)
     -- init
-    self.type   = "bomb"
-    self.offset = {x=1, y=3}
+    self:setDimensions(5, 5)
+    self.offset = {x=-1, y=0}
     self.damp   = {x=1.5, y=1.5}
     self.speed  = {x=150, y=150}
-    self.gravity = 33
     self.lifetime = math.random(3, 4)
     self.bounciness = .8
     self:setDimensions(5, 5)
@@ -23,24 +22,17 @@ function Bomb:init(x, y, data)
     self.vel = {x=vel_x or 0,y=vel_y or 0}
     self.max_vel = {x=175, y=200}
     -- Additional
-    self:newAnimation(self.type, Game.assets.anim.bomb, '1-4', 1, .1)
-    self:setSprite(self.type)
-end
-
-
-function Bomb:filter(other)
-    if other.type == "player" then return
-    elseif not other.solid then return
-    else return "bounce" end
+    self:newAnimation(self.name, Game.assets.anim.bomb, '1-4', 1, .1)
+    self:setSprite(self.name)
 end
 
 
 function Bomb:onCollision(other)
     if other.name == "lava" then self:onDead() end
-    if other.type == "player" then return end
+    if other:instanceOf(Actor) then return end
     -- Reduce velocity with every collision
-    self.vel.x = self.vel.x * .98
-    self.vel.y = self.vel.y * .98
+    self.vel.x = self.vel.x * .95
+    self.vel.y = self.vel.y * .95
 end
 
 
@@ -61,7 +53,7 @@ function Bomb:onDead()
     local cols = Game.level.collision_world:queryRect(x, y, radius, radius)
     for i=1, #cols do
         local other = cols[i]
-        if other.type == "bomb" then
+        if other.name == "bomb" then
             local x_speed = math.random(30, 100)
             local y_speed = math.random(40, 200)
             if self.x >= other.x then other.vel.x = -x_speed

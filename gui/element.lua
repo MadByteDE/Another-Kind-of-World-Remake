@@ -2,13 +2,13 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Object = require("objects.object")
-local Element = Object:extend("Element")
+local Element = Object:extend("element")
 
 
 function Element:init(x, y, t)
     Object.init(self, x, y, t)
-    self.type       = "element"
-    self.text       = self.text or self.type
+    self.name       = "element"
+    self.text       = self.text or self.name
     self.collide    = self.collide or true
     self.draggable  = self.draggable or false
     self.hovered    = false

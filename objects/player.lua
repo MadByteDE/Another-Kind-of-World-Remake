@@ -2,23 +2,20 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Actor = require("objects.actor")
-local Player  = Actor:extend("Player")
+local Player = Actor:extend("player")
 
 
 function Player:init(x, y)
     -- Init
-    Actor.init(self, x, y, {collide=true, solid=true, can_die=true})
-    self.type   = "player"
     self:setDimensions(6, 7)
-    self.offset = {x=1, y=1}
     self.acc    = {x=35, y=110}
     self.vel    = {x=0, y=0}
     self.max_vel= {x=70, y=150}
     self.damp   = {x=30, y=0}
-    self.gravity = 33
     self.max_bombs = 3
     if Game.debug then self.max_bombs = 99 end
     self.health = 100
+    Actor.init(self, x, y, {collide=true, can_die=true})
     -- Additional
     self:newAnimation("idle", Game.assets.anim.player_idle, '1-2', 1, .3)
     self:newAnimation("run", Game.assets.anim.player_run, '1-4', 1, .15)
@@ -44,7 +41,7 @@ end
 
 function Player:onCollision(other)
     Actor.onCollision(self, other)
-    if other.type == "exit" then
+    if other.name == "exit" then
         self:destroy()
         Game.scene:success()
     end
@@ -63,8 +60,6 @@ function Player:logic(dt)
     if mx > self.x+self.width/2 then
     self.sprite.flippedH = false
     else self.sprite.flippedH = true end
-    -- Prevent jumping while in air
-    if self.vel.y > 50 then self.in_air = true end
     -- Key movement
     if keyDown("a") or keyDown("left")  then
         self:setSprite("run")

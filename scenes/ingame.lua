@@ -2,15 +2,14 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Scene = require("scenes.scene")
-local Ingame = Scene:extend("Ingame")
+local Ingame = Scene:extend("ingame")
 
 
 function Ingame:init(id, editor_level)
-    self.name = "Ingame"
-    Game.level:load(id or Game.level.id)
+    self.name = "ingame"
     self.editor_level = editor_level or false
+    Game.level:load(id or Game.level.id)
     self.players = Game.level:getObject("player")
-    if #self.players > 0 then self.player = self.players[1] end
     if Game.debug then
         Log:debug("Col Obj: "..Game.level.collision_world:countItems())
         Log:debug("Anim Obj: "..#Game.level.animated_tiles:get())
@@ -22,7 +21,7 @@ end
 function Ingame:success()
     Game:playSound("success", .7)
     Game:transition(function()
-        if self.editor_level then Game:switchScene("Editor")
+        if self.editor_level then Game:switchScene("editor")
         else self:init(Game.level.id+1) end
     end, 1)
 end
@@ -37,40 +36,32 @@ function Ingame:fail()
 end
 
 
-function Ingame:logic(dt)
-    Game.level:update(dt)
-end
-
-
 function Ingame:render()
-    -- Draw level
-    Game.level:draw()
     -- Debug info
     Game:print("'TAB' - Switch to editor", 1, 10, {1, 1, 1, .1})
 end
 
 
 function Ingame:keypressed(key)
-    if self.player then self.player:keypressed(key) end
-    if key == "r" then self:fail()
+    if key == "r" then
+        self:fail()
     elseif key == "tab" then
-        Game:transition(function()
-            Game:switchScene("Editor")
-        end, 1)
+        Game:transition(function() Game:switchScene("editor", Game.level.id) end, 1)
     elseif key == "escape" then
         Game:transition(function() love.event.quit() end, 3)
     end
+    for k, player in ipairs(self.players) do player:keypressed(key) end
 end
 
 
 function Ingame:keyreleased(key)
-    if self.player then self.player:keyreleased(key) end
+    for k, player in ipairs(self.players) do player:keyreleased(key) end
 end
 
 
 function Ingame:mousereleased(x, y, button)
     Scene.mousereleased(self, x, y, button)
-    if self.player then self.player:mousereleased(x, y, button) end
+    for k, player in ipairs(self.players) do player:mousereleased(x, y, button) end
 end
 
 return Ingame

@@ -2,20 +2,13 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Object = require("objects.object")
-local Tile = Object:extend("Tile")
+local Tile = Object:extend("tile")
 
 
 function Tile:init(x, y, tile)
-    for k,v in pairs(tile or {}) do self[k] = v end
     -- Init
-    local tw = Game.level.tilesize
-    Object.init(self, x, y, {width=tw, height=tw})
-    -- Additional
-    -- Remove properties used for the entity
-    if self.type == "entity" then
-        self.collide = false
-        self.solid = false
-    end
+    if tile and tile.solid then print("solid tile: ".. tile.name) end
+    Object.init(self, x, y, tile)
     -- Add sprite
     if self.animdata then
         self:newAnimation(self.name, Game.assets.anim[self.name], unpack(self.animdata))
@@ -28,5 +21,6 @@ function Tile:init(x, y, tile)
         self:setSprite(self.name)
     end
 end
+
 
 return Tile

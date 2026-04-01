@@ -1,22 +1,21 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
-local Class = require("lib.30log")
 local Anim8 = require("lib.anim8")
-
-local Object = Class("Object")
+local Class = require("lib.30log")
+local Object = Class("object")
 
 
 function Object:init(x, y, t)
     for k,v in pairs(t or {}) do self[k] = v end
     -- Core
-    self.type   = self.type or "object"
+    self.name   = self.name or "object"
     self.rot    = self.rot or 0
     self.scale  = self.scale or {x=1, y=1}
     self.offset = self.offset or {x=0, y=0}
+    self.rgba   = self.rgba or {1, 1, 1, 1}
     self:setDimensions(self.width or 8, self.height or 8)
     self:setPosition(x+self.offset.x, y+self.offset.y)
-    self.rgba   = self.rgba or {1, 1, 1, 1}
     -- Properties
     self.visible = self.visible or true
     self.deadly = self.deadly or false
@@ -31,9 +30,16 @@ function Object:init(x, y, t)
 end
 
 
+function Object:filter(other)
+    if self.solid and other.solid then return "slide" end
+end
+
+
 function Object:newSprite(name, image)
     self.sprites[name] = {
         image   = image,
+        width   = image:getWidth(),
+        height  = image:getHeight(),
         update  = _NULL,
         draw    = function(self, image, ...) love.graphics.draw(image or self.image, ...) end
     }
@@ -42,21 +48,19 @@ end
 
 
 function Object:newAnimation(name, image, frames, row, duration, onLoop)
-    local g = Anim8.newGrid(8, 8, image:getWidth(), image:getHeight())
+    -- TODO: Replace hardcoded frame size with custom sizes for frames
+    local w, h = 8, 8
+    local g = Anim8.newGrid(w, h, image:getWidth(), image:getHeight())
     self.sprites[name] = Anim8.newAnimation(g(frames, row), duration, onLoop)
     self.sprites[name].image = image
+    self.sprites[name].width = w
+    self.sprites[name].height = h
     return self.sprites[name]
 end
 
 
 function Object:setSprite(name)
     self.sprite = self.sprites[name] or self.sprite
-end
-
-
-function Object:filter(other)
-    if self.solid and other.solid then return "slide"
-    else return "cross" end
 end
 
 
@@ -144,9 +148,14 @@ function Object:draw()
             local x, y = self.x, self.y
             local sx, sy = self.scale.x, self.scale.y
             local ox, oy = self.offset.x, self.offset.y
+            local left = (self.sprite.width-self.width) / 2
+            local top = (self.sprite.height-self.height)
+            love.graphics.push()
+            love.graphics.translate(-left, -top)
             love.graphics.setColor(self.rgba)
             self.sprite:draw(self.sprite.image, x, y, r, sx, sy, ox, oy)
             love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.pop()
         end
 
         self:render()

@@ -2,35 +2,41 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Actor = require("objects.actor")
-local Bug = Actor:extend("Bug")
+local Bug = Actor:extend("bug")
 
 
 function Bug:init(x, y)
     -- Core
-    self.type   = "bug"
-    self:setDimensions(8, 6)
-    self.offset = {x=0, y=2}
-    self.acc    = {x=3, y=0}
+    self:setDimensions(8, 5)
+    self.acc    = {x=3, y=3}
     self.vel    = {x=0, y=0}
-    self.max_vel= {x=10, y=0}
+    self.max_vel= {x=10, y=150}
     self.damp   = {x=0, y=0}
     self.health = 50
-    self.filter = function(other)
-        if other.solid then return "slide"
+    self.move_filter = function(other)
+        if not other then return end
+        if other.type == "tile" and other.solid then return "cross"
         else return end
     end
     -- Init
-    Actor.init(self, x, y, {collide=true, can_die=true, deadly=true})
+    Actor.init(self, x, y+3, {collide=true, can_die=true, deadly=true})
     -- Additional
     -- Random movement direction when spawning
     local dir = love.math.random(1, 2)
     if dir == 1 then self.dir.x  = -1
     else self.dir.x = 1 end
     -- Add sprite
-    self:newAnimation(self.type, Game.assets.anim.bug, '1-6', 1, .15)
-    self:setSprite(self.type)
+    self:newAnimation(self.name, Game.assets.anim.bug, '1-6', 1, .15)
+    self:setSprite(self.name)
     self.sprite:gotoFrame(math.random(1, #self.sprite.frames))
     return self
+end
+
+
+function Bug:onCollision(other)
+    if other.name ~= "bug" then
+        Actor.onCollision(self, other)
+    end
 end
 
 
@@ -51,20 +57,16 @@ function Bug:logic(dt)
     -- AI movement on platform
     local x = self.x + self.vel.x * dt
     local y = self.y + self.vel.y * dt
+    if self.in_air then return end
     if self.dir.x > 0 then
-        local right = Game.level.collision_world:queryPoint(x+self.width+1, y+(self.height/2), self.filter)
-        local downRight  = Game.level.collision_world:queryRect(x+self.width, y+self.height, 2, 2, self.filter)
+        local right = Game.level.collision_world:queryPoint(x+(self.width+1), y+(self.height/2), self.move_filter)
+        local downRight = Game.level.collision_world:queryPoint(x+self.width, y+(self.height+1), self.move_filter)
         if #downRight==0 or #right > 0 then self.dir.x = -1 end
     elseif self.dir.x < 0 then
-        local left  = Game.level.collision_world:queryPoint(x-1, y+(self.height/2), self.filter)
-        local downLeft  = Game.level.collision_world:queryRect(x-3, y+self.height, 2, 2, self.filter)
+        local left = Game.level.collision_world:queryPoint(x-1, y+(self.height/2), self.move_filter)
+        local downLeft = Game.level.collision_world:queryPoint(x, y+(self.height+1), self.move_filter)
         if #downLeft==0 or #left > 0 then self.dir.x = 1 end
     end
 end
-
-
--- function Bug:render()
---     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
--- end
 
 return Bug

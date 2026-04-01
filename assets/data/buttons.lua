@@ -9,7 +9,7 @@ return {
         action = function(element, button)
             if button == 1 then
                 Game:transition(function()
-                    Game:switchScene("Editor")
+                    Game:switchScene("editor")
                 end, .5)
             end
         end
@@ -19,7 +19,7 @@ return {
         image = Game.assets.gui.button.save,
         action = function(element, button)
             if button == 1 then
-                Game.level:save(Game.scene.level_id)
+                Game.level:save(Game.level.id)
                 print("Successfully saved level")
             end
         end
@@ -31,7 +31,7 @@ return {
             if button == 1 then
                 Game:transition(function()
                     Game.level:save()
-                    Game:switchScene("Ingame", Game.level.id, true)
+                    Game:switchScene("ingame", Game.level.id, true)
                 end)
             end
         end

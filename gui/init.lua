@@ -2,9 +2,9 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Class = require("lib.30log")
-local Conta = require("lib.conta")
+local Gui = Class("gui")
 
-local Gui = Class()
+local Conta = require("lib.conta")
 
 local elements  = {
     button     = require("gui.button"),

@@ -1,17 +1,17 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
-local Class = require("lib.30log")
 local Bump  = require("lib.bump")
 local Conta = require("lib.conta")
 local Tile  = require("objects.tile")
-
+local Class = require("lib.30log")
 local Level = Class("Level")
 
 local entities = {
     player   = require("objects.player"),
     bug      = require("objects.bug"),
     exit     = require("objects.exit"),
+    lava     = require("objects.lava"),
     bomb     = require("objects.bomb"),
     particle = require("objects.particle")
 }
@@ -60,7 +60,7 @@ local function createLevel(self)
                     tiledata.id = index
                     self:setTile(x, y, Tile(tx, ty, tiledata))
                     -- Tile represents an entity - set background tile and spawn the entity
-                    if tiledata.type == "entity" and Game.scene.name == "Ingame" then
+                    if tiledata.type == "entity" and Game.scene.name == "ingame" then
                         self:setTile(x, y, Tile(tx, ty, Game.assets.data.tiles[1])) -- background
                         self:spawn(tiledata.name, tx, ty, tiledata)
                     end
@@ -75,7 +75,17 @@ end
 -- Constructor --
 ----------------------------
 
-function Level:init() end
+function Level:init(id)
+    self.tilesize = self.tilesize or 8
+    self.canvas = love.graphics.newCanvas(Game.width, Game.height)
+    self.tiles = {}
+    self.objects = Conta()
+    self.animated_tiles = Conta()
+    self.collision_world = Bump.newWorld(24)
+    self.id = id or self.id or 99
+    createLevel(self)
+    self:renderCanvas()
+end
 
 
 ----------------------------
@@ -104,14 +114,7 @@ function Level:load(id)
     -- Found level file -> Initialize
     if self.level_path then
         for k,v in pairs(love.filesystem.load(self.level_path)()) do self[k] = v end
-        self.id = id or "New level"
-        self.tilesize = self.tilesize or 8
-        self.canvas = love.graphics.newCanvas(Game.width, Game.height)
-        self.objects = Conta()
-        self.animated_tiles = Conta()
-        self.collision_world = Bump.newWorld(24)
-        createLevel(self)
-        self:renderCanvas()
+        self:init()
     end
 end
 
@@ -210,8 +213,8 @@ end
 -- Object manipulation --
 ----------------------------
 
-function Level:spawn(type, x, y, data)
-    local entity = entities[type](x, y, data)
+function Level:spawn(name, x, y, data)
+    local entity = entities[name](x, y, data)
     return self.objects:add(entity)
 end
 
@@ -235,7 +238,7 @@ function Level:draw()
     love.graphics.draw(self.canvas)
     self.animated_tiles:draw()
     self.objects:draw()
-    if self.overlay and Game.scene.name == "Ingame" then
+    if self.overlay and Game.scene.name == "ingame" then
         love.graphics.draw(self.overlay)
     end
 end

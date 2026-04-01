@@ -1,22 +1,25 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
-local Scene = require("scenes.scene")
 local Tile  = require("objects.tile")
-local Editor = Scene:extend("Editor")
+local Scene = require("scenes.scene")
+local Editor = Scene:extend("editor")
 
 
-function Editor:init(level_id)
-    self.name = "Editor"
+function Editor:init(id)
+    self.name = "editor"
+    -- Init level
+    Game.level:load(id or Game.level.id)
     -- Pre-selected tile when entering editor mode
     self.current_tile = Game.assets.data.tiles[2]  -- wall
-    Game.level:load(level_id or Game.level.id)
     -- Add tile panel
-    self.panel = Game.gui:add("tilepanel", 220, 50)
+    self.panel = Game.gui:add("tilepanel", Game.width-20, Game.height/2)
+    self.panel:center()
     self.panel:createButtons()
     -- Add text box
     local data = {text=Game.level.id, width=72, height=8}
-    self.titlebox = Game.gui:add("textbox", Game.width/2, 8, data):center()
+    self.titlebox = Game.gui:add("textbox", Game.width/2, 8, data)
+    self.titlebox:center()
 end
 
 
@@ -27,8 +30,6 @@ end
 
 
 function Editor:logic(dt)
-    -- Update level
-    Game.level:update(dt)
     -- Place tiles
     if Game.gui.hovered_obj then return end
     if love.mouse.isDown(1) then
@@ -41,8 +42,6 @@ end
 
 
 function Editor:render()
-    -- Draw level
-    Game.level:draw()
     -- Draw tile preview
     local mx, my = Game:getMousePosition()
     local tx, ty = Game.level:toTileCoords(mx, my)
@@ -63,12 +62,12 @@ function Editor:keypressed(key)
         Game:transition(function() love.event.quit() end, 3)
     -- Switch to play mode
     elseif key == "tab" then
-        Game:transition(function() Game:switchScene("Ingame") end, 1.5)
+        Game:transition(function() Game:switchScene("ingame") end, 1.5)
     -- Save & test editor level
     elseif key == "space" then
         Game:transition(function()
-            Game.level:save(self.level_id)
-            Game:switchScene("Ingame", Game.level.id, true)
+            Game.level:save(self.titlebox.text)
+            Game:switchScene("ingame", Game.level.id, true)
         end, 1)
     end
 end

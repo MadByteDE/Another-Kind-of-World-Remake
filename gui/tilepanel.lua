@@ -2,16 +2,16 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Element = require("gui.element")
-local Tilepanel = Element:extend("Tilepanel")
+local Tilepanel = Element:extend("tilepanel")
 
 
 function Tilepanel:init(x, y, t)
     Element.init(self, x, y, t)
-    self.type       = "tilepanel"
+    self.name       = "tilepanel"
     self.draggable  = true
     self.rgba       = {1, 1, 1, .7}
-    self:newSprite(self.type, Game.assets.gui.tilepanel)
-    self:setSprite(self.type)
+    self:newSprite(self.name, Game.assets.gui.tilepanel)
+    self:setSprite(self.name)
     local w, h = self.sprite.image:getDimensions()
     self:setDimensions(w, h)
 end

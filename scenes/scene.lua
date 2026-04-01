@@ -2,7 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Class = require("lib.30log")
-local Scene = Class("Scene")
+local Scene = Class("scene")
 
 
 function Scene:init()end

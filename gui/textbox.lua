@@ -2,13 +2,14 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Element = require("gui.element")
+local Textbox = Element:extend("textbox")
+
 local utf8 = require("utf8")
-local Textbox = Element:extend("Textbox")
 
 
 function Textbox:init(x, y, t)
     Element.init(self, x, y, t)
-    self.type = "Textbox"
+    self.name = "textbox"
     self.text = self.text or ""
     self.text_color = {1, 1, 1, .75}
     self.rgba = {.05, .05, .05, .5}

@@ -1,14 +1,13 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
-local Actor = require("objects.actor")
-local Exit = Actor:extend("Exit")
+local Object = require("objects.object")
+local Exit = Object:extend("exit")
 
 
 function Exit:init(x, y, tile)
     -- Init
-    Actor.init(self, x, y, tile)
-    self.type = "exit"
+    Object.init(self, x, y)
     self.visible = false
     -- Additional
     self:newSprite(self.name, Game.assets.tile.exit)
@@ -17,10 +16,9 @@ end
 
 
 function Exit:logic(dt)
-    if not self.visible and #Game.level.objects:get("bug") == 0 then
+    if not self.visible and #Game.level:getObject("bug") == 0 then
         self.visible = true
         self.collide = true
-        self.solid = false
         self:addCollider()
         for i=1, math.random(10, 15) do
             local x, y = self:getCenter()

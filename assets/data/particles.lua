@@ -8,10 +8,6 @@ return {
         images={Game.assets.particle.glitter},
         collide=true, wrap=true, bounciness=.4, damp={x=2, y=0},
         lifetime=1.5, range={x={-60, 60}, y={-50, -80}},
-        filter=function(self, other)
-            if other:instanceOf(Actor) then return "cross"
-            else return "bounce" end
-        end
     },
 
     ["blood"] = {
@@ -27,10 +23,6 @@ return {
     ["dust"] = {
         images={Game.assets.particle.dust},
         collide=true, wrap=true, bounciness=.5, damp={x=2, y=0},
-        lifetime=1.5, range={x={-25, 25}, y={-30, -50}}, gravity=20,
-        filter=function(self, other)
-            if other:instanceOf(Actor) then return "cross"
-            else return "bounce" end
-        end
+        lifetime=1.5, range={x={-25, 25}, y={-30, -50}},
     },
 }

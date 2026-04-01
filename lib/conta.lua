@@ -29,8 +29,8 @@ THE SOFTWARE.
 ]]--
 
 -- Locals --
-local function matchType(item, type)
-    if string.lower(item._flags.type) == string.lower(type) then return true end
+local function matchName(item, name)
+    if string.lower(item._flags.name) == string.lower(name) then return true end
 end
 
 
@@ -53,7 +53,7 @@ end
 
 function Conta:add(item, flags)
     self.items[#self.items+1] = item
-    item._flags = {update=true, draw=true, priority=0, type=item.type or "item"}
+    item._flags = {update=true, draw=true, priority=0, name=item.name or "item"}
     self:set(item, flags)
     return item
 end
@@ -81,7 +81,7 @@ function Conta:get(item)
     elseif type(item) == "string" then
         local res = {}
         self:iterate(function(k,v)
-            if matchType(v, item) then
+            if matchName(v, item) then
                 res[#res+1] = v
             end
         end)
@@ -90,13 +90,13 @@ function Conta:get(item)
         if item._flags then
             return item
         else
-            local types = {}
-            for i=1, #item do types[item[i]] = {} end
+            local names = {}
+            for i=1, #item do names[item[i]] = {} end
             self:iterate(function(k,v)
-                local newtype = types[v._flags.type]
-                if newtype then newtype[#newtype+1] = v end
+                local newName = names[v._flags.name]
+                if newName then newName[#newName+1] = v end
             end)
-        return types
+        return names
         end
     else
         return self.items
@@ -115,9 +115,9 @@ function Conta:clear()
 end
 
 
-function Conta:update(dt, type)
+function Conta:update(dt, name)
     self:iterate(function(k,v)
-        if type and not matchType(v, type) then return end
+        if name and not matchName(v, name) then return end
         if v.removed then table.remove(self.items, k)
         else
             if v.update and v._flags.update then v:update(dt) end
@@ -126,9 +126,9 @@ function Conta:update(dt, type)
 end
 
 
-function Conta:draw(type)
+function Conta:draw(name)
     for k,v in ipairs(self.items) do
-        if type and not matchType(v, type) then return end
+        if name and not matchName(v, name) then return end
         if v.draw and v._flags.draw then v:draw() end
     end
 end

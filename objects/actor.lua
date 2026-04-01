@@ -2,7 +2,7 @@
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
 local Object = require("objects.object")
-local Actor = Object:extend("Actor")
+local Actor = Object:extend("actor")
 
 
 function Actor:init(x, y, t)
@@ -11,17 +11,26 @@ function Actor:init(x, y, t)
     self.vel        = self.vel or {x=0, y=0}
     self.max_vel    = self.max_vel or {x=150, y=150}
     self.acc        = self.acc or {x=50, y=50}
-    self.gravity    = self.gravity or 0
+    self.gravity    = self.gravity or 33
     self.damp       = self.damp or {x=0, y=0}
     self.dir        = self.dir or {x=0, y=0}
     -- Properties
     self.damage_cooldown = 0
-    self.health     = clamp(self.health, 0, 999)
-    self.max_health = clamp(self.max_health, 0, 999)
+    self.health     = clamp(self.health or 0, 0, 999)
+    self.max_health = clamp(self.max_health or 0, 0, 999)
     self.lifetime   = clamp(self.lifetime, 0, 999)
-    self.bounciness = clamp(self.bounciness, 0, 10)
+    self.bounciness = clamp(self.bounciness or 0, 0, 10)
     self.in_air     = self.in_air or false
     self.wrap       = self.wrap or true
+end
+
+
+function Actor:filter(other)
+    if other.solid then
+        if self.bounciness > 0 then return "bounce"
+        else return "slide" end
+    end
+    return "cross"
 end
 
 
@@ -52,11 +61,6 @@ function Actor:accelerate(dt)
     else self.vel.y = self.vel.y / (1 + self.damp.y * dt) end
     if math.abs(self.vel.x) <= 0.01 then self.vel.x = 0 end
     if math.abs(self.vel.y) <= 0.01 then self.vel.y = 0 end
-end
-
-
-function Actor:applyGravity(dt)
-    self.vel.y = self.vel.y + self.gravity * 10 * dt
 end
 
 
@@ -99,7 +103,7 @@ function Actor:throw(name, data)
     data.parent = self
     data.dx     = (mx-cx)/angle
     data.dy     = (my-cy)/angle
-    Game.level:spawn(name, cx, cy-1, data)
+    Game.level:spawn(name, cx, cy, data)
     Game:playSound("toss")
     -- Pushback
     self.vel.x = self.vel.x + (random_range(70, 10) * -data.dx)
@@ -141,7 +145,8 @@ function Actor:update(dt)
         self.damage_cooldown = 0
     end
     -- Add gravity
-    self:applyGravity(dt)
+    if self.vel.y > 0 then self.in_air = true end
+    self.vel.y = self.vel.y + self.gravity * 10 * dt
     -- clamp speed to set limits
     self.vel.x = clamp(self.vel.x, -self.max_vel.x, self.max_vel.x)
     self.vel.y = clamp(self.vel.y, -self.max_vel.y, self.max_vel.y)
@@ -164,9 +169,8 @@ function Actor:update(dt)
                 if col.normal.x ~= 0 then
                     self.vel.x = 0
                 end
-            end
             -- Apply bounciness
-            if col.type == "bounce" then
+            elseif col.type == "bounce" then
                 local nx, ny = col.normal.x, col.normal.y
                 if (nx < 0 and self.vel.x > 0) or (nx > 0 and self.vel.x < 0) then
                     self.vel.x = -self.vel.x * self.bounciness

@@ -29,8 +29,8 @@ local Game = {
 }
 
 local scenes = {
-    Ingame  = require("scenes.ingame"),
-    Editor  = require("scenes.editor"),
+    ingame  = require("scenes.ingame"),
+    editor  = require("scenes.editor"),
 }
 
 -- Configure inputs
@@ -41,18 +41,18 @@ love.keyboard.setKeyRepeat(true)
 
 function Game:load()
     Log:message("Logs will be saved in: %s", join( love.filesystem.getSaveDirectory(), "logs" ))
-    -- Level
-    Game.level = Level()
     -- Screen
     local w, h = Game:getWindowSize()
     self:setMode(w, h, self.flags)
+    -- Level
+    self.level = Level(0)
     -- GUI
     self.gui = Gui()
     self.gui:add("button", self.width-13, 3, Game.assets.data.buttons.quit)
     -- Start-up
     love.graphics.setFont(self.assets.font.tinypixels(8))
     if not Game.debug then self:playSound("music", .275, true) end
-    Game:switchScene("Ingame", 0)
+    Game:switchScene("ingame")
 end
 
 
@@ -154,6 +154,7 @@ function Game:update(dt)
     local elapsed = self.fade.duration-self.fade.timer
     self.fade.color[4] = elapsed/step * self.fade.timer/step
     -- Update current scene
+    self.level:update(dt)
     self.scene:update(dt)
     self.gui:update(dt)
 end
@@ -163,6 +164,7 @@ function Game:draw()
     love.graphics.push()
     love.graphics.translate(self._shake.x, self._shake.y)
     love.graphics.scale(self.scale.x, self.scale.y)
+    self.level:draw()
     self.scene:draw()
     self.gui:draw()
     -- Draw debug info
