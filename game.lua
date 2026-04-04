@@ -35,7 +35,7 @@ local scenes = {
 }
 
 -- Configure inputs
--- if not Game.debug then love.mouse.setGrabbed(true) end
+if not Game.debug then love.mouse.setGrabbed(true) end
 love.mouse.setVisible(false)
 love.keyboard.setKeyRepeat(true)
 
