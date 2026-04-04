@@ -18,7 +18,7 @@ function Bomb:init(x, y, data)
     local vel_x = (self.speed.x + math.abs(data.parent.vel.x)) * (data.dx or 0)
     local vel_y = (self.speed.y + math.abs(math.min(data.parent.vel.y, 0))) * (data.dy or 0)
     self.vel = {x=vel_x or 0,y=vel_y or 0}
-    self.max_vel = {x=140, y=160}
+    self.max_vel = {x=140, y=180}
     self.lifetime = math.random(3, 4)
     self.bounciness = .8
     -- Add sprite(s)
