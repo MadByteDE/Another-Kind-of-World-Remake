@@ -5,10 +5,10 @@ local Scene = require("scenes.scene")
 local Ingame = Scene:extend("ingame")
 
 
-function Ingame:init(id, editor_level)
+function Ingame:init(level, editor_level)
     self.name = "ingame"
     self.editor_level = editor_level or false
-    Game.level:load(id or Game.level.id)
+    Game.level:load(level)
     self.players = Game.level:getObject("player")
     if Game.debug then
         Log:debug("Col Obj: "..Game.level.collision_world:countItems())
@@ -45,7 +45,7 @@ function Ingame:keypressed(key)
     if key == "r" then
         self:fail()
     elseif key == "tab" then
-        Game:transition(function() Game:switchScene("editor", Game.level.id) end, 1)
+        Game:transition(function() Game:switchScene("editor", Game.level:getSaveData()) end, 1)
     elseif key == "escape" then
         Game:transition(function() love.event.quit() end, 3)
     end

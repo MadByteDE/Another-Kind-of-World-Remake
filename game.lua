@@ -45,7 +45,7 @@ function Game:load()
     local w, h = Game:getWindowSize()
     self:setMode(w, h, self.flags)
     -- Level
-    self.level = Level(0)
+    self.level = Level()
     -- GUI
     self.gui = Gui()
     -- Quit button
@@ -61,8 +61,8 @@ function Game:load()
     self.gui:add("button", self.width-button.image:getWidth()-2, 2, button)
     -- Start-up
     love.graphics.setFont(self.assets.font.tinypixels(8))
-    if not Game.debug then self:playSound("music", .275, true) end
-    Game:switchScene("ingame")
+    if not Game.debug then self:playSound("music", .1, true) end
+    Game:switchScene("ingame", 0)
 end
 
 

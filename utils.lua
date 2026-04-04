@@ -17,6 +17,21 @@ function join(...)
 end
 
 
+function getFileName(path)
+    return path:match("[^/]+$")
+end
+
+
+function getFileExtension(path)
+    return path:match("[^.]+$")
+end
+
+
+function getFilePath(path)
+    return path:match("(.*/)")
+end
+
+
 function random_range(value, range)
     return value + math.random(-range, range)
 end

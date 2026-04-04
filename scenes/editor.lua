@@ -50,7 +50,7 @@ end
 function Editor:init(level)
     self.name = "editor"
     -- Init level
-    Game.level:load(id or Game.level.id)
+    Game.level:load(level)
     -- Pre-selected tile when entering editor mode
     self.current_tile = Game.assets.data.tiles[2]  -- wall
     -- Add title box
@@ -88,9 +88,11 @@ function Editor:render()
     local mx, my = Game:getMousePosition()
     local tx, ty = Game.level:toTileCoords(mx, my)
     local x, y = Game.level:toScreenCoords(tx, ty)
-    love.graphics.setColor(1, 1, 1, .3)
-    local sprite = Game.assets.tile[self.current_tile.name]
-    if self.current_tile then love.graphics.draw(sprite, x, y) end
+    if self.current_tile then
+        local sprite = Game.assets.tile[self.current_tile.name]
+        love.graphics.setColor(1, 1, 1, .3)
+        love.graphics.draw(sprite, x, y)
+    end
     -- Draw usage info
     Game:print("TAB - Switch to game", 1, 10, {1, 1, 1, .1})
     Game:print("LMB/RMB - Place/Pick tile", 1, 20, {1, 1, 1, .1})
@@ -105,11 +107,11 @@ function Editor:keypressed(key)
     -- Switch to play mode
     elseif key == "tab" then
         Game:transition(function() Game:switchScene("ingame") end, 1.5)
-    -- Save & test editor level
+    -- Test editor level without saving
     elseif key == "space" then
         Game:transition(function()
-            Game.level:save(self.titlebox.text)
-            Game:switchScene("ingame", Game.level.id, true)
+            Game.level.id = self.titlebox.text
+            Game:switchScene("ingame", Game.level:getSaveData(), true)
         end, 1)
     end
 end
