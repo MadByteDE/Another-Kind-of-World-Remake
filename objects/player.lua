@@ -13,7 +13,7 @@ function Player:init(x, y)
     self.acc    = {x=35, y=110}
     self.vel    = {x=0, y=0}
     self.max_vel= {x=70, y=150}
-    self.damp   = {x=30, y=0}
+    self.damp   = {x=15, y=.25}
     self.max_bombs = 3
     if Game.debug then self.max_bombs = 99 end
     self.health = 100
@@ -21,16 +21,6 @@ function Player:init(x, y)
     self:newAnimation("idle", Game.assets.anim.player_idle, '1-2', 1, .3)
     self:newAnimation("run", Game.assets.anim.player_run, '1-4', 1, .15)
     self:setSprite("idle")
-end
-
-
-function Player:onDamage(amount, other)
-    for i=1, math.random(5, 10) do
-        local x, y = self:getCenter()
-        Game.level:spawn("particle", x, y, Game.assets.data.particles.blood)
-    end
-    local pitch = math.random(75, 125)/100
-    Game:playSound("splat"):setPitch(pitch)
 end
 
 

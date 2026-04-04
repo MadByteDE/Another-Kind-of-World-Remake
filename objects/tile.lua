@@ -22,4 +22,9 @@ function Tile:init(x, y, tile)
 end
 
 
+function Tile:render()
+    -- self:drawRectangle("line")
+end
+
+
 return Tile

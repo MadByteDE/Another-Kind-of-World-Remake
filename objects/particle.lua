@@ -11,7 +11,7 @@ function Particle:init(x, y, data)
     -- Core
     local sprite = data.images[math.random(1, #data.images)]
     self:setDimensions(sprite:getDimensions())
-    Actor.init(self, x-self.width/2, y-self.height/2, data)
+    Actor.init(self, x-self.width/2-1, y-self.height/2-1, data)
     -- Properties
     self.lifetime = (data.lifetime or .75) + (math.random(-10, 10)/50)
     self.vel.x = math.random(data.range.x[1], data.range.x[2])

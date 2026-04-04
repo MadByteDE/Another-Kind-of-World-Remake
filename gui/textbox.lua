@@ -20,6 +20,7 @@ function Textbox:onEnter(mouse)
     Element.onEnter(self, mouse)
     self.rgba = {.05, .05, .05, .5}
     self.text_color = {1, 1, 1, 1}
+    self.saved_text = self.text
     love.keyboard.setTextInput(true)
 end
 
@@ -28,6 +29,9 @@ function Textbox:onExit(mouse)
     Element.onExit(self, mouse)
     self.rgba = {.05, .05, .05, .3}
     self.text_color = {1, 1, 1, .5}
+    if self.text == "" then
+        self.text = self.saved_text
+    end
     love.keyboard.setTextInput(false)
 end
 
@@ -49,7 +53,7 @@ end
 function Textbox:onTextInput(text)
     local font = love.graphics.getFont()
     if font:getWidth(self.text) > self.width-5 then return end
-    self.text = self.text .. text:gsub('[%p%c%s]', '') -- remove symbols etc.
+    self.text = self.text .. text
 end
 
 

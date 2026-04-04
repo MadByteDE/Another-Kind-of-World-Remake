@@ -142,7 +142,6 @@ function Object:render() end
 
 function Object:draw()
     if self.visible then
-
         if self.sprite then
             local r = self.rot
             local x, y = self.x, self.y
@@ -157,7 +156,6 @@ function Object:draw()
             love.graphics.setColor(1, 1, 1, 1)
             love.graphics.pop()
         end
-
         self:render()
     end
 end

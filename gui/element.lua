@@ -17,7 +17,7 @@ function Element:init(x, y, t)
     self.diff       = {x=0, y=0}
     self.tooltip    = self.tooltip or {}
     self.tooltip.text = self.tooltip.text or nil
-    self.tooltip.delay = self.tooltip.delay or 2
+    self.tooltip.delay = self.tooltip.delay or 1
     self.tooltip.timer = 0
     self.tooltip.show = false
 end

@@ -13,12 +13,12 @@ function Bomb:init(x, y, data)
     local y = y - self.height/2 - self.offset.y/2
     Actor.init(self, x, y, {collide=true})
     -- Properties
-    self.damp   = {x=1.5, y=1.5}
+    self.damp   = {x=1.5, y=1}
     self.speed  = {x=150, y=150}
     local vel_x = (self.speed.x + math.abs(data.parent.vel.x)) * (data.dx or 0)
     local vel_y = (self.speed.y + math.abs(math.min(data.parent.vel.y, 0))) * (data.dy or 0)
     self.vel = {x=vel_x or 0,y=vel_y or 0}
-    self.max_vel = {x=175, y=200}
+    self.max_vel = {x=140, y=160}
     self.lifetime = math.random(3, 4)
     self.bounciness = .8
     -- Add sprite(s)
@@ -31,8 +31,8 @@ function Bomb:onCollision(other)
     if other.name == "lava" then self:onDead() end
     if other:instanceOf(Actor) then return end
     -- Reduce velocity with every collision
-    self.vel.x = self.vel.x * .95
-    self.vel.y = self.vel.y * .95
+    self.vel.x = self.vel.x * .98
+    self.vel.y = self.vel.y * .98
 end
 
 
@@ -51,9 +51,9 @@ function Bomb:onDead()
     local x, y = self:getCenter(-radius/2, -radius/2)
     local cols = Game.level.collision_world:queryRect(x, y, radius, radius)
     for k, other in ipairs(cols) do
-        if other.name == "bomb" then
+        if other:instanceOf(Actor) then
             local x_speed = math.random(30, 100)
-            local y_speed = math.random(40, 200)
+            local y_speed = math.random(70, 150)
             if self.x >= other.x then other.vel.x = -x_speed
             else other.vel.x = x_speed end
             if self.y >= other.y then other.vel.y = -y_speed

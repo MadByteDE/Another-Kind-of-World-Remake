@@ -1,10 +1,9 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Conta = require("lib.conta")
 local Class = require("lib.30log")
 local Gui = Class("gui")
-
-local Conta = require("lib.conta")
 
 local elements  = {
     button     = require("gui.button"),

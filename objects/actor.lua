@@ -10,7 +10,7 @@ function Actor:init(x, y, t)
     -- Movement component
     self.vel        = self.vel or {x=0, y=0}
     self.max_vel    = self.max_vel or {x=150, y=150}
-    self.acc        = self.acc or {x=50, y=50}
+    self.acc        = self.acc or {x=50, y=80}
     self.gravity    = self.gravity or 33
     self.damp       = self.damp or {x=0, y=0}
     self.dir        = self.dir or {x=0, y=0}
@@ -107,7 +107,7 @@ function Actor:throw(name, data)
     Game:playSound("toss")
     -- Pushback
     self.vel.x = self.vel.x + (random_range(70, 10) * -data.dx)
-    self.vel.y = self.vel.y + (random_range(50, 15) * -data.dy)
+    self.vel.y = self.vel.y + (random_range(30, 15) * -data.dy)
 end
 
 
@@ -118,6 +118,16 @@ end
 
 function Actor:onCollision(other)
     if other.deadly and self.can_die then self:damage(999, other) end
+end
+
+
+function Actor:onDamage(amount, other)
+    for i=1, math.random(5, 10) do
+        local x, y = self:getCenter()
+        Game.level:spawn("particle", x, y, Game.assets.data.particles.blood)
+    end
+    local pitch = math.random(75, 125)/100
+    Game:playSound("splat"):setPitch(pitch)
 end
 
 

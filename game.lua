@@ -8,6 +8,7 @@ math.randomseed(socket.gettime() * 10000)
 -- Configure graphics
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.graphics.setLineWidth(.1)
+love.graphics.setPointSize(3)
 
 -- Dependencies
 require("utils")
@@ -34,7 +35,7 @@ local scenes = {
 }
 
 -- Configure inputs
-if not Game.debug then love.mouse.setGrabbed(true) end
+-- if not Game.debug then love.mouse.setGrabbed(true) end
 love.mouse.setVisible(false)
 love.keyboard.setKeyRepeat(true)
 
