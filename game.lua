@@ -48,7 +48,17 @@ function Game:load()
     self.level = Level(0)
     -- GUI
     self.gui = Gui()
-    self.gui:add("button", self.width-13, 3, Game.assets.data.buttons.quit)
+    -- Quit button
+    local button = {
+        tooltip = {text="Quit game"},
+        image   = Game.assets.gui.button.back,
+        action  = function(self, button)
+            if button == 1 then
+                Game:transition(function() love.event.quit() end, 3)
+            end
+        end
+    }
+    self.gui:add("button", self.width-button.image:getWidth()-2, 2, button)
     -- Start-up
     love.graphics.setFont(self.assets.font.tinypixels(8))
     if not Game.debug then self:playSound("music", .275, true) end

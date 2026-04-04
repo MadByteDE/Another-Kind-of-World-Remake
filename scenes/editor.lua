@@ -6,20 +6,62 @@ local Scene = require("scenes.scene")
 local Editor = Scene:extend("editor")
 
 
-function Editor:init(id)
+local function addPanelButtons(self)
+    -- Clear button
+    local button = {}
+    button.tooltip  = {text="Undo unsaved changes"}
+    button.parent   = self.panel
+    button.image    = Game.assets.gui.button.clear
+    button.action   = function(element, button)
+        if button == 1 then
+            Game:transition(function()
+                Game:switchScene("editor", Game.level.id)
+            end, .5)
+        end
+    end
+    Game.gui:add("button", 0, self.panel.height+1, button)
+    -- Save button
+    button.tooltip = {text="Save the current level"}
+    button.parent = self.panel
+    button.image = Game.assets.gui.button.save
+    button.action = function(element, button)
+        if button == 1 then
+            Game.level.id = self.titlebox.text
+            Game.level:save(Game.level.id)
+            print("Successfully saved level")
+        end
+    end
+    Game.gui:add("button", button.image:getWidth(), self.panel.height+1, button)
+    -- Play button
+    button.tooltip = {text="play the current level"}
+    button.parent = self.panel
+    button.image = Game.assets.gui.button.play
+    button.action = function(element, button)
+        if button == 1 then
+            Game:transition(function()
+                Game:switchScene("ingame", Game.level:getSaveData(), true)
+            end, 1)
+        end
+    end
+    Game.gui:add("button", button.image:getWidth()*2, self.panel.height+1, button)
+end
+
+
+function Editor:init(level)
     self.name = "editor"
     -- Init level
     Game.level:load(id or Game.level.id)
     -- Pre-selected tile when entering editor mode
     self.current_tile = Game.assets.data.tiles[2]  -- wall
-    -- Add tile panel
-    self.panel = Game.gui:add("tilepanel", Game.width-20, Game.height/2)
-    self.panel:center()
-    self.panel:createButtons()
-    -- Add text box
+    -- Add title box
     local data = {text=Game.level.id, width=72, height=8}
     self.titlebox = Game.gui:add("textbox", Game.width/2, 8, data)
     self.titlebox:center()
+    -- Add tile panel
+    self.panel = Game.gui:add("tilepanel", 20, (Game.height/2)-8)
+    self.panel:center()
+    self.panel:addTiles()
+    addPanelButtons(self)
 end
 
 

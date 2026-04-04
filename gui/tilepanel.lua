@@ -17,11 +17,11 @@ function Tilepanel:init(x, y, t)
 end
 
 
-function Tilepanel:createButtons()
+function Tilepanel:addTiles(tiles)
     -- Tile buttons
     local tw = Game.level.tilesize
     local rows, spacing = 3, 1
-    for index, tiledata in ipairs(Game.assets.data.tiles) do
+    for index, tiledata in ipairs(tiles or Game.assets.data.tiles) do
         local column = (index-1)%rows
         local row = math.floor((index-1)/rows)
         local x = 2+column*tw+spacing*column
@@ -35,13 +35,6 @@ function Tilepanel:createButtons()
                 if pressed == 1 then Game.scene.current_tile = button.tile end
             end,
         }
-        Game.gui:add("button", x, y, button)
-    end
-    local buttons = {"clear", "save", "play"}
-    for index=1, #buttons do
-        local button = Game.assets.data.buttons[buttons[index]]
-        button.parent = self
-        local x, y = 11*(index-1), 1+self.height
         Game.gui:add("button", x, y, button)
     end
 end
