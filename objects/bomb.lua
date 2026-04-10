@@ -22,8 +22,7 @@ function Bomb:init(x, y, data)
     self.lifetime = math.random(3, 4)
     self.bounciness = .8
     -- Add sprite(s)
-    self:newAnimation(self.name, Game.assets.anim.bomb, '1-4', 1, .1)
-    self:setSprite(self.name)
+    self:setSprite(self.name, {image=Game.assets.anim.bomb, frames='1-4', row=1, duration=.1})
 end
 
 
@@ -64,5 +63,7 @@ function Bomb:onDead()
     -- Remove bomb
     self:destroy()
 end
+
+-- function Bomb:render() self:drawRectangle("line") end
 
 return Bomb

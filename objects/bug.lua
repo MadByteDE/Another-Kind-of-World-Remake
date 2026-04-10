@@ -24,8 +24,7 @@ function Bug:init(x, y)
     if dir == 1 then self.dir.x  = -1
     else self.dir.x = 1 end
     -- Add sprite(s)
-    self:newAnimation(self.name, Game.assets.anim.bug, '1-6', 1, .15)
-    self:setSprite(self.name)
+    self:setSprite(self.name, {image=Game.assets.anim.bug, frames='1-6', row=1, duration=.15})
     self.sprite:gotoFrame(math.random(1, #self.sprite.frames))
     return self
 end
@@ -102,12 +101,6 @@ function Bug:logic(dt)
     end
 end
 
-
--- function Bug:render()
---     self:drawRectangle("line")
---     for k, point in pairs(self.points) do
---         love.graphics.points(point.x, point.y)
---     end
--- end
+-- function Bug:render() self:drawRectangle("line") end
 
 return Bug

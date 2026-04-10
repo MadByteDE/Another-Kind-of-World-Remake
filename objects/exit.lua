@@ -11,8 +11,7 @@ function Exit:init(x, y, tile)
     -- Properties
     self.visible = false
     -- Add sprite(s)
-    self:newSprite(self.name, Game.assets.tile.exit)
-    self:setSprite(self.name)
+    self:setSprite(self.name, Game.assets.tile.exit)
 end
 
 
@@ -27,5 +26,7 @@ function Exit:logic(dt)
         end
     end
 end
+
+-- function Exit:render() self:drawRectangle("line") end
 
 return Exit

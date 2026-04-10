@@ -10,21 +10,16 @@ function Tile:init(x, y, tile)
     Object.init(self, x, y, tile)
     -- Add sprite(s)
     if self.animdata then
-        self:newAnimation(self.name, Game.assets.anim[self.name], unpack(self.animdata))
-        self:setSprite(self.name)
+        self.animdata.image = Game.assets.anim[self.name]
+        self:setSprite(self.name, self.animdata)
         if self.randomFrame then
             self.sprite:gotoFrame(love.math.random(1, #self.sprite.frames))
         end
     else
-        self:newSprite(self.name, Game.assets.tile[self.name])
-        self:setSprite(self.name)
+        self:setSprite(self.name, Game.assets.tile[self.name])
     end
 end
 
-
-function Tile:render()
-    -- self:drawRectangle("line")
-end
-
+-- function Tile:render() self:drawRectangle("line") end
 
 return Tile

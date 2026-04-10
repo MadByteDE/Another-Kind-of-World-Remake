@@ -36,6 +36,7 @@ end
 
 
 function Object:newSprite(name, image)
+    assert(type(image) == "userdata", "Second argument must be an image!")
     self.sprites[name] = {
         image   = image,
         width   = image:getWidth(),
@@ -47,19 +48,24 @@ function Object:newSprite(name, image)
 end
 
 
-function Object:newAnimation(name, image, frames, row, duration, onLoop)
-    -- TODO: Replace hardcoded frame size with custom sizes for frames
-    local w, h = 8, 8
-    local g = Anim8.newGrid(w, h, image:getWidth(), image:getHeight())
-    self.sprites[name] = Anim8.newAnimation(g(frames, row), duration, onLoop)
-    self.sprites[name].image = image
+function Object:newAnimation(name, data)
+    assert(type(data) == "table", "Second argument must be a table!")
+    local w, h = data.width or 8, data.height or 8
+    local g = Anim8.newGrid(w, h, data.image:getWidth(), data.image:getHeight())
+    self.sprites[name] = Anim8.newAnimation(g(data.frames, data.row), data.duration, data.onLoop)
+    self.sprites[name].image = data.image
     self.sprites[name].width = w
     self.sprites[name].height = h
     return self.sprites[name]
 end
 
 
-function Object:setSprite(name)
+function Object:setSprite(name, data)
+    if data then
+        if type(data) == "table" then self:newAnimation(name, data)
+        elseif type(data) == "userdata" then self:newSprite(name, data)
+        else error("Invalid data type: "..type(data)) end
+    end
     self.sprite = self.sprites[name] or self.sprite
 end
 
@@ -126,6 +132,7 @@ end
 
 
 function Object:logic(dt) end
+function Object:render() end
 
 
 function Object:update(dt)
@@ -135,9 +142,6 @@ function Object:update(dt)
     -- update the sprite / animation
     if self.sprite then self.sprite:update(dt) end
 end
-
-
-function Object:render() end
 
 
 function Object:draw()

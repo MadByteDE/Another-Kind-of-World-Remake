@@ -11,8 +11,7 @@ function Button:init(x, y, t)
     self.rgba = {.8, .8, .8, .75}
     self.action = self.action or _NULL
     if self.image then
-        self:newSprite(self.name, self.image)
-        self:setSprite(self.name)
+        self:setSprite(self.name, self.image)
         local w, h = self.sprite.image:getDimensions()
         self:setDimensions(w, h)
     end

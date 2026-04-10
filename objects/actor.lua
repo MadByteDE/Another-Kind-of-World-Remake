@@ -197,4 +197,6 @@ function Actor:update(dt)
     self.x, self.y = x, y
 end
 
+-- function Bomb:render() self:drawRectangle("line") end
+
 return Actor

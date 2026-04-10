@@ -10,8 +10,9 @@ function Lava:init(x, y, data)
     self:setDimensions(8, 5)
     Object.init(self, x, y+3, {deadly=true, collide=true})
     -- Add sprite(s)
-    self:newSprite(self.name, Game.assets.tile.lava)
-    self:setSprite(self.name)
+    self:setSprite(self.name, Game.assets.tile.lava)
 end
+
+-- function Lava:render() self:drawRectangle("line") end
 
 return Lava

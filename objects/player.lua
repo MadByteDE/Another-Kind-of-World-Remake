@@ -18,8 +18,8 @@ function Player:init(x, y)
     if Game.debug then self.max_bombs = 99 end
     self.health = 100
     -- Add sprite(s)
-    self:newAnimation("idle", Game.assets.anim.player_idle, '1-2', 1, .3)
-    self:newAnimation("run", Game.assets.anim.player_run, '1-4', 1, .15)
+    self:newAnimation("idle", {image=Game.assets.anim.player_idle, frames='1-2', row=1, duration=.3})
+    self:newAnimation("run", {image=Game.assets.anim.player_run, frames='1-4', row=1, duration=.15})
     self:setSprite("idle")
 end
 
@@ -61,6 +61,7 @@ function Player:logic(dt)
     end
 end
 
+-- function Player:render() self:drawRectangle("line") end
 
 function Player:keypressed(key)
     if key == "w" or key == "up" or key == "space" then

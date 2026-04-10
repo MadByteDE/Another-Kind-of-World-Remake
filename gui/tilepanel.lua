@@ -10,10 +10,8 @@ function Tilepanel:init(x, y, t)
     self.name       = "tilepanel"
     self.draggable  = true
     self.rgba       = {1, 1, 1, .7}
-    self:newSprite(self.name, Game.assets.gui.tilepanel)
-    self:setSprite(self.name)
-    local w, h = self.sprite.image:getDimensions()
-    self:setDimensions(w, h)
+    self:setSprite(self.name, Game.assets.gui.tilepanel)
+    self:setDimensions(self.sprite.image:getDimensions())
 end
 
 

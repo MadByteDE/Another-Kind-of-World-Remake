@@ -19,8 +19,7 @@ function Particle:init(x, y, data)
     self.rgba[4] = .65
     self.alpha_tween = Tween.new(fadeout_time, self.rgba, {[4]=0})
     -- Add sprite(s)
-    self:newSprite(self.name, sprite)
-    self:setSprite(self.name)
+    self:setSprite(self.name, sprite)
 end
 
 
@@ -35,5 +34,7 @@ function Particle:logic(dt)
         self.alpha_tween:update(dt)
     end
 end
+
+-- function Particle:render() self:drawRectangle("line") end
 
 return Particle
