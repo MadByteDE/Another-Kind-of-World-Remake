@@ -134,13 +134,14 @@ end
 function Actor:update(dt)
     Object.update(self, dt)
     self:accelerate(dt)
-    -- wrap object around the screen
     if self.wrap then
-        if self.x > Game.width then self.x = -self.width+2
-        elseif self.x < -self.width then self.x = Game.width-2
-        elseif self.y > Game.height then self.y = -self.height+2
-        elseif self.y < -self.height then self.y = Game.height-2
-        end
+        -- Workaround for actors falling through the world when wrapping around
+        if self.x > Game.width or self.x < -self.width then self.y = self.y-.1 end
+        -- wrap object around the screen
+        if self.x > Game.width then self.x = -self.width
+        elseif self.x < -self.width then self.x = Game.width end
+        if self.y > Game.height then self.y = -self.height
+        elseif self.y < -self.height then self.y = Game.height end
     end
     -- Update collsion rect
     self:updateCollider()
@@ -156,12 +157,12 @@ function Actor:update(dt)
         self.damage_cooldown = 0
     end
     -- Add gravity
-    if self.vel.y > 0 then self.in_air = true end
+    if self.vel.y ~= 0 then self.in_air = true end
     self.vel.y = self.vel.y + self.gravity * 10 * dt
     -- clamp speed to set limits
     self.vel.x = clamp(self.vel.x, -self.max_vel.x, self.max_vel.x)
     self.vel.y = clamp(self.vel.y, -self.max_vel.y, self.max_vel.y)
-    -- calculate position
+    -- calculate next position
     local x = self.x + self.vel.x * dt
     local y = self.y + self.vel.y * dt
     -- Resolve collisions & update position
