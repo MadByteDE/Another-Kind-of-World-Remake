@@ -42,7 +42,7 @@ function Bomb:onDead()
     Game:playSound("boom"):setPitch(pitch)
     Game:shake()
     -- Explosion particles
-    for i=1, math.random(30, 40) do
+    for i=1, math.random(20, 30) do
         local x, y = self.x + self.width/2, self.y + self.height/2
         Game.level:spawn("particle", x, y, Game.assets.data.particles.explosion)
     end
