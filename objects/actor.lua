@@ -1,6 +1,7 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Profiler = require("lib.profiler")
 local Object = require("objects.object")
 local Actor = Object:extend("actor")
 
@@ -132,6 +133,7 @@ end
 
 
 function Actor:update(dt)
+    if Game.debug then Profiler:zone("Actor_"..self.name) end
     Object.update(self, dt)
     self:accelerate(dt)
     if self.wrap then
@@ -196,6 +198,7 @@ function Actor:update(dt)
         end
     end
     self.x, self.y = x, y
+    if Game.debug then Profiler:zone_pop() end
 end
 
 -- function Bomb:render() self:drawRectangle("line") end

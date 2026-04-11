@@ -1,6 +1,7 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Profiler = require("lib.profiler")
 local Actor = require("objects.actor")
 local Bomb = Actor:extend("bomb")
 
@@ -41,9 +42,14 @@ function Bomb:onDead()
     Game:playSound("boom"):setPitch(pitch)
     Game:shake()
     -- Explosion particles
+    if Game.debug then Profiler:zone("Bomb_Particles") end
     for i=1, math.random(20, 30) do
         local x, y = self.x + self.width/2, self.y + self.height/2
         Game.level:spawn("particle", x, y, Game.assets.data.particles.explosion)
+    end
+    if Game.debug then
+        Profiler:zone_pop()
+        Profiler:zone("Bomb_Col_Resolve")
     end
     -- Apply explosion damage
     local radius = 24
@@ -60,6 +66,7 @@ function Bomb:onDead()
         end
         if other.can_die then other:damage(50, self) end
     end
+    if Game.debug then Profiler:zone_pop() end
     -- Remove bomb
     self:destroy()
 end

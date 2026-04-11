@@ -12,6 +12,7 @@ love.graphics.setPointSize(3)
 
 -- Dependencies
 require("utils")
+local Profiler = require("lib.profiler")
 local Gui   = require("gui")
 local Level = require("level")
 
@@ -141,6 +142,7 @@ end
 
 
 function Game:update(dt)
+    if self.debug then Profiler:zone("update") end
     -- Screen shake
     if self._shake.timer > 0 then
         self._shake.timer = self._shake.timer - dt
@@ -165,10 +167,12 @@ function Game:update(dt)
     self.level:update(dt)
     self.scene:update(dt)
     self.gui:update(dt)
+    if self.debug then Profiler:zone_pop() end
 end
 
 
 function Game:draw()
+    if self.debug then Profiler:zone("draw") end
     love.graphics.push()
     love.graphics.translate(self._shake.x, self._shake.y)
     love.graphics.scale(self.scale.x, self.scale.y)
@@ -193,11 +197,13 @@ function Game:draw()
     local ox, oy = Game.assets.gui.cursor:getDimensions()
     love.graphics.draw(Game.assets.gui.cursor, mx, my, 0, 1, 1, ox/2, oy/2)
     love.graphics.pop()
+    if self.debug then Profiler:zone_pop() end
 end
 
 
 function Game:keypressed(key, ...)
     if not Game.gui.hovered_obj then self.scene:keypressed(key, ...) end
+    if key == "f1" then Profiler:toggle() end
     self.gui:keypressed(key, ...)
 end
 

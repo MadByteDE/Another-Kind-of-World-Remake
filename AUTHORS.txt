@@ -21,28 +21,36 @@ See license text below for more details.
 
 AKOW includes the following third-party assets or software:
 
-  anim8 by Enrique García Cota,
+  (lib) anim8 by Enrique García Cota,
   Copyright (c) 2011 Enrique García Cota
   Licensed under the MIT licence
 
-  bump by Enrique García Cota,
+  (lib) bump by Enrique García Cota,
   Copyright (c) 2014 Enrique García Cota
   Licensed under the MIT licence
 
-  30log by Matthias Roland Yonaba,
+  (lib) 30log by Matthias Roland Yonaba,
   Copyright (c) 2012-2016 Roland Yonaba
   Licensed under the MIT licence
 
-  conta by Lars Lönneker,
+  (lib) conta by Lars Lönneker,
   Copyright (c) 2020-2026 Lars Lönneker
   Licensed under the MIT licence
 
-  cargo by Bjorn Swenson,
+  (lib) cargo by Bjorn Swenson,
   Copyright (c) 2019 Bjorn Swenson
   Licensed under the MIT licence
 
-  tween by Enrique García Cota, Yuichi Tateno, Emmanuel Oga
+  (lib) tween by Enrique García Cota, Yuichi Tateno, Emmanuel Oga
   Copyright (c) 2014 Enrique García Cota, Yuichi Tateno, Emmanuel Oga
+  Licensed under the MIT licence
+
+  (lib) json by rxi
+  Copyright (c) 2020 rxi
+  Licensed under the MIT licence
+
+  (lib) profiler by Josh Perry
+  Copyright (c) 2026 Josh Perry
   Licensed under the MIT licence
   
 

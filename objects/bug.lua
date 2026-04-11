@@ -1,6 +1,7 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Profiler = require("lib.profiler")
 local Actor = require("objects.actor")
 local Bug = Actor:extend("bug")
 
@@ -38,6 +39,7 @@ end
 
 
 function Bug:queryEnvironment(dt)
+    if Game.debug then Profiler:zone("Bug_EnvCol_Query") end
     local tw = Game.level.tilesize
     local dist  = {x=tw-2.5, y=tw}
     local cx, cy = self:getCenter()
@@ -64,6 +66,7 @@ function Bug:queryEnvironment(dt)
         local cols = Game.level.collision_world:queryPoint(point.x, point.y, self.move_filter)
         if #cols > 0 then t[key] = cols[1] end
     end
+    if Game.debug then Profiler:zone_pop() end
     return t
 end
 

@@ -1,6 +1,7 @@
 -- Copyright © 2020-2026 AKOW Developers
 -- Licensed under the terms of the GPL v3. See AUTHORS.txt for details.
 
+local Profiler = require("lib.profiler")
 local Bump  = require("lib.bump")
 local Conta = require("lib.conta")
 local Tile  = require("objects.tile")
@@ -25,6 +26,7 @@ end
 
 
 local function generateEmptyLevel(self)
+    if Game.debug then Profiler:zone("Level_Gen_Empty") end
     self.tiles = {}
     for y = 1, Game.height/self.tilesize do
         self.tiles[y] = {}
@@ -35,10 +37,12 @@ local function generateEmptyLevel(self)
             self:drawToCanvas(function() self.tiles[y][x]:draw() end)
         end
     end
+    if Game.debug then Profiler:zone_pop() end
 end
 
 
 local function createLevel(self)
+    if Game.debug then Profiler:zone("Level_Create") end
     -- Loop through the tiledata
     for y = 1, Game.height/self.tilesize do
         for x = 1, Game.width/self.tilesize do
@@ -60,6 +64,7 @@ local function createLevel(self)
             end
         end
     end
+    if Game.debug then Profiler:zone_pop() end
 end
 
 
@@ -96,6 +101,7 @@ end
 
 
 function Level:load(level)
+    if Game.debug then Profiler:zone("Level_Load") end
     -- Load level
     local t = type(level)
     if t == "number" or t == "string" then
@@ -105,6 +111,7 @@ function Level:load(level)
     else
         self:init(level)
     end
+    if Game.debug then Profiler:zone_pop() end
 end
 
 
