@@ -7,8 +7,8 @@ local Lava = Object:extend("lava")
 
 function Lava:init(x, y, data)
     -- Core
-    self:setDimensions(8, 5)
-    Object.init(self, x, y+3, {deadly=true, collide=true})
+    self:setDimensions(8, 4)
+    Object.init(self, x, y+4, {deadly=true, collide=true})
     -- Add sprite(s)
     self:setSprite(self.name, Game.assets.tile.lava)
 end
