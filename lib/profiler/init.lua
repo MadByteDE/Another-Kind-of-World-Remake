@@ -1,6 +1,9 @@
-local zone = require("jit.zone")
+local PATH = (...):gsub("%.init$", "")
+
+local json = require(PATH .. ".lib.json")
+local zone = require(PATH .. ".zone")
+
 local profile = require("jit.profile")
-local json = require("lib.json")
 
 local DEFAULT_MODE = "fi1"
 local STACK_DEPTH  = 5
@@ -149,7 +152,7 @@ function Profiler:start(mode, thread_name)
         pid = 1,
         tid = self.thread_id,
         args = {
-            name = "what-a-mansion"
+            name = love.filesystem.getIdentity()
         }
     })
 
@@ -283,7 +286,7 @@ function Profiler:save_trace(path)
     if not ok then
         error("Failed to save trace: " .. tostring(err))
     else
-        print("Trace saved to " .. path)
+        print(("Trace saved to %s/%s"):format(love.filesystem.getSaveDirectory(), path))
     end
 end
 
