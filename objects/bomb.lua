@@ -44,7 +44,7 @@ function Bomb:onDead()
     -- Explosion particles
     if Game.debug then Profiler:zone("Bomb_Particles") end
     for i=1, math.random(20, 30) do
-        local x, y = self.x + self.width/2, self.y + self.height/2
+        local x, y = self.x+self.width/2, self.y+self.height/2
         Game.level:spawn("particle", x, y, Game.assets.data.particles.explosion)
     end
     if Game.debug then
@@ -71,6 +71,9 @@ function Bomb:onDead()
     self:destroy()
 end
 
--- function Bomb:render() self:drawRectangle("line") end
+-- function Bomb:render()
+--     self:drawRectangle("line")
+--     love.graphics.points(self:getCenter())
+-- end
 
 return Bomb

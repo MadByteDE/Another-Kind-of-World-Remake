@@ -10,6 +10,7 @@ io.stdout:setvbuf("no")
 if arg[2] == "debug" then require("lldebugger").start() end
 
 -- Core modules
+require("utils")
 Log     = require("lib.log").create("latest")
 Game    = require("game")
 

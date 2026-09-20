@@ -61,7 +61,10 @@ function Player:logic(dt)
     end
 end
 
--- function Player:render() self:drawRectangle("line") end
+-- function Player:render()
+--     self:drawRectangle("line")
+--     love.graphics.points(self:getCenter())
+-- end
 
 function Player:keypressed(key)
     if key == "w" or key == "up" or key == "space" then

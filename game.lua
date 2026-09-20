@@ -11,7 +11,6 @@ love.graphics.setLineWidth(.1)
 love.graphics.setPointSize(3)
 
 -- Dependencies
-require("utils")
 local Profiler = require("lib.profiler")
 local Gui   = require("gui")
 local Level = require("level")

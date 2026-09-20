@@ -53,13 +53,13 @@ function Bug:queryEnvironment(dt)
         self.points.right={x=x+dist.x, y=y}
         self.points.topright={x=x+dist.x, y=y-dist.y}
         self.points.bottomright={x=x+dist.x, y=y+dist.y}
-        self.points.bottomright2={x=x+dist.x, y=y+(dist.y*2)}
+        self.points.bottomright2={x=x+dist.x-2, y=y+(dist.y*2)}
     elseif self.dir.x < 0 then
         self.points.top={x=x+(w/2)-.5, y=y-dist.y}
         self.points.left={x=x-dist.x, y=y}
         self.points.topleft={x=x-dist.x, y=y-dist.y}
         self.points.bottomleft={x=x-dist.x, y=y+dist.y}
-        self.points.bottomleft2={x=x-dist.x, y=y+(dist.y*2)}
+        self.points.bottomleft2={x=x-dist.x+2, y=y+(dist.y*2)}
     end
     local t = {}
     for key, point in pairs(self.points) do
@@ -104,6 +104,12 @@ function Bug:logic(dt)
     end
 end
 
--- function Bug:render() self:drawRectangle("line") end
+
+-- function Bug:render()
+--     self:drawRectangle("line")
+--     for k,v in pairs(self.points) do love.graphics.points(v.x, v.y) end
+--     love.graphics.points(self:getCenter())
+-- end
+
 
 return Bug

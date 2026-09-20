@@ -112,8 +112,8 @@ end
 
 
 function Object:getCenter(ox, oy)
-    local x = self.x+(ox or 0)+self.width/2
-    local y = self.y+(oy or 0)+self.height/2
+    local x = self.x+self.width/2+(ox or 0)
+    local y = self.y+self.height/2+(oy or 0)
     return x, y
 end
 
